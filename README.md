@@ -4,23 +4,24 @@
 
 # statscan-taxdata-tidying
  
-A set of R scripts to load, clean, and merge StatsCan income tax data files for British Columbia. These codes wrangle a purchased export of StatsCan data on this [page](https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/income-statistics-gst-hst-statistics/t1-final-statistics/final-statistics-2017-edition-2015-tax-year.html)
+A set of R scripts to load, clean, and merge annual Statistics Canada income tax data files for British Columbia. These codes wrangle a purchased export of Statistics Canada data on this [page](https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/income-statistics-gst-hst-statistics/t1-final-statistics/final-statistics-2017-edition-2015-tax-year.html)
 
 
 ## structure
 
 
-This project relates to income tax data released to BC Stats by Statistics Canada. The original data came in xlsx sheets (CD-ROM from BC Stats). Contents include: one xlsx file for each year for individuals and families.
+This REPO is for tidying annual income tax data released to BC Stats by Statistics Canada. The original data comes in xlsx sheets (CD-ROM to BC Stats). Contents include: one xlsx file for each year for individuals and families.
 
-The Individuals_Data folder contains one csv file per year for individuals income tax from 2000 until 2015, and families income tax from 2004 until 2016 are in Families_Data folder not released in this REPO. 
+The Data folder will contain one untidy xlsx and one cleaned csv file per year for individual income tax data and families once the scripts are successfully run (files are not released in this REPO). 
 
 
-The RCodes_Individuals and RCodes_Families folder contains the R-codes used to read, clean, merge, and wrangle the data into csv. Specifically, the empty cells were removed in all sheets, merged, and the BC geographies was extracted.
+The R_Scripts folder contains the R-codes used to read, clean, merge, and wrangle the data into csv. 
+The codes help remove the empty cells in all sheets,extract the BC geographies, and merge all sheets into one csv.
 
 
 The metadata provided by Statistics Canada is in Documentation folder. 
 
-### Usage
+## usage
 
 There are four scripts that are required for the analysis (housed in R_Scripts folder), they need to be run in order:
 
@@ -30,29 +31,29 @@ There are four scripts that are required for the analysis (housed in R_Scripts f
 - 04_encrypt.R
 
 
-#### Example
+### example
 
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-In progress
+coming...
 ```
 
-### Project Status
+## project status
 
-In progress.
+This project is set up to share code, get feedback, and to be used again for future data that get purchased by BC Stats.
 
-### Getting Help or Reporting an Issue
+## getting help or reporting an issue
 
 To report bugs/issues/feature requests, please file an [issue](https://github.com/bcgov/StatCan_IncomeTax_Tidying/issues/).
 
-### How to Contribute
+## how to contribute
 
 If you would like to contribute, please see our [CONTRIBUTING](CONTRIBUTING.md) guidelines.
 
 Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-### License
+### license
 
 ```
 Copyright 2019 Province of British Columbia
