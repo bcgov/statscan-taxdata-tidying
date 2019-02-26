@@ -7,7 +7,7 @@
 A set of R scripts to load, clean, and merge StatsCan income tax data files for British Columbia. These codes wrangle a purchased export of StatsCan data on this [page](https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/income-statistics-gst-hst-statistics/t1-final-statistics/final-statistics-2017-edition-2015-tax-year.html)
 
 
-### structure
+## structure
 
 
 This project relates to income tax data released to BC Stats by Statistics Canada. The original data came in xlsx sheets (CD-ROM from BC Stats). Contents include: one xlsx file for each year for individuals and families.
@@ -35,7 +35,7 @@ There are four scripts that are required for the analysis (housed in R_Scripts f
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-
+In progress
 ```
 
 ### Project Status
