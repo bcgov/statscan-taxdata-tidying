@@ -23,12 +23,14 @@ The metadata provided by Statistics Canada is in Documentation folder.
 
 ## usage
 
-There are four scripts that are required for the analysis (housed in R_Scripts folder), they need to be run in order:
+There are five scripts that are required for the analysis (housed in R_Scripts folder), they need to be run in order. 
+The outputs and encryption steps are based on IDD guidelines and required for file imports into Popdata BC's secure analytic environment.
 
 - 01_load.R
 - 02_clean.R
 - 03_merge.R
-- 04_encrypt.R
+- 04_output.R
+- 05_encrypt.R 
 
 
 ### example
