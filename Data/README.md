@@ -8,7 +8,7 @@ To work with the data using R scripts, simply change "path to the project" to in
 
 ```{r }
 
-#load income data into R
+#load tax data into R
 
 setwd("path to the project")
 getwd()
