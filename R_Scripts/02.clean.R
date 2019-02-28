@@ -12,7 +12,8 @@
 
 #-------------------------------------------------------------------------------------------------
 
-# extract the BC subset of the data in data tables
+# Since the data is at federal Canada level, we need to extract BC Geographies out
+# extract the BC geographical concepts in data tables
 
 dat1.new <- subset(dat1[dat1$Geo_Level == "11" | dat1$Geo_Level == "12",])
 dat2.new <- subset(dat1[dat1$Place_Name == "ABBOTSFORD - MISSION" | dat1$Place_Name == "CHILLIWACK" | dat1$Place_Name == "KAMLOOPS" | dat1$Place_Name == "KELOWNA" | dat1$Place_Name == "PRINCE GEORGE" | dat1$Place_Name == "VANCOUVER" | dat1$Place_Name == "VICTORIA" | dat1$Place_Name ==  "VANCOUVER ISLAND AND COAST" | dat1$Place_Name =="VANCOUVER CENTRE" | dat1$Place_Name == "VANCOUVER EAST" | dat1$Place_Name == "VANCOUVER GRANVILLE" | dat1$Place_Name == "VANCOUVER KINGSWAY" | dat1$Place_Name ==  "VANCOUVER QUADRA" | dat1$Place_Name == "VANCOUVER SOUTH", ])
@@ -22,6 +23,5 @@ dat4.new <-subset(dat1, grepl("^9", Postal_Area))
 df <- rbind(dat1.new, dat2.new, dat3.new, dat4.new)
 
 
-# Output the generated table into a .csv format file
-
+# Output the sub-sheets generated into a .csv format file 
 write.table(df, file ="2015_Individuals_Table_1_BC.csv", sep = ",", row.names = FALSE)
