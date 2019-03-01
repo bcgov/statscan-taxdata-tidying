@@ -12,6 +12,13 @@
 
 #-------------------------------------------------------------------------------------------------
 
+# load package dependencies
+library(here)
+
+# chose the file location
+here("file path to data folder") 
+
+# load data by referring to 01.load.R scripts
 # Since the data is at federal Canada level, we need to extract BC Geographies out
 # extract the BC geographical concepts in data tables
 
