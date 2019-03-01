@@ -12,3 +12,18 @@
 
 #-------------------------------------------------------------------------------------------------
 
+# File Encryption
+# load library dependencies
+remotes::install_github("ropensci/cyphr", upgrade = FALSE)
+library(here)
+
+# To do anything we first need a key:
+key <- cyphr::key_sodium(sodium::keygen())
+
+# load and encrypt file
+here("file path")
+cyphr::encrypt_file("2015_Family_Table_19.csv", key, "2015_Family_Table_19.encrypted.csv")
+
+# the file is encripted now
+# let's decrypt to test
+cyphr::decrypt_file("2015_Family_Table_19.encrypted.csv", key, "2015_Family_Table_19.clear.csv")
