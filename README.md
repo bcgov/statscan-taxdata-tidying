@@ -2,12 +2,14 @@
 
 # statscan-taxdata-tidying
  
-A set of R scripts to load, clean, and merge annual Statistics Canada income tax data for British Columbia. The scripts in this repository wrangle and tidy purchased annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xlsx format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xlsx file for each year for individuals and families. Metadata provided by Statistics Canada is in `/Documentation` folder. 
+A set of R scripts to load, clean, and merge anonymized annual Statistics Canada income tax data for British Columbia. 
+
+The scripts in this repository wrangle and tidy purchased anonymized annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for anonymized individuals and anonymized families. Metadata provided by Statistics Canada is in `/Documentation` folder. 
 
 
 ## Usage
 
-Untidy .xlsx files per year for individual and family income tax data  must be placed in the `/Data` folder. Tidied .csv equivalent files are written to a `/Tmp` folder.
+Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data` folder. Tidied .csv equivalent files are written to a `/Tmp` folder.
 
 There are five scripts located in the `/R-Scripts` folder that are required for the analysis, they need to be run in order:
 
