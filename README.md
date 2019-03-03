@@ -4,15 +4,16 @@
 
 # statscan-taxdata-tidying
  
-A set of R scripts to load, clean, and merge annual Statistics Canada income tax data files for British Columbia. These codes wrangle a purchased export of Statistics Canada data on this [page](https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/income-statistics-gst-hst-statistics/t1-final-statistics/final-statistics-2017-edition-2015-tax-year.html)
+This is a project undertook at Integrated Data Division (IDD), Ministry of Citizens' Services, to enable Data Innovation Program in collaboration with Population Data BC. 
+IDD has generated a set of R scripts to load, clean, and merge annual Statistics Canada income tax data files for British Columbia. These codes wrangle a purchased export of Statistics Canada data on this [page](https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/income-statistics-gst-hst-statistics/t1-final-statistics/final-statistics-2017-edition-2015-tax-year.html)
 
 
 ## structure
 
 
-This REPO is for tidying annual income tax data released to BC Stats by Statistics Canada. The original data comes in xlsx sheets (CD-ROM to BC Stats). Contents include: one xlsx file for each year for individuals and families.
+This REPO is for tidying annual income tax data released to BC Stats by Statistics Canada. The original data comes in xls sheets (CD-ROM to BC Stats). Contents include: one xls file for each year for individuals and families.
 
-The Data folder will contain one untidy xlsx and one cleaned csv file per year for individual income tax data and families once the scripts are successfully run (files are not released in this REPO). 
+The Data folder will contain one untidy xls and one cleaned csv file per year for individual income tax data and families once the scripts are successfully run (files are not released in this REPO). 
 
 
 The R_Scripts folder contains the R-codes used to read, clean, merge, and wrangle the data into csv. 
