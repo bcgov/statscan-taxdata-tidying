@@ -19,8 +19,8 @@ library(dplyr)
 library(stringr)
 library(here)
 
-# set and locate the working directory in which the data files are stored
-here() #the file path to the data folder containing xlsx
+# # set and locate the working directory in which the data files are stored
+# here() #the file path to the data folder containing xlsx
 
 
 # load tax data from individuals (per year) xlsx tables into R 

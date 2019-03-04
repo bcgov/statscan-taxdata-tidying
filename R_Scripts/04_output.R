@@ -21,8 +21,8 @@ library(dplyr)
 library(plyr)
 library(here)
 
-# chose the file location
-here("file path to data folder")
+# # chose the file location
+# here("file path to data folder")
 # load data files, skip first line, and add tax year  (for family files)
 
 df1 <- read.table(file ="2016_Family_Table.csv", sep = ",", skip = 1)

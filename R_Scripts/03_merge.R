@@ -12,11 +12,11 @@
 
 #-------------------------------------------------------------------------------------------------
 
-# load package dependencies
-library(here)
-
-# chose the file location
-here("file path to data folder")
+# # load package dependencies
+# library(here)
+# 
+# # chose the file location
+# here("file path to data folder")
 
 # input all sub-tables in a year and check their structure before merging them
 # this code is an example for individual csv's
