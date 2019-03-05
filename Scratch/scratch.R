@@ -134,6 +134,7 @@ sheet8names <- c("City_ID", "Postal_Area", "Postal_Walk", "Geo_Level", "Place_Na
 sheet8 <- read_excel(filepath, sheet = sheets[14], skip = 3, col_names = sheet8names) %>%
   filter_all(any_vars(!is.na(.)))
 
+<<<<<<< HEAD
 #read sheet 13 (19)
 sheet13names <- c("City_ID", "Postal_Area", "Geo_Level", "Place_Name","CoupleFamily_LowIncome_0_Child",
                   "CoupleFamily_LowIncome_1_Child","CoupleFamily_LowIncome_2_Child","CoupleFamily_LowIncome_3P_Child",
@@ -190,8 +191,6 @@ sheet13names <- c("City_ID", "Postal_Area", "Geo_Level", "Place_Name","CoupleFam
 sheet13 <- read_excel(filepath, sheet = sheets[19], skip = 4, col_names = sheet13names) %>%
   filter_all(any_vars(!is.na(.)))
 
-
-
 #################
 #### clean ######
 #################
@@ -242,6 +241,7 @@ read_then_csv_ind <- function(sheet, skip, col_names, path) {
     "17", "11", "4", c("City_ID", "Postal_Area", "Postal_Walk", "Geo_Level", "Place_Name", "M_15_19", 	"M_20_24",	"M_25_29",	"M_30_34", 	"M_35_39",	"M_40_44", 	"M_45_49", 	"M_50_54",	"M_55_59",	"M_60_64",	"M_65P",	"M_Total",	"F_15_19", 	"F_20_24",	"F_25_29",	"F_30_34", 	"F_35_39",	"F_40_44", 	"F_45_49", 	"F_50_54",	"F_55_59",	"F_60_64",	"F_65P",	"F_Total",	"All_15_19", 	"All_20_24",	"All_25_29",	"All_30_34", 	"All_35_39",	"All_40_44", 	"All_45_49", 	"All_50_54",	"All_55_59",	"All_60_64",	"All_65P",	"All_Total",	"M_Lab_Inc_15_19", 	"M_Lab_Inc_20_24",	"M_Lab_Inc_25_29",	"M_Lab_Inc_30_34", 	"M_Lab_Inc_35_39",	"M_Lab_Inc_40_44", 	"M_Lab_Inc_45_49", 	"M_Lab_Inc_50_54",	"M_Lab_Inc_55_59",	"M_Lab_Inc_60_64",	"M_Lab_Inc_65P",	"M_Lab_Inc_Total",	"F_Lab_Inc_15_19", 	"F_Lab_Inc_20_24",	"F_Lab_Inc_25_29",	"F_Lab_Inc_30_34", 	"F_Lab_Inc_35_39",	"F_Lab_Inc_40_44", 	"F_Lab_Inc_45_49", 	"F_Lab_Inc_50_54",	"F_Lab_Inc_55_59",	"F_Lab_Inc_60_64",	"F_Lab_Inc_65P",	"F_Lab_Inc_Total",	"All_Lab_Inc_15_19", 	"All_Lab_Inc_20_24",	"All_Lab_Inc_25_29",	"All_Lab_Inc_30_34", 	"All_Lab_Inc_35_39",	"All_Lab_Inc_40_44", 	"All_Lab_Inc_45_49", 	"All_Lab_Inc_50_54",	"All_Lab_Inc_55_59",	"All_Lab_Inc_60_64",	"All_Lab_Inc_65P",	"All_Lab_Inc_Total",	"M_Part_Rate_15_19", 	"M_Part_Rate_20_24",	"M_Part_Rate_25_29",	"M_Part_Rate_30_34", 	"M_Part_Rate_35_39",	"M_Part_Rate_40_44", 	"M_Part_Rate_45_49", 	"M_Part_Rate_50_54",	"M_Part_Rate_55_59",	"M_Part_Rate_60_64",	"M_Part_Rate_65P",	"M_Part_Rate_Total",	"F_Part_Rate_15_19", "F_Part_Rate_20_24",	"F_Part_Rate_25_29",	"F_Part_Rate_30_34", 	"F_Part_Rate_35_39",	"F_Part_Rate_40_44", 	"F_Part_Rate_45_49", 	"F_Part_Rate_50_54",	"F_Part_Rate_55_59",	"F_Part_Rate_60_64",	"F_Part_Rate_65P",	"F_Part_Rate_Total",	"All_Part_Rate_15_19", 	"All_Part_Rate_20_24",	"All_Part_Rate_25_29",	"All_Part_Rate_30_34", 	"All_Part_Rate_35_39",	"All_Part_Rate_40_44", 	"All_Part_Rate_45_49", 	"All_Part_Rate_50_54",	"All_Part_Rate_55_59",	"All_Part_Rate_60_64",	"All_Part_Rate_65P",	"All_Part_Rate_Total"),
     "18", "12", "4", c("City_ID", "Postal_Area", "Postal_Walk", "Geo_Level", "Place_Name", "Inc_Lab_M_15_19", "Inc_Lab_M_20_24",	"Inc_Lab_M_25_29",	"Inc_Lab_M_30_34", 	"Inc_Lab_M_35_39",	"Inc_Lab_M_40_44", 	"Inc_Lab_M_45_49", "Inc_Lab_M_50_54",	"Inc_Lab_M_55_59",	"Inc_Lab_M_60_64",	"Inc_Lab_M_65P",	"Inc_Lab_M_Total",	"Inc_Lab_F_15_19", 	"Inc_Lab_F_20_24",	"Inc_Lab_F_25_29", "Inc_Lab_F_30_34", 	"Inc_Lab_F_35_39",	"Inc_Lab_F_40_44", 	"Inc_Lab_F_45_49", 	"Inc_Lab_F_50_54",	"Inc_Lab_F_55_59",	"Inc_Lab_F_60_64",	"Inc_Lab_F_65P",	"Inc_Lab_F_Total",	"Inc_Lab_All_15_19", 	"Inc_Lab_All_20_24",	"Inc_Lab_All_25_29",	"Inc_Lab_All_30_34",	"Inc_Lab_All_35_39",	"Inc_Lab_All_40_44", 	"Inc_Lab_All_45_49", 	"Inc_Lab_All_50_54",	"Inc_Lab_All_55_59",	"Inc_Lab_All_60_64",	"Inc_Lab_All_65P",	"Inc_Lab_All_Total",	"EI_M_5_19", 	"EI_M_20_24", "EI_M_25_29",	"EI_M_30_34", 	"EI_M_35_39",	"EI_M_40_44", 	"EI_M_45_49", 	"EI_M_50_54",	"EI_M_55_59",	"EI_M_60_64",	"EI_M_65P",	"EI_M_Total",	"EI_F_15_19", 	"EI_F_20_24",	"EI_F_25_29",	"EI_F_30_34", 	"EI_F_35_39",	"EI_F_40_44", 	"EI_F_45_49", 	"EI_F_50_54",	"EI_F_55_59",	"EI_F_60_64",	"EI_F_65P",	"EI_F_Total",	"All_EI_15_19", 	"All_EI_20_24",	"All_EI_25_29",	"All_EI_30_34", 	"All_EI_35_39",	"All_EI_40_44", 	"All_EI_45_49", 	"All_EI_50_54",	"All_EI_55_59",	"All_EI_60_64",	"All_EI_65P",	"All_EI_Total"),
     "19", "13", "4", c("City_ID", "Postal_Area", "Geo_Level", "Place_Name","CoupleFamily_LowIncome_0_Child",
+<<<<<<< HEAD
                     "CoupleFamily_LowIncome_1_Child","CoupleFamily_LowIncome_2_Child","CoupleFamily_LowIncome_3P_Child",
                     "CoupleFamily_LowIncome_Total","Percent_LowIncome_0_Child","Percent_LowIncome_1_Child","Percent_LowIncome_2_Child",
                     "Percent_LowIncome_3P_Child","Percent_LowIncome_Total","Avg_LowIncome_Ratio_0_Child","Avg_LowIncome_Ratio_1_Child",
@@ -293,6 +293,80 @@ read_then_csv_ind <- function(sheet, skip, col_names, path) {
                     "Percent_AllFamilies_LowIncome_0_Child","Percent_Families_LowIncome_1_Child","Percent_AllFamilies_LowIncome_2_Child","Percent_AllFamilies_LowIncome_3P_Child","Percent_AllFamilies_LowIncome_total","Avg_AllFamilies_LowIncome_0_Child",
                     "Avg_AllFamilies_LowIncome_1_Child","Avg_AllFamilies_LowIncome_2_Child","Avg_AllFamilies_LowIncome_3P_Child","Avg_AllFamilies_LowIncome_total")
     
+=======
+                       "CoupleFamily_LowIncome_1_Child","CoupleFamily_LowIncome_2_Child","CoupleFamily_LowIncome_3_Child","CoupleFamily_LowIncome_Total",
+                       "Percent_LowIncome_0_Child","Percent_LowIncome_1_Child","Percent_LowIncome_2_Child","Percent_LowIncome_3_Child",
+                       "Percent_LowIncome_Total","Avg_LowIncome_Ratio_0_Child","Avg_LowIncome_Ratio_1_Child","Avg_LowIncome_Ratio_2_Child",
+                       "Avg_LowIncome_Ratio_3_Child","Avg_LowIncome_Ratio","Age_0_17_LowIncome_0_Child","Age_0_17_LowIncome_1_Child",
+                       "Age_0_17_LowIncome_2_Child","Age_0_17_LowIncome_3_Child","Age_0_17_LowIncome","Percent_0_17_LowIncome_0_Child",
+                       "Percent_0_17_LowIncome_1_Child","Percent_0_17_LowIncome_2_Child","Percent_0_17_LowIncome_3_Child","Percent_0_17_LowIncome_Total",
+                       "Avg_0_17_LowIncome_Ratio_0_Child","Avg_0_17_LowIncome_Ratio_1_Child","Avg_0_17_LowIncome_Ratio_2_Child",
+                       "Avg_0_17_LowIncome_Ratio_3_Child","Avg_0_17_LowIncome_Ratio","Age_18_64_LowIncome_0_Child","Age_18_64_LowIncome_1_Child",
+                       "Age_18_64_LowIncome_2_Child","Age_18_64_LowIncome_3_Child","Age_18_64_LowIncome","Percent_18_64_LowIncome_0_Child",
+                       "Percent_18_64_LowIncome_1_Child","Percent_18_64_LowIncome_2_Child","Percent_18_64_LowIncome_3_Child","Percent_18_64_LowIncome_Total",
+                       "Avg_18_64_LowIncome_Ratio_0_Child","Avg_18_64_LowIncome_Ratio_1_Child","Avg_18_64_LowIncome_Ratio_2_Child",
+                       "Avg_18_64_LowIncome_Ratio_3_Child","Avg_18_64_LowIncome_Ratio","Age_65P_LowIncome_0_Child","Age_65P_LowIncome_1_Child",
+                       "Age_65P_LowIncome_2_Child","Age_65P_LowIncome_3_Child","Age_65P_LowIncome","Percent_65P_LowIncome_0_Child",
+                       "Percent_65P_LowIncome_1_Child","Percent_65P_LowIncome_2_Child","Percent_65P_LowIncome_3_Child","Percent_65P_LowIncome_Total",
+                       "Avg_65P_LowIncome_Ratio_0_Child","Avg_65P_LowIncome_Ratio_1_Child","Avg_65P_LowIncome_Ratio_2_Child",
+                       "Avg_65P_LowIncome_Ratio_3_Child","Avg_65P_LowIncome_Ratio","LoneParent_LowIncome_1_Child","LoneParent_LowIncome_2_Child",
+                       "LoneParent_LowIncome_3_Child","LoneParent_LowIncome","LoneParent_Percent_LowIncome_1_Child","LoneParent_Percent_LowIncome_2_Child",
+                       "LoneParent_Percent_LowIncome_3_Child","LoneParent_Percent_LowIncome","LoneParent_Avg_LowIncome_1_Child",
+                       "LoneParent_Avg_LowIncome_Ratio_2_Child","LoneParent_Avg_LowIncome_Ratio_3_Child","LoneParent_Avg_LowIncome_Ratio",
+                       "LoneParent_Age_0_17_LowIncome_1_Child","LoneParent_Age_0_17_LowIncome_2_Child","LoneParent_Age_0_17_LowIncome_3_Child",
+                       "LoneParent_Age_0_17_LowIncome","Percent_LoneParent_Age_0_17_LowIncome_1_Child","Percent_LoneParent_Age_0_17_LowIncome_2_Child",
+                       "Percent_LoneParent_Age_0_17_LowIncome_3_Child","Percent_LoneParent_Age_0_17_LowIncome","Avg_LoneParent_Age_0_17_LowIncome_1_Child",
+                       "Avg_LoneParent_Age_0_17_LowIncome_2_Child","Avg_LoneParent_Age_0_17_LowIncome_3_Child","Avg_LoneParent_Age_0_17_LowIncome",
+                       "Age_18_64_LowIncome_1_Child","Age_18_64_LowIncome_2_Child","Age_18_64_LowIncome_3_Child","Age_18_64_LowIncome",
+                       "Percent_18_64_LowIncome_1_Child","Percent_18_64_LowIncome_2_Child","Percent_18_64_LowIncome_3_Child",
+                       "Percent_18_64_LowIncome","Avg_18_64_LowIncome_1_Child","Avg_18_64_LowIncome_2_Child","Avg_18_64_LowIncome_3_Child",
+                       "Avg_18_64_LowIncome","Age_65P_LowIncome_1_Child","Age_65P_LowIncome_2_Child","Age_65P_LowIncome_3_Child","Age_65P_LowIncome",
+                       "Percent_65P_LowIncome_1_Child","Percent_65P_LowIncome_2_Child","Percent_65P_LowIncome_3_Child","Percent_65P_LowIncome",
+                       "Avg_65P_LowIncome_1_Child","Avg_65P_LowIncome_2_Child","Avg_65P_LowIncome_3_Child","Avg_65P_LowIncome","Families_LowIncome_0_Child",
+                       "Families_LowIncome_1_Child","Families_LowIncome_2_Child","Families_LowIncome_3_Child","Families_LowIncome",
+                       "Percent_Families_LowIncome_0_Child","Percent_Families_LowIncome_1_Child","Percent_Families_LowIncome_2_Child",
+                       "Percent_Families_LowIncome_3_Child","Percent_Families_LowIncome","Avg_Families_LowIncome_0_Child","Avg_Families_LowIncome_1_Child",
+                       "Avg_Families_LowIncome_2_Child","Avg_Families_LowIncome_3_Child","Avg_Families_LowIncome","Families_0_17_LowIncome_0_Child",
+                       "Families_0_17_LowIncome_1_Child","Families_0_17_LowIncome_2_Child","Families_0_17_LowIncome_3_Child","Families_0_17_LowIncome",
+                       "Percent_Families_0_17_LowIncome_0_Child","Percent_Families_0_17_LowIncome_1_Child","Percent_Families_0_17_LowIncome_2_Child",
+                       "Percent_Families_0_17_LowIncome_3_Child","Percent_Families_0_17_LowIncome","Avg_Families_0_17_LowIncome_0_Child",
+                       "Avg_Families_0_17_LowIncome_1_Child","Avg_Families_0_17_LowIncome_2_Child","Avg_Families_0_17_LowIncome_3_Child",
+                       "Avg_Families_0_17_LowIncome","Age_Families_18_64_LowIncome_0_Child","Age_Families_18_64_LowIncome_1_Child",
+                       "Age_Families_18_64_LowIncome_2_Child","Avg_Families_18_64_LowIncome_3_Child",
+                       "Age_Families_18_64_LowIncomePercent_Families_18_64_LowIncome_0_Child",
+                       "Percent_Families_18_64_LowIncome_1_Child","Percent_Families_18_64_LowIncome_2_Child","Percent_Families_18_64_LowIncome_3_Child",
+                       "Percent_Families_18_64_LowIncome","Avg_Families_LowIncome_0_Child","Avg_Families_LowIncome_1_Child","Avg_Families_LowIncome_2_Child",
+                       "Avg_Families_LowIncome_3_Child","Avg_Families_LowIncome","Age_65P_Families_LowIncome_0_Child","Age_65P_Families_LowIncome_1_Child",
+                       "Age_65P_Families_LowIncome_2_Child","Age_65P_Families_LowIncome_3_Child","Age_65P_Families_LowIncome","Percent_Families_LowIncome_0_Child",
+                       "Percent_Families_LowIncome_1_Child","Percent_Families_LowIncome_2_Child","Percent_Families_LowIncome_3_Child","Percent_Families_LowIncome",
+                       "Avg_Families_LowIncome_0_Child","Avg_Families_LowIncome_1_Child","Avg_Families_LowIncome_2_Child","Avg_Families_LowIncome_3_Child",
+                       "Avg_Families_LowIncome","NonFamily_LowIncome_0_Child","NonFamily_LowIncome","Percent_NonFamily_LowIncome_0_Child",
+                       "Percent_NonFamily_LowIncome","Avg_NonFamily_LowIncome_0_Child","Avg_NonFamily_LowIncome","Non_Family_Age_0_17_LowIncome_0_Child",
+                       "Non_Family_Age_0_17_LowIncome","Percent_Age_0_17_Non_Family_LowIncome_0_Child","Percent_Age_0_17_Non_Family_LowIncome",
+                       "Avg_Age_0_17_Non_Family_LowIncome_0_Child","Avg_Age_0_17_Non_Family_LowIncome","Age_18_64_Non_Family_LowIncome_0_Child",
+                       "Age_18_64_Non_Family_LowIncome","Percent_18_64_Non_Family_LowIncome_0_Child","Percent_18_64_Non_Family_LowIncome",
+                       "Avg_18_64_Non_Family_LowIncome_0_Child","Avg_18_64_Non_Family_LowIncome","Age_65P_Non_Family_LowIncome_0_Child",
+                       "Age_65P_Non_Family_LowIncome","Percent_65P_Non_Family_LowIncome_0_Child","Percent_65P_Non_Family_LowIncome",
+                       "Avg_65P_Non_Family_LowIncome_0_Child","Avg_65P_Non_Family_LowIncome","AllFamilies_LowIncome_0_Child","AllFamilies_LowIncome_1_Child",
+                       "AllFamilies_LowIncome_2_Child","AllFamilies_LowIncome_3_Child","AllFamilies_LowIncome","Percent_AllFamilies_LowIncome_0_Child",
+                       "Percent_AllFamilies_LowIncome_1_Child","Percent_AllFamilies_LowIncome_2_Child","Percent_AllFamilies_LowIncome_3_Child",
+                       "Percent_AllFamilies_LowIncome","Avg_AllFamilies_LowIncome_0_Child","Avg_AllFamilies_LowIncome_1_Child","Avg_AllFamilies_LowIncome_2_Child",
+                       "Avg_AllFamilies_LowIncome_3_Child","Avg_AllFamilies_LowIncome","AllFamilies_0_17_LowIncome_0_Child","AllFamilies_0_17_LowIncome_1_Child",
+                       "AllFamilies_0_17_LowIncome_2_Child","AllFamilies_0_17_LowIncome_3_Child","AllFamilies_0_17_LowIncome",
+                       "Percent_AllFamilies_0_17_LowIncome_0_Child","Percent_AllFamilies_0_17_LowIncome_1_Child","Percent_AllFamilies_0_17_LowIncome_2_Child",
+                       "Percent_AllFamilies_0_17_LowIncome_3_Child","Percent_AllFamilies_0_17_LowIncome","Avg_AllFamilies_0_17_LowIncome_0_Child",
+                       "Avg_AllFamilies_0_17_LowIncome_1_Child","Avg_AllFamilies_0_17_LowIncome_2_Child","Avg_AllFamilies_0_17_LowIncome_3_Child",
+                       "Avg_AllFamilies_0_17_LowIncome","Age_AllFamilies_18_64_LowIncome_0_Child","Age_AllFamilies_18_64_LowIncome_1_Child",
+                       "Age_AllFamilies_18_64_LowIncome_2_Child","Avg_AllFamilies_18_64_LowIncome_3_Child","Age_AllFamilies_18_64_LowIncome",
+                       "Percent_AllFamilies_18_64_LowIncome_0_Child","Percent_AllFamilies_18_64_LowIncome_1_Child","Percent_AllFamilies_18_64_LowIncome_2_Child",
+                       "Percent_AllFamilies_18_64_LowIncome_3_Child","Percent_AllFamilies_18_64_LowIncome","Avg_AllFamilies_LowIncome_0_Child",
+                       "Avg_AllFamilies_LowIncome_1_Child","Avg_AllFamilies_LowIncome_2_Child","Avg_AllFamilies_LowIncome_3_Child","Avg_AllFamilies_LowIncome",
+                       "Age_65P_AllFamilies_LowIncome_0_Child","Age_65P_AllFamilies_LowIncome_1_Child","Age_65P_AllFamilies_LowIncome_2_Child",
+                       "Age_65P_AllFamilies_LowIncome_3_Child","Age_65P_AllFamilies_LowIncome","Percent_AllFamilies_LowIncome_0_Child",
+                       "Percent_Families_LowIncome_1_Child","Percent_AllFamilies_LowIncome_2_Child","Percent_AllFamilies_LowIncome_3_Child",
+                       "Percent_AllFamilies_LowIncome","Avg_AllFamilies_LowIncome_0_Child","Avg_AllFamilies_LowIncome_1_Child","Avg_AllFamilies_LowIncome_2_Child",
+                       "Avg_AllFamilies_LowIncome_3_Child","Avg_AllFamilies_LowIncome")
+>>>>>>> d7e812d3d674ef49ac2c0ca7dedb140ca7e51ca8
     ) %>% mutate(skiprow = as.integer(skiprow))
   
    pathbase <- path %>%
