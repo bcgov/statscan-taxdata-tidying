@@ -4,6 +4,9 @@
  
 A set of R scripts to load, clean, and merge anonymized annual Statistics Canada income tax data for British Columbia. 
 
+
+## Structure
+
 The scripts in this repository wrangle and tidy purchased anonymized annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for anonymized individuals and anonymized families. Metadata provided by Statistics Canada is in `/Documentation` folder. 
 
 
@@ -17,7 +20,6 @@ There are five scripts located in the `/R-Scripts` folder that are required for 
 - 02_clean.R
 - 03_merge.R
 - 04_output.R
-- 05_encrypt.R 
 
 
 ## Getting Help or Reporting an Issue
