@@ -5,16 +5,20 @@ date: '`r format(Sys.time(), "%d %B, %Y")`'
 output:
   pdf_document: default
   html_document: default
+urlcolor: blue
 ---
 
 # Introduction 
-Currently, the data files in IDD are income estimates for individuals ranging from years 2000 up to 2015. Each table in a year is an aggregation of sub-tables as listed in Table 1.
-The income estimates for families range from years 2004 up to 2016. Each table in a year is an aggregation of all sub-tables as listed in Table 2. 
-The technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors can be found in documentation folder. For information about this product or the wide range of services and data available from Statistics Canada, visit their [website](www.statcan.gc.ca).
-For further questions, the Statistics Canada email is STATCAN.infostats-infostats.STATCAN@canada.ca.
+
+Currently, the fully anonymized data includes income estimates for individuals ranging from years 2000 up to 2015. Each table in a year is an aggregation of sub-tables as listed in Table 1.
+The anonymized income estimates for families range from years 2004 up to 2016. Each table in a year is an aggregation of all sub-tables as listed in Table 2. 
+
+The technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors can be found in the `/Documentation` folder. For information about this product or the wide range of services and data available from Statistics Canada, visit their [website](www.statcan.gc.ca).
+For further questions, the Statistics Canada email is <STATCAN.infostats-infostats.STATCAN@canada.ca>.
 
 
 # Data table structures for individuals and families
+
 
 ```{r echo= FALSE}
 library(knitr)
@@ -30,11 +34,11 @@ Individuals <- data.frame(
  stringsAsFactors = FALSE)
 ``` 
 
+
 ```{r echo = FALSE}
 kable(cbind(Individuals), "latex", booktabs = T, caption = "Structure for Individual Tables") %>%
   kable_styling(latex_options = c("striped", "scale_down", font_size=200))
 ```
-
 
 
 ```{r echo= FALSE}

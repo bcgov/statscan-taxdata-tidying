@@ -12,11 +12,11 @@
 
 #-------------------------------------------------------------------------------------------------
 
-# load package dependencies
-library(here)
-
-# chose the file location
-here("file path to data folder")
+# # load package dependencies
+# library(here)
+# 
+# # chose the file location
+# here("file path to data folder")
 
 # input all sub-tables in a year and check their structure before merging them
 # this code is an example for individual csv's
@@ -42,7 +42,7 @@ df18 <- read.table(file ="2015_Individuals_Table_12_BC.csv", sep = ",")
 df19 <- read.table(file ="2015_Individuals_Table_13_BC.csv", sep = ",")
 
 # check the number of rows to see if they are all the same length before merging
-nrow(df1) # check the number of rows for all dfs
+nrow(df1) # check the number of rows for all dfs before merging
 
 
 # merge all csv sub-sheets into one large .csv file
@@ -64,29 +64,28 @@ write.table(DFs, file ="2015_Individuals_BC.csv", sep = ",", row.names = FALSE, 
 # input all sub-tables in a year and check their structure before merging them
 # this code is an example for families csv's
 
-df1 <-  read.table(file ="2015_Family_Table_1_Canada.csv", sep = ",")
-df2 <-  read.table(file ="2015_Family_Table_2_Canada.csv", sep = ",")
-df3 <-  read.table(file ="2015_Family_Table_3A_Canada.csv", sep = ",")
-df4 <-  read.table(file ="2015_Family_Table_3B_Canada.csv", sep = ",")
-df5 <-  read.table(file ="2015_Family_Table_3C_Canada.csv", sep = ",")
-df6 <-  read.table(file ="2015_Family_Table_4A_Canada.csv", sep = ",")
-df7 <-  read.table(file ="2015_Family_Table_4B_Canada.csv", sep = ",")
-df8 <-  read.table(file ="2015_Family_Table_4C_Canada.csv", sep = ",")
-df9 <-  read.table(file ="2015_Family_Table_5A_Canada.csv", sep = ",")
-df10 <-  read.table(file ="2015_Family_Table_5B_Canada.csv", sep = ",")
-df11 <-  read.table(file ="2015_Family_Table_6_Canada.csv", sep = ",")
-df12 <-  read.table(file ="2015_Family_Table_7_Canada.csv", sep = ",")
-df13 <-  read.table(file ="2015_Family_Table_8_Canada.csv", sep = ",")
-df14 <-  read.table(file ="2015_Family_Table_9_Canada.csv", sep = ",")
-df15 <-  read.table(file ="2015_Family_Table_10_Canada.csv", sep = ",")
-df18 <-  read.table(file ="2015_Family_Table_14A_Canada.csv", sep = ",")
-df19 <-  read.table(file ="2015_Family_Table_14B_Canada.csv", sep = ",")
-df20 <-  read.table(file ="2015_Family_Table_14C_Canada.csv", sep = ",")
-df21 <-  read.table(file ="2015_Family_Table_15_Canada.csv", sep = ",")
-df22 <-  read.table(file ="2015_Family_Table_17_Canada.csv", sep = ",")
-df23 <-  read.table(file ="2015_Family_Table_18_Canada.csv", sep = ",")
-df24 <- read.table(file ="2015_Family_Table_19_New_LIM.csv", sep = ",")
-df25 <- read.table(file ="2015_Family_Table_20_New_LIM.csv", sep = ",")
+df1 <-  read.table(file ="2015_Family_Table_1_BC.csv", sep = ",")
+df2 <-  read.table(file ="2015_Family_Table_2_BC.csv", sep = ",")
+df3 <-  read.table(file ="2015_Family_Table_3A_BC.csv", sep = ",")
+df4 <-  read.table(file ="2015_Family_Table_3B_BC.csv", sep = ",")
+df5 <-  read.table(file ="2015_Family_Table_3C_BC.csv", sep = ",")
+df6 <-  read.table(file ="2015_Family_Table_4A_BC.csv", sep = ",")
+df7 <-  read.table(file ="2015_Family_Table_4B_BC.csv", sep = ",")
+df8 <-  read.table(file ="2015_Family_Table_4C_BC.csv", sep = ",")
+df9 <-  read.table(file ="2015_Family_Table_5A_BC.csv", sep = ",")
+df10 <-  read.table(file ="2015_Family_Table_5B_BC.csv", sep = ",")
+df11 <-  read.table(file ="2015_Family_Table_6_BC.csv", sep = ",")
+df12 <-  read.table(file ="2015_Family_Table_7_BC.csv", sep = ",")
+df13 <-  read.table(file ="2015_Family_Table_8_BC.csv", sep = ",")
+df14 <-  read.table(file ="2015_Family_Table_9_BC.csv", sep = ",")
+df15 <-  read.table(file ="2015_Family_Table_10_BC.csv", sep = ",")
+df18 <-  read.table(file ="2015_Family_Table_14A_BC.csv", sep = ",")
+df19 <-  read.table(file ="2015_Family_Table_14B_BC.csv", sep = ",")
+df20 <-  read.table(file ="2015_Family_Table_14C_BC.csv", sep = ",")
+df21 <-  read.table(file ="2015_Family_Table_15_BC.csv", sep = ",")
+df22 <-  read.table(file ="2015_Family_Table_17_BC.csv", sep = ",")
+df23 <-  read.table(file ="2015_Family_Table_18_BC.csv", sep = ",")
+
 
 
 DFs <- data.frame(cbind(df1, df2[,6:ncol(df2)], df3[,6:ncol(df3)], df4[,6:ncol(df4)], df5[,6:ncol(df5)], df6[,6:ncol(df6)], df7[,6:ncol(df7)], df8[,6:ncol(df8)], df9[,6:ncol(df9)], df10[,6:ncol(df10)], df11[,6:ncol(df11)], df12[,6:ncol(df12)], 
