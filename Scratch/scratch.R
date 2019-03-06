@@ -21,9 +21,6 @@ library(dplyr)
 library(stringr)
 library(here)
 
-# set and locate the working directory in which the data files are stored
-# here() #the file path to the data folder containing xlsx
-
 filepath <- here("Data", "2015_IND_Tables_1_to_13_Canada.xlsx")
 
 # load tax data from individuals (per year) xlsx tables into R 
@@ -32,66 +29,6 @@ dat1 <- read.xlsx(filepath, sheet = 1, startRow = 4) # note: the first 2 rows ha
 names(dat1) <- c("City_ID", "Postal_Area", "Postal_Walk", "Geo_Level", "Place_Name", "No_Taxfilers",  "Taxfilers_0_24_Percent",  "Taxfilers_25_44_Percent", "Taxfilers_45_64_Percent", "Taxfilers_65Plus_Percent", "Taxfilers_Average_Age",	"Taxfilers_Female_Percent", "Taxfilers_Married_Percent", "Taxfilers_Appt_Percent",	"No_All_Persons",  "Persons_0_24_Percent",	"Persons_25_44_Percent", "Persons_45_64_Percent", "Persons_56Plus_Percent",	"Persons_Average_Age", "Persons_Female_Percent", "Persons_Married_Percent", "Persons_Appt_Percent",	"No_Total_Income", "Percent_Total_Income_15K", "Percent_Total_Income_25K", "Percent_Total_Income_35K", "Percent_Total_Income_50K", "Percent_Total_Income_75K", "Percent_Total_Income_100K",	"Total_Income_Median_Males", "Total_Income_Median_Females", "Total_Income_Median",	"Total_Income_Median_Cdn_Index",	"Total_Income_Median_Prov_Index",	"Employment_Income",	"EI_Female_Percent",	"EI_Percent",	"Median_EI_Males", "Median_EI_Females", "Total_Median_EI",	"No_CCTB", 	"CCTB_Dollars_000")
 dat1 <- na.omit(dat1)
 
-#read file path for individual income table 14
-dat14 <- read.xlsx(filepath, sheet = 14, startRow = 3)
-names(dat14) <- c("City_ID", "Postal_Area", "Postal_Walk", "Geo_Level", "Place_Name", "M_0_24_Income",	"M_0_24_Income_Dollar",	"M_0_24_IncomeTax",	"M_0_24_IncomeTax_Dollar",	"M_0_24_AfterTax_Income",	"M_0_24_AfterTax_Income_Dollar",	"M_25_34_Income",	"M_25_34_Income_Dollar",	"M_25_34_IncomeTax",	"M_25_34_IncomeTax_Dollar",	"M_25_34_AfterTax_Income",	"M_25_34_AfterTax_Income_Dollar",	"M_35_44_Income",	"M_35_44_Income_Dollar",	"M_35_44_IncomeTax",	"M_35_44_IncomeTax_Dollar",	"M_35_44_AfterTax_Income",	"M_35_44_AfterTax_Income_Dollar",	"M_45_54_Income",	"M_45_54_Income_Dollar",	"M_45_54_IncomeTax",	"M_45_54_IncomeTax_Dollar",	"M_45_54_AfterTax_Income",	"M_45_54_AfterTax_Income_Dollar",	"M_55_64_Income",	"M_55_64_Income_Dollar",	"M_55_64_IncomeTax",	"M_55_64_IncomeTax_Dollar",	"M_55_64_AfterTax_Income",	"M_55_64_AfterTax_Income_Dollar",	"M_65P_Income",	"M_65P_Income_Dollar",	"M_65P_IncomeTax",	"M_65P_IncomeTax_Dollar",	"M_65P_AfterTax_Income",	"M_65P_AfterTax_Income_Dollar",	"M_All_Income",	"M_All_Income_Dollar",	"M_All_IncomeTax",	"M_All_IncomeTax_Dollar",	"M_All_AfterTax_Income",	"M_All_AfterTax_Income_Dollar",	"F_0_24_Income",	"F_0_24_Income_Dollar",	"F_0_24_IncomeTax",	"F_0_24_IncomeTax_Dollar",	"F_0_24_AfterTax_Income",	"F_0_24_AfterTax_Income_Dollar",	"F_25_34_Income",	"F_25_34_Income_Dollar",	"F_25_34_IncomeTax",	"F_25_34_IncomeTax_Dollar",	"F_25_34_AfterTax_Income",	"F_25_34_AfterTax_Income_Dollar",	"F_35_44_Income",	"F_35_44_Income_Dollar",	"F_35_44_IncomeTax",	"F_35_44_IncomeTax_Dollar",	"F_35_44_AfterTax_Income",	"F_35_44_AfterTax_Income_Dollar",	"F_45_54_Income",	"F_45_54_Income_Dollar",	"F_45_54_IncomeTax",	"F_45_54_IncomeTax_Dollar",	"F_45_54_AfterTax_Income",	"F_45_54_AfterTax_Income_Dollar",	"F_55_64_Income",	"F_55_64_Income_Dollar",	"F_55_64_IncomeTax", "F_55_64_IncomeTax_Dollar",	"F_55_64_AfterTax_Income",	"F_55_64_AfterTax_Income_Dollar",	"F_65P_Income",	"F_65P_Income_Dollar",	"F_65P_IncomeTax",	"F_65P_IncomeTax_Dollar",	"F_65P_AfterTax_Income",	"F_65P_AfterTax_Income_Dollar",	"F_All_Income",	"F_All_Income_Dollar",	"F_All_IncomeTax",	"F_All_IncomeTax_Dollar",	"F_All_AfterTax_Income",	"M_All_AfterTax_Income_Dollar",	"All_0_24_Income",	"All_0_24_Income_Dollar",	"All_0_24_IncomeTax",	"All_0_24_IncomeTax_Dollar",	"All_0_24_AfterTax_Income",	"All_0_24_AfterTax_Income_Dollar",	"All_25_34_Income",	"All_25_34_Income_Dollar",	"All_25_34_IncomeTax",	"All_25_34_IncomeTax_Dollar",	"All_25_34_AfterTax_Income",	"All_25_34_AfterTax_Income_Dollar",	"All_35_44_Income",	"All_35_44_Income_Dollar",	"All_35_44_IncomeTax",	"All_35_44_IncomeTax_Dollar",	"All_35_44_AfterTax_Income",	"All_35_44_AfterTax_Income_Dollar",	"All_45_54_Income",	"All_45_54_Income_Dollar",	"All_45_54_IncomeTax",	"All_45_54_IncomeTax_Dollar",	"All_45_54_AfterTax_Income",	"All_45_54_AfterTax_Income_Dollar",	"All_55_64_Income",	"All_55_64_Income_Dollar",	"All_55_64_IncomeTax",	"All_55_64_IncomeTax_Dollar",	"All_55_64_AfterTax_Income",	"All_55_64_AfterTax_Income_Dollar",	"All_65P_Income",	"All_65P_Income_Dollar",	"All_65P_IncomeTax",	"All_65P_IncomeTax_Dollar",	"All_65P_AfterTax_Income",	"All_65P_AfterTax_Income_Dollar",	"All_Income",	"All_Income_Dollar",	"All_IncomeTax",	"All_IncomeTax_Dollar",	"All_AfterTax_Income",	"All_AfterTax_Income_Dollar")
-dat14 <- na.omit(dat14)
-
-# table 19 has an issue in names(dat19)
-# read file path for individual income table 19
-dat19 <- read.xlsx(filepath, sheet = 19, startRow = 4)
-names(dat19) <- c("City_ID", "Postal_Area", "Geo_Level", "Place_Name","CoupleFamily_LowIncome_0_Child",
-                 "CoupleFamily_LowIncome_1_Child","CoupleFamily_LowIncome_2_Child","CoupleFamily_LowIncome_3P_Child",
-                 "CoupleFamily_LowIncome_Total","Percent_LowIncome_0_Child","Percent_LowIncome_1_Child","Percent_LowIncome_2_Child",
-                 "Percent_LowIncome_3P_Child","Percent_LowIncome_Total","Avg_LowIncome_Ratio_0_Child","Avg_LowIncome_Ratio_1_Child",
-                 "Avg_LowIncome_Ratio_2_Child","Avg_LowIncome_Ratio_3P_Child","Avg_LowIncome_Total","No_0_17_LowIncome_0_Child",
-                 "No_0_17_LowIncome_1_Child","No_0_17_LowIncome_2_Child","No_0_17_LowIncome_3P_Child","No_0_17_LowIncome_Total",
-                 "Percent_0_17_LowIncome_0_Child","Percent_0_17_LowIncome_1_Child","Percent_0_17_LowIncome_2_Child","Percent_0_17_LowIncome_3P_Child",
-                 "Percent_0_17_LowIncome_Total","Avg_0_17_LowIncome_Ratio_0_Child","Avg_0_17_LowIncome_Ratio_1_Child","Avg_0_17_LowIncome_Ratio_2_Child",
-                 "Avg_0_17_LowIncome_Ratio_3P_Child","Avg_0_17_LowIncome_Ratio_Total","Age_18_64_LowIncome_0_Child","Age_18_64_LowIncome_1_Child",
-                 "Age_18_64_LowIncome_2_Child","Age_18_64_LowIncome_3P_Child","Age_18_64_LowIncome_Total","Percent_18_64_LowIncome_0_Child",
-                 "Percent_18_64_LowIncome_1_Child","Percent_18_64_LowIncome_2_Child","Percent_18_64_LowIncome_3P_Child","Percent_18_64_LowIncome_Total",
-                 "Avg_18_64_LowIncome_Ratio_0_Child","Avg_18_64_LowIncome_Ratio_1_Child","Avg_18_64_LowIncome_Ratio_2_Child","Avg_18_64_LowIncome_Ratio_3P_Child",
-                 "Avg_18_64_LowIncome_Ratio_total","Age_65P_LowIncome_0_Child","Age_65P_LowIncome_1_Child","Age_65P_LowIncome_2_Child","Age_65P_LowIncome_3P_Child",
-                 "Age_65P_LowIncome_Total","Percent_65P_LowIncome_0_Child","Percent_65P_LowIncome_1_Child","Percent_65P_LowIncome_2_Child","Percent_65P_LowIncome_3P_Child",
-                 "Percent_65P_LowIncome_Total","Avg_65P_LowIncome_Ratio_0_Child","Avg_65P_LowIncome_Ratio_1_Child","Avg_65P_LowIncome_Ratio_2_Child",
-                 "Avg_65P_LowIncome_Ratio_3P_Child","Avg_65P_LowIncome_Ratio_total","LoneParent_LowIncome_1_Child","LoneParent_LowIncome_2_Child","LoneParent_LowIncome_3P_Child",
-                 "LoneParent_LowIncome_total","LoneParent_Percent_LowIncome_1_Child","LoneParent_Percent_LowIncome_2_Child","LoneParent_Percent_LowIncome_3P_Child","LoneParent_Percent_LowIncome_total",
-                 "LoneParent_Avg_LowIncome_1_Child","LoneParent_Avg_LowIncome_Ratio_2_Child","LoneParent_Avg_LowIncome_Ratio_3P_Child","LoneParent_Avg_LowIncome_Ratio_total","LoneParent_Age_0_17_LowIncome_1_Child",
-                 "LoneParent_Age_0_17_LowIncome_2_Child","LoneParent_Age_0_17_LowIncome_3P_Child","LoneParent_Age_0_17_LowIncome_total","Percent_LoneParent_Age_0_17_LowIncome_1_Child",
-                 "Percent_LoneParent_Age_0_17_LowIncome_2_Child","Percent_LoneParent_Age_0_17_LowIncome_3P_Child","Percent_LoneParent_Age_0_17_LowIncome_total","Avg_LoneParent_Age_0_17_LowIncome_1_Child",
-                 "Avg_LoneParent_Age_0_17_LowIncome_2_Child","Avg_LoneParent_Age_0_17_LowIncome_3P_Child","Avg_LoneParent_Age_0_17_LowIncome_total","Age_18_64_LowIncome_1_Child","Age_18_64_LowIncome_2_Child",
-                 "Age_18_64_LowIncome_3P_Child","Age_18_64_LowIncome_total","Percent_18_64_LowIncome_1_Child","Percent_18_64_LowIncome_2_Child","Percent_18_64_LowIncome_3P_Child","Percent_18_64_LowIncome_total",
-                 "Avg_18_64_LowIncome_1_Child","Avg_18_64_LowIncome_2_Child","Avg_18_64_LowIncome_3P_Child","Avg_18_64_LowIncome_total","Age_65P_LowIncome_1_Child","Age_65P_LowIncome_2_Child","Age_65P_LowIncome_3P_Child",
-                 "Age_65P_LowIncome_total","Percent_65P_LowIncome_1_Child","Percent_65P_LowIncome_2_Child","Percent_65P_LowIncome_3P_Child","Percent_65P_LowIncome_total","Avg_65P_LowIncome_1_Child","Avg_65P_LowIncome_2_Child",
-                 "Avg_65P_LowIncome_3P_Child","Avg_65P_LowIncome_total","Families_LowIncome_0_Child","Families_LowIncome_1_Child","Families_LowIncome_2_Child","Families_LowIncome_3P_Child","Families_LowIncome_total",
-                 "Percent_Families_LowIncome_0_Child","Percent_Families_LowIncome_1_Child","Percent_Families_LowIncome_2_Child","Percent_Families_LowIncome_3P_Child","Percent_Families_LowIncome_total","Avg_Families_LowIncome_0_Child",
-                 "Avg_Families_LowIncome_1_Child","Avg_Families_LowIncome_2_Child","Avg_Families_LowIncome_3P_Child","Avg_Families_LowIncome_total","Families_0_17_LowIncome_0_Child","Families_0_17_LowIncome_1_Child",
-                 "Families_0_17_LowIncome_2_Child","Families_0_17_LowIncome_3P_Child","Families_0_17_LowIncome_total","Percent_Families_0_17_LowIncome_0_Child","Percent_Families_0_17_LowIncome_1_Child",
-                 "Percent_Families_0_17_LowIncome_2_Child","Percent_Families_0_17_LowIncome_3P_Child","Percent_Families_0_17_LowIncome_total","Avg_Families_0_17_LowIncome_0_Child","Avg_Families_0_17_LowIncome_1_Child",
-                 "Avg_Families_0_17_LowIncome_2_Child","Avg_Families_0_17_LowIncome_3P_Child","Avg_Families_0_17_LowIncome_total","Age_Families_18_64_LowIncome_0_Child","Age_Families_18_64_LowIncome_1_Child",
-                 "Age_Families_18_64_LowIncome_2_Child","Avg_Families_18_64_LowIncome_3P_Child","Age_Families_18_64_LowIncome_total","Percent_Families_18_64_LowIncome_0_Child","Percent_Families_18_64_LowIncome_1_Child",
-                 "Percent_Families_18_64_LowIncome_2_Child","Percent_Families_18_64_LowIncome_3P_Child","Percent_Families_18_64_LowIncome_total","Avg_Families_LowIncome_0_Child","Avg_Families_LowIncome_1_Child",
-                 "Avg_Families_LowIncome_2_Child","Avg_Families_LowIncome_3P_Child","Avg_Families_LowIncome_total","Age_65P_Families_LowIncome_0_Child","Age_65P_Families_LowIncome_1_Child","Age_65P_Families_LowIncome_2_Child",
-                 "Age_65P_Families_LowIncome_3P_Child","Age_65P_Families_LowIncome_total","Percent_Families_LowIncome_0_Child","Percent_Families_LowIncome_1_Child","Percent_Families_LowIncome_2_Child","Percent_Families_LowIncome_3P_Child",
-                 "Percent_Families_LowIncome_total","Avg_Families_LowIncome_0_Child","Avg_Families_LowIncome_1_Child","Avg_Families_LowIncome_2_Child","Avg_Families_LowIncome_3P_Child","Avg_Families_LowIncome_total","NonFamily_LowIncome_0_Child",
-                 "NonFamily_LowIncome_total","Percent_NonFamily_LowIncome_0_Child","Percent_NonFamily_LowIncome_0_Child_total","Avg_NonFamily_LowIncome_0_Child","Avg_NonFamily_0_ChildLowIncome","Non_Family_Age_0_17_LowIncome_0_Child",
-                 "Non_Family_Age_0_17_0_child_LowIncome","Percent_Age_0_17_Non_Family_LowIncome_0_Child","Percent_Age_0_17_Non_Family_0_Child_LowIncome_total","Avg_Age_0_17_Non_Family_LowIncome_0_Child",
-                 "Avg_Age_0_17_Non_Family_0_Child_LowIncome_total","Age_18_64_Non_Family_LowIncome_0_Child","Age_18_64_Non_Family_LowIncome_0_Child_total","Percent_18_64_Non_Family_LowIncome_0_Child",
-                 "Percent_18_64_Non_Family_LowIncome_0_Child_total","Avg_18_64_Non_Family_LowIncome_0_Child","Avg_18_64_Non_Family_LowIncome_0_Child_total","Age_65P_Non_Family_LowIncome_0_Child",
-                 "Age_65P_Non_Family_LowIncome_0_Child_total","Percent_65P_Non_Family_LowIncome_0_Child","Percent_65P_Non_Family_LowIncome_0_Child_total","Avg_65P_Non_Family_LowIncome_0_Child","Avg_65P_Non_Family_LowIncome_0_Child_total",
-                 "AllFamilies_LowIncome_0_Child","AllFamilies_LowIncome_1_Child","AllFamilies_LowIncome_2_Child","AllFamilies_LowIncome_3P_Child","AllFamilies_LowIncome_total","Percent_AllFamilies_LowIncome_0_Child","Percent_AllFamilies_LowIncome_1_Child",
-                 "Percent_AllFamilies_LowIncome_2_Child","Percent_AllFamilies_LowIncome_3P_Child","Percent_AllFamilies_LowIncome_total","Avg_AllFamilies_LowIncome_0_Child","Avg_AllFamilies_LowIncome_1_Child","Avg_AllFamilies_LowIncome_2_Child",
-                 "Avg_AllFamilies_LowIncome_3P_Child","Avg_AllFamilies_LowIncome_total","AllFamilies_0_17_LowIncome_0_Child","AllFamilies_0_17_LowIncome_1_Child","AllFamilies_0_17_LowIncome_2_Child","AllFamilies_0_17_LowIncome_3P_Child",
-                 "AllFamilies_0_17_LowIncome_total","Percent_AllFamilies_0_17_LowIncome_0_Child","Percent_AllFamilies_0_17_LowIncome_1_Child","Percent_AllFamilies_0_17_LowIncome_2_Child","Percent_AllFamilies_0_17_LowIncome_3P_Child",
-                 "Percent_AllFamilies_0_17_LowIncome_total","Avg_AllFamilies_0_17_LowIncome_0_Child","Avg_AllFamilies_0_17_LowIncome_1_Child","Avg_AllFamilies_0_17_LowIncome_2_Child","Avg_AllFamilies_0_17_LowIncome_3P_Child",
-                 "Avg_AllFamilies_0_17_LowIncome_total","Age_AllFamilies_18_64_LowIncome_0_Child","Age_AllFamilies_18_64_LowIncome_1_Child","Age_AllFamilies_18_64_LowIncome_2_Child","Avg_AllFamilies_18_64_LowIncome_3P_Child",
-                 "Age_AllFamilies_18_64_LowIncome_total","Percent_AllFamilies_18_64_LowIncome_0_Child","Percent_AllFamilies_18_64_LowIncome_1_Child","Percent_AllFamilies_18_64_LowIncome_2_Child","Percent_AllFamilies_18_64_LowIncome_3P_Child",
-                 "Percent_AllFamilies_18_64_LowIncome_total","Avg_AllFamilies_LowIncome_0_Child","Avg_AllFamilies_LowIncome_1_Child","Avg_AllFamilies_LowIncome_2_Child","Avg_AllFamilies_LowIncome_3P_Child","Avg_AllFamilies_LowIncome_total",
-                 "Age_65P_AllFamilies_LowIncome_0_Child","Age_65P_AllFamilies_LowIncome_1_Child","Age_65P_AllFamilies_LowIncome_2_Child","Age_65P_AllFamilies_LowIncome_3P_Child","Age_65P_AllFamilies_LowIncome_total",
-                 "Percent_AllFamilies_LowIncome_0_Child","Percent_Families_LowIncome_1_Child","Percent_AllFamilies_LowIncome_2_Child","Percent_AllFamilies_LowIncome_3P_Child","Percent_AllFamilies_LowIncome_total","Avg_AllFamilies_LowIncome_0_Child",
-                 "Avg_AllFamilies_LowIncome_1_Child","Avg_AllFamilies_LowIncome_2_Child","Avg_AllFamilies_LowIncome_3P_Child","Avg_AllFamilies_LowIncome_total")
-dat19 <- na.omit(dat19)
 
 ###################################################
 ### Using readxl to avoid using MS Excel to manually
