@@ -254,4 +254,13 @@ filepath %>%
   set_names() %>% 
   map(read_then_csv_ind, path = filepath)
 
+##################################
+### add sheet name to column names 
+##################################
+
+sheet3Anames <- c("foo", "foo2", "foo3")
+sheet3Anames
+sheet3Anames_prefix <- paste0("3A_", c("foo", "foo2", "foo3"))
+sheet3Anames_prefix
+
 
