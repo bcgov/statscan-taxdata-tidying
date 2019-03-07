@@ -126,7 +126,7 @@ dat18 <- na.omit(dat18)
 
 #read file path for individual income table 19
 dat19 <- read.xlsx(file.dat, sheet = 19, startRow = 4)
-names(dat1) <- c("City_ID", "Postal_Area", "Geo_Level", "Place_Name","CoupleFamily_LowIncome_0_Child",
+names(dat19) <- c("City_ID", "Postal_Area", "Geo_Level", "Place_Name","CoupleFamily_LowIncome_0_Child",
                  "CoupleFamily_LowIncome_1_Child","CoupleFamily_LowIncome_2_Child","CoupleFamily_LowIncome_3P_Child",
                  "CoupleFamily_LowIncome_Total","Percent_LowIncome_0_Child","Percent_LowIncome_1_Child","Percent_LowIncome_2_Child",
                  "Percent_LowIncome_3P_Child","Percent_LowIncome_Total","Avg_LowIncome_Ratio_0_Child","Avg_LowIncome_Ratio_1_Child",

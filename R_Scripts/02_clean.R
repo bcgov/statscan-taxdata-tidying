@@ -12,11 +12,11 @@
 
 #-------------------------------------------------------------------------------------------------
 
-# load package dependencies
-library(here)
-library(dplyr)
-
-# chose the file location
+# # load package dependencies
+# library(here)
+# library (dplyr)
+# 
+# # chose the file location
 # here("file path to data folder") 
 
 # load data by referring to 01.load.R scripts
@@ -27,13 +27,13 @@ locs <- c("ALBERNI-CLAYOQUOT",
           "ABBOTSFORD", "ABBOTSFORD - MISSION", "BURNABY NORTH-SEYMOUR", "BURNABY SOUTH", "BULKLEY-NECHAKO", 
           "CAPITAL", "CARIBOO", "CARIBOO", "CARIBOO-PRINCE GEORGE", "CENTRAL COAST", "CENTRAL KOOTENAY",
           "CENTRAL OKANAGAN", "CENTRAL OKANAGAN-SIMILKAMEEN-NICOLA", "CHILLIWACK", "CHILLIWACK-HOPE", "CLOVERDALE-LANGLEY CITY",
-          "COLUMBIA-SHUSWAP", "COMOX VALLEY", "COQUITLAM-PORT COQUITLAM", "COURTENAY-ALBERNI", "COWICHAN VALLEY",
-          "COWICHAN-MALAHAT-LANGFORD", "CRANBROOK", "DELTA", "EAST KOOTENAY", "ESQUIMALT-SAANICH-SOOKE", "FLEETWOOD-PORT KELLS", "FRASER VALLEY",
+          "COLUMBIA-SHUSWAP", "COQUITLAM-PORT COQUITLAM", "COURTENAY-ALBERNI", "COWICHAN VALLEY",
+          "COWICHAN-MALAHAT-LANGFORD", "DELTA", "EAST KOOTENAY", "ESQUIMALT-SAANICH-SOOKE", "FLEETWOOD-PORT KELLS", "FRASER VALLEY",
           "FRASER-FORT GEORGE", "GREATER VANCOUVER", "KAMLOOPS", "KAMLOOPS-THOMPSON-CARIBOO",
           "KELOWNA", "KELOWNA-LAKE COUNTRY", "KITIMAT-STIKINE", "KOOTENAY",
           "KOOTENAY BOUNDARY","KOOTENAY-COLUMBIA",
-          "LANGLEY-ALDERGROVE", "LOWER MAINLAND--SOUTHWEST", "MISSION-MATSQUI-FRASER CANYON", "MOUNT WADDINGTON",
-          "NANAIMO", "NANAIMO-LADYSMITH", "NECHAKO",
+          "LANGLEY-ALDERGROVE", "LOWER MAINLAND--SOUTHWEST",
+          "NANAIMO", "NANAIMO-LADYSMITH",
           "NEW WESTMINSTER-BURNABY", "NORTH COAST",
           "NORTH ISLAND-POWELL RIVER","NORTH OKANAGAN",
           "NORTH OKANAGAN-SHUSWAP", "NORTH VANCOUVER",
@@ -56,8 +56,8 @@ dat4.new <-subset(dat1, grepl("^9", Postal_Area))
 
 df <- rbind(dat1.new, dat2.new, dat3.new, dat4.new)
 
-# check for duplicated rows and remove them (assign to re-new df)
-df <- distinct(df)
+# check for duplicated rows and remove them (assign data to a new df)
+df <- distinct(df) 
 
 
 # Output the sub-sheets generated into a .csv format file 
