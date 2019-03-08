@@ -13,9 +13,9 @@
 ######################################
 
 # load folder and files
-setwd("~/Desktop/StatCan_IncomeTax_Tidying/IND tables 2000 to 2015")
+setwd("~/Data/IND")
 getwd()
-dir.wrk <- "~/Desktop/StatCan_IncomeTax_Tidying/IND tables 2000 to 2015"
+dir.wrk <- "~/Data/IND"
 dir.wrk <- getwd()
 
 # load package dependencies
