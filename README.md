@@ -20,7 +20,7 @@ Tidied .csv equivalent files are written to a `/Tmp` folder. The `/R`folder cont
 
 
 
-# Scratch folder 
+## Scratch folder 
 
 There are five scripts located in the `/Scratch` folder that are not required for the analysis, and are written after the R scripts were generated before function was discovered. The aim is to generate a reproducible workflow for file load, clean, merge, and output.  
 
