@@ -1,0 +1,2 @@
+# about the R folder
+This folder contains all the R scripts used to wrangle the xlsx files into machine readable csv tables. Each script has a year reference for which the codes were used. The IND refers to individuals and FAM refers to family files.
