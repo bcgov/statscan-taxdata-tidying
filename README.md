@@ -9,7 +9,7 @@ A set of R scripts to load, clean, and merge anonymized annual Statistics Canada
 
 This repo contains the following contents:
 - Documents in `/Documentation/` folder
-- Data in `/Data/` folder and `/Data/IND` or `/Data/FAM/` subfolders
+- Data in `/Data/` folder and `/Data/IND/` or `/Data/FAM/` subfolders
 - R scripts in `/R/`folder
 - Exercise folder in `/Scratch/`
 
