@@ -10,14 +10,27 @@ urlcolor: blue
 
 # Introduction 
 
-Currently, the fully anonymized data includes income estimates for individuals ranging from years 2000 up to 2015. Each table in a year is an aggregation of sub-tables as listed in Table 1.
-The anonymized income estimates for families range from years 2004 up to 2016. Each table in a year is an aggregation of all sub-tables as listed in Table 2. 
+Integrated Data Division (CITZ) has acquired historical annual t1 tax data from BC Stats (JTT) who has in turn purchased the data tables from Statistics Canada.
+
+The data are in .xls format and are housed in the folder named Individuals xls and Family xls
+
+In this project, the xls files are cleaned and merged into one csv sheet per year using open source RStudio. The cleaned data are in Provincial Extract folder and the codes used to wrangle the data are within R script folder respectively.
+
+For more questions, please consult with Director of Data Insights (Dan Mackenzie, Dan.Mackenzie@gov.bc.ca) or the data scientists at IDD (Noushin.Nabavi@gov.bc.ca; Stephanie.Hazlitt@gov.bc.ca; Ashlin.Richardson@gov.bc.ca). 
+
+The BC Gov GitHub repository about this project can found here: https://github.com/bcgov/statscan-taxdata-tidying
 
 The technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors can be found in the `/Documentation` folder. For information about this product or the wide range of services and data available from Statistics Canada, visit their [website](www.statcan.gc.ca).
-For further questions, the Statistics Canada email is <STATCAN.infostats-infostats.STATCAN@canada.ca>.
+For further questions, the Statistics Canada email is <STATCAN.infostats-infostats.STATCAN@canada.ca>. 
 
+
+This data (from Statistics Canada) includes information copied with permission from Canada Post Corporation. Information about Statistics Canada Open Licence Grants can be found here: https://www.statcan.gc.ca/eng/reference/licence 
 
 # Data table structures for individuals and families
+
+Currently, the fully anonymized data includes income estimates for individuals ranging from years 2000 up to 2015. Each table in a year is an aggregation of sub-tables as listed in Table 1. The anonymized income estimates for families range from years 2004 up to 2016. Each table in a year is an aggregation of all sub-tables as listed in Table 2. 
+
+The original data came in xls format with spaces in names. They were opened in microsoft excel and their names were fixed with no space and re-saved as xlsx. RStudio was then used to wrangle the data into machine readable csv's. 
 
 
 ```{r echo= FALSE}
