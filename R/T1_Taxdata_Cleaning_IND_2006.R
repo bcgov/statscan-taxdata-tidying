@@ -14,9 +14,9 @@
 
 #For Table 1 in individual income data
 #load income data into R
-setwd("~/Desktop/Income/IND tables 2000 to 2015")
+setwd("~/Data/IND")
 getwd()
-dir.wrk <- "~/Desktop/Income/IND tables 2000 to 2015"
+dir.wrk <- "~/Data/IND"
 dir.wrk <- getwd()
 
 #load libraries

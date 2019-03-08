@@ -12,14 +12,24 @@ The scripts in this repository wrangle and tidy purchased anonymized annual Stat
 
 ## Usage
 
-Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data` folder. Tidied .csv equivalent files are written to a `/Tmp` folder.
+Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data/IND` or `/Data/FAM` folders. 
 
-There are five scripts located in the `/R-Scripts` folder that are required for the analysis, they need to be run in order:
+The .xls files were converted to .xlsx and their empty spaces in the names were removed for more convenient data wrangling. This can also be done with readxl and tidyxl package in RStudio.
 
-- 01_load.R
-- 02_clean.R
-- 03_merge.R
-- 04_output.R
+Tidied .csv equivalent files are written to a `/Tmp` folder. The `/R`folder contains all the R scripts used to read, clean, merge, and output the xlsx files.
+
+
+
+# Scratch folder 
+
+There are five scripts located in the `/Scratch` folder that are not required for the analysis, and are written after the R scripts were generated before function was discovered. The aim is to generate a reproducible workflow for file load, clean, merge, and output.  
+
+- 01_load.R # only an example to load files for one year and the sample column names 
+- 02_clean.R # how to extract BC geographies 
+- 03_merge.R # merging all sub-sheets into one 
+- 04_output.R # write out the merged csv's
+- 05_encrypt.R # how to encrypt files for security (was not used, also note warning and latest version when using)
+- 06_scratch.R # functions to use for efficiency (i.e. use to load, clean, merge, and output in one go)
 
 
 ## Getting Help or Reporting an Issue

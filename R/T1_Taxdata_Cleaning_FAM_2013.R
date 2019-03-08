@@ -14,9 +14,9 @@
 
 #For Tables in Families income data
 #load income data into R
-setwd("~/Desktop/StatCan_IncomeTax_Tidying/Family tables 2013 to 2015")
+setwd("~/Data/FAM")
 getwd()
-dir.wrk <- "~/Desktop/StatCan_IncomeTax_Tidying/Family tables 2013 to 2015"
+dir.wrk <- "~/Data/FAM"
 dir.wrk <- getwd()
 
 #load libraries
