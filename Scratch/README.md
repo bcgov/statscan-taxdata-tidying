@@ -1,2 +1,2 @@
 # about the scratch folder
-{raison d'être} for this folder is to re-work the long R scripts into one that follows a workflow for loading the files, clearning, merging, and outputing the t1 tax data. This workflow is to make the R scripts more efficient with the use of functions. This folder is under development. 
+{raison d'être} for this folder is to re-work the long R scripts into one that follows a workflow for loading the files, cleaning, merging, and outputing the t1 tax data. This workflow is to make the R scripts more efficient with the use of functions. This folder is under development. 
