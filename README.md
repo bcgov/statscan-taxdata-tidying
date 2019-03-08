@@ -9,26 +9,26 @@ A set of R scripts to load, clean, and merge anonymized annual Statistics Canada
 
 This repo contains the following contents:
 - Documents in `/Documentation/` folder
-- Data in `/Data/` folder and `/Data/IND` or `/Data/FAM` subfolders
-- R scripts in `/R`folder
-- Exercise folder in `/Scratch`
+- Data in `/Data/` folder and `/Data/IND` or `/Data/FAM/` subfolders
+- R scripts in `/R/`folder
+- Exercise folder in `/Scratch/`
 
-The scripts in this repository wrangle and tidy purchased anonymized annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for anonymized individuals and anonymized families. Metadata provided by Statistics Canada is in `/Documentation` folder. 
+The scripts in this repository wrangle and tidy purchased anonymized annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for anonymized individuals and anonymized families. Metadata provided by Statistics Canada is in `/Documentation/` folder. 
 
 
 ## Usage
 
-Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data/` folder either as `/Data/IND` or `/Data/FAM` sub-folders to house the individual or family files respectively.
+Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data/` folder either as `/Data/IND/` or `/Data/FAM/` sub-folders to house the individual or family files respectively.
 
 The .xls files were converted to .xlsx and their empty spaces in the names were removed for more convenient data wrangling. This can also be done with readxl and tidyxl package in RStudio.
 
-Tidied .csv equivalent files are written to a `/Tmp` folder. The `/R` folder contains all the R scripts used to read xlsx, clean, merge, and output the merged csv files.
+Tidied .csv equivalent files are written to a `/Tmp/` folder. The `/R/` folder contains all the R scripts used to read xlsx, clean, merge, and output the merged csv files.
 
 
 
 ## Scratch folder 
 
-There are six scripts located in the `/Scratch` folder that are not required for the analysis, and are written after the R scripts were generated and before functions were discovered. The aim is to generate a reproducible workflow for file load, clean, merge, and output in one go.  
+There are six scripts located in the `/Scratch/` folder that are not required for the analysis, and are written after the R scripts were generated and before functions were discovered. The aim is to generate a reproducible workflow for file load, clean, merge, and output in one go.  
 
 - 01_load.R # only an example to load files for one year and the sample column names 
 - 02_clean.R # how to extract BC geographies 
