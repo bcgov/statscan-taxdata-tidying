@@ -12,7 +12,7 @@ The scripts in this repository wrangle and tidy purchased anonymized annual Stat
 
 ## Usage
 
-Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data/IND` or `/Data/FAM` folders. 
+Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data/` folder either as `/Data/IND` or `/Data/FAM` sub-folders to house the individual or family files respectively.
 
 The .xls files were converted to .xlsx and their empty spaces in the names were removed for more convenient data wrangling. This can also be done with readxl and tidyxl package in RStudio.
 
