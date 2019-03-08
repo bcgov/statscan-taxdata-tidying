@@ -14,6 +14,8 @@
 ###  01_load.R  - some edits to run
 #####################################
 
+# The codes in R folder were generated before learning how to use functions!
+# This code should do the job of the script in R folder
 # load library dependencies
 library(data.table)
 library(openxlsx)

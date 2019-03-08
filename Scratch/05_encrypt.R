@@ -15,7 +15,7 @@
 # Please note that the cyphr package is under a WARNING
 # until this package reaches version 1, the format used internally to move data around may change without warning or regard for backward compatibility 
 # this may make it  difficult to recover  data! Once the developers reach version 1.0.0,  backward compatiblity will be supported
-
+# We did not end up using these codes but they do work great :) 
 
 # File Encryption
 # load library dependencies
