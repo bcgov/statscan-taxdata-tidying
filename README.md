@@ -16,7 +16,7 @@ Untidy .xls files per year for anonymized individual and family income tax data 
 
 The .xls files were converted to .xlsx and their empty spaces in the names were removed for more convenient data wrangling. This can also be done with readxl and tidyxl package in RStudio.
 
-Tidied .csv equivalent files are written to a `/Tmp` folder. The `/R`folder contains all the R scripts used to read, clean, merge, and output the xlsx files.
+Tidied .csv equivalent files are written to a `/Tmp` folder. The `/R`folder contains all the R scripts used to read xlsx, clean, merge, and output the merged csv files.
 
 
 
