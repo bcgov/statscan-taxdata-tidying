@@ -9,7 +9,7 @@ A set of R scripts to load, clean, and merge anonymized annual Statistics Canada
 
 This repo contains the following contents:
 - Documents in `/Documentation/` folder
-- Data folder is divided into Raw and Derived `/Data/Raw-xls-Data/` and `/Data/Derived-csv-Data/` subfolders
+- The Public-Data folder is divided into Raw and Derived `/Public-Data/Data/Raw-xls-Data/` and `/Public-Data/Derived-csv-Data/` subfolders
 - R scripts are in `/R/` folder
 - Exercises are in `/Scratch/` folder
 
