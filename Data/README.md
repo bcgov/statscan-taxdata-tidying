@@ -16,10 +16,10 @@ See the License for the specific language governing permissions and limitations 
 
 # Data Source
 
-The xlsx files from Statistics Canada are housed in the `Raw-xlsx-Data` folder and the cleaned-up sheets are written into `Derived-csv-Data` 
+The xlsx files from Statistics Canada are housed in the `raw-data` folder and the cleaned-up sheets are written into `derived-data` 
 
 e.g.
 
-`here::here("/Data/Raw-xlsx-Data/2015_IND_Tables_1_to_13_Canada.xlsx")`  
-`here::here("/Data/Derived-csv-Data/2015_IND_Tables_Canada.csv")`
+`here::here("/Data/raw-data/2015_IND_Tables_1_to_13_Canada.xlsx")`  
+`here::here("/Data/derived-data/2015_IND_Tables_Canada.csv")`
 
