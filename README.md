@@ -9,7 +9,7 @@ A set of R scripts to load, clean, and merge anonymized annual Statistics Canada
 
 This repo contains the following contents:
 - Documents in `/Documentation/` folder
-- The Public-Data folder is divided into Raw and Derived `/Public-Data/Data/Raw-xls-Data/` and `/Public-Data/Derived-csv-Data/` subfolders
+- The Public-Data folder is divided into Raw and Derived `/Data/Raw-xls-Data/` and `/Data/Derived-csv-Data/` subfolders
 - R scripts are in `/R/` folder
 - Exercises are in `/Scratch/` folder
 
@@ -18,7 +18,7 @@ The scripts in this repository wrangle and tidy purchased anonymized annual Stat
 
 ## Usage
 
-Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data/` folder either as `/Data/IND/` or `/Data/FAM/` sub-folders to house the individual or family files respectively.
+Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data/` folder `/Data/Raw-xls-Data/`.
 
 The .xls files were converted to .xlsx and their empty spaces in the names were removed for more convenient data wrangling. This can also be done with readxl and tidyxl package in RStudio.
 
