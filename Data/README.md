@@ -16,9 +16,10 @@ See the License for the specific language governing permissions and limitations 
 
 # Data Source
 
-The `01.load.R` script in the `R_Scripts` folder reads in .xls files in this `/Data` folder, and either in `/Data/IND` or `/Data/FAM`.
+The xlsx files from Statistics Canada are housed in the `Raw-xlsx-Data` folder and the cleaned-up sheets are written into `Derived-csv-Data` 
 
 e.g.
 
-`here::here("/Data/IND/2015_IND_Tables_1_to_13_Canada.xlsx")`
+`here::here("/Data/Raw-xlsx-Data/2015_IND_Tables_1_to_13_Canada.xlsx")`  
+`here::here("/Data/Derived-csv-Data/2015_IND_Tables_Canada.csv")`
 
