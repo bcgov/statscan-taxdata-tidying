@@ -24,12 +24,17 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
     basename() %>%
     tools::file_path_sans_ext()
   
+  if (sheet %in% c("3A", "3B", "3C", "8", "9")) {
+    tempcols <- c("one", "two")
+  } else tempcols <- c("one", "two", "three")
+                     
   sheetcolnames <- path %>%
     read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE) %>%
     t() %>% 
-    as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
-    fill(one, two, three) %>% 
-    mutate(sheet_col_names = paste("I", sheet, one, two, three, sep = '_'),
+    as_tibble(.name_repair = ~ tempcols) %>% 
+    fill(tempcols) %>% 
+    unite(sheet_col_names) %>% 
+    mutate(sheet_col_names = paste("I", sheet, sheet_col_names, sep = '_'),
            sheet_col_names = str_replace(sheet_col_names, "_NA_NA|_NA", "")) %>% 
     select(sheet_col_names) %>% 
     pull()
