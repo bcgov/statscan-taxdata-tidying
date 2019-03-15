@@ -14,9 +14,9 @@
 
 #For Tables in Families income data
 #load income data into R
-setwd("~/Data/FAM")
+setwd("~/data-raw/FAM")
 getwd()
-dir.wrk <- "~/Data/FAM"
+dir.wrk <- "~/data-raw/FAM"
 dir.wrk <- getwd()
 
 #load libraries

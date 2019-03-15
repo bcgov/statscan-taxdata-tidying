@@ -24,7 +24,7 @@ library(dplyr)
 library(stringr)
 library(here)
 
-filepath <- here("Data", "2015_IND_Tables_1_to_13_Canada.xlsx")
+filepath <- here("data-raw", "2015_IND_Tables_1_to_13_Canada.xlsx")
 
 # load tax data from individuals (per year) xlsx tables into R 
 #read file path for individual income table 1
@@ -45,7 +45,7 @@ library(readxl)
 
 # Set file name, folder and path at top so you only have to change it in one place
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
-filefolder <- "Data/ind"
+filefolder <- "data-raw/ind"
 filepath <- here(filefolder, filename)
 
 # Get sheet names and positions from .xls file
@@ -266,11 +266,11 @@ read_then_csv_ind <- function(sheet, skip, col_names, path) {
   
   path %>%
     read_excel(sheet = sheet, skip = sheetskiprows, col_names = c(sheetcolnames)) %>% 
-    write_csv(paste0("tmp/", pathbase, "-", sheet, ".csv"))
+    write_csv(paste0("data-tidy/", pathbase, "-", sheet, ".csv"))
 }
 
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
-filefolder <- "Data/ind"
+filefolder <- "data-raw/ind"
 filepath <- here(filefolder, filename)
 
 # read sheet name 8
