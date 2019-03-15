@@ -14,12 +14,10 @@ See the License for the specific language governing permissions and limitations 
 
 
 
-# Data Source
+# Tidy Data Folder
 
-The xlsx files from Statistics Canada are housed in the `raw-data` folder and the cleaned-up sheets are written into `derived-data` 
+The tidied `.csv` files are exported to the `data-tidy` folder
 
-e.g.
+e.g. `data-tidy/2015_Individuals_BritishColumbia.csv`  
 
-`here::here("/Data/raw-data/2015_IND_Tables_1_to_13_Canada.xlsx")`  
-`here::here("/Data/derived-data/2015_IND_Tables_Canada.csv")`
 
