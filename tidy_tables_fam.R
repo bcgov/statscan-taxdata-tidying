@@ -70,7 +70,7 @@ filepath <- here(filefolder, filename)
 sheets <- excel_sheets(filepath)
 
 ## read one sheet by sheet name 
-F_test <- tidy_tax_fam("1", path = filepath)
+F_test <- tidy_tax_fam("7", path = filepath)
 
 ## inspecting column names for duplicates (when )
 nocols <- colnames(F_test)
@@ -95,7 +95,9 @@ tidy_sheets %>%
 ## TO DO ##
 ###########
 
-## Check to see if any column names are duplicacted with this approach
+## Need to make one off column_name vector for F-07 as the approach used 
+## does not work with header design of the tables (i.e. cannot paste contents to get unique names)
+
 ## Add in the filtering of BC rows into the function
 
 
