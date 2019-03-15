@@ -4,7 +4,7 @@
  
 A set of R scripts to load, clean, and merge anonymized annual Statistics Canada income tax data for British Columbia. 
 
-
+<!--
 ## Structure
 
 This repo contains the following contents:
@@ -36,7 +36,7 @@ There are six scripts located in the `/Scratch/` folder that are not required fo
 - 04_output.R # write out the merged csv's
 - 05_encrypt.R # how to encrypt files for security (was not used, also note warning and latest version when using)
 - 06_scratch.R # functions to use for efficiency (i.e. use to load, clean, merge, and output in one go)
-
+-->
 
 ## Getting Help or Reporting an Issue
 
