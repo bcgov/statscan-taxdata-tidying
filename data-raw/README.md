@@ -18,6 +18,8 @@ See the License for the specific language governing permissions and limitations 
 
 The `*.xls` files from Statistics Canada need to be in the `data-raw` folder
 
-e.g. `data-raw/2015_IND_Tables_1_to_13_Canada.xls`  
+e.g. 
 
+- `data-raw/ind/2015_IND_Tables_1 to_13_Canada.xls`  
+- `data-raw/fam/2015_Family_Tables_1_to_18_Canada.xls`  
 
