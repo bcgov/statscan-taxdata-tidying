@@ -26,21 +26,34 @@ library(tibble)
 
 tidy_tax_i13sheet <- function(sheet, skip, col_names, path) {
   
-  sheetcolnames <- path %>%
-    read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE) %>%
+  types <- c("Couple Families",
+             "Lone-Parent Families",
+             "Census Families In Low Income",
+             "Non-Family Persons",
+             "All family units" )
+  
+  sheet_13_colnames <- read_xls(filepath, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3) %>%
     t() %>% 
-    as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
-    fill(c("one", "two", "three")) %>% 
-    unite(sheet_col_names) %>% 
-    mutate(sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|")),
-           sheet_col_names = paste("I|13", sheet_col_names, sep = '|'),
-           sheet_col_names = str_replace(sheet_col_names, "_na_na|_na", "")) %>% 
-    select(sheet_col_names) %>% 
+    as_tibble(.name_repair = ~ c("one", "three", "four")) %>% 
+    mutate(two = NA) %>% 
+    select(one, two, three, four) %>% 
+    mutate(two = case_when(str_detect(three, "0-17") ~ "0-17",
+                           str_detect(three, "18-64") ~ "18-64",
+                           str_detect(three, "65 +") ~ "65+",
+                           one %in% types ~ "all_ages",
+                           TRUE ~ NA_character_)) %>% 
+    fill(one, two, three) %>%  # fill empty cells
+    unite(sheet_13_colnames) %>% 
+    mutate(sheet_13_colnames = tolower(str_replace_all(sheet_13_colnames, "\\s", "|")),
+           sheet_13_colnames = paste("I|13", sheet_13_colnames, sep = '|'),
+           sheet_13_colnames = str_replace_all(sheet_13_colnames, "_na_na|_na", "")) %>% 
+    select(sheet_13_colnames) %>% 
     pull()
+  
   
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
-               col_names = sheetcolnames,
+               col_names = sheet_13_colnames,
                .name_repair = "unique") %>%
     tibble::add_column(year = sheet, .before = 1) 
   
@@ -64,7 +77,7 @@ test <- tidy_tax_i13sheet("2004", path = filepath)
 
 
 ## Read in and add names to all sheets at once
-tidy_sheets <- filepath %>%
+tidy_13_sheets <- filepath %>%
   excel_sheets() %>%
   set_names() %>% 
   map(tidy_tax_i13sheet, path = filepath)
