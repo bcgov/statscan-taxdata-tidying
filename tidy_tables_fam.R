@@ -90,6 +90,57 @@ tidy_sheets %>%
   names(.) %>%
   walk(~ write_csv(tidy_sheets[[.]], paste0("data-tidy/", "2016_Family_BC", "-", ., ".csv")))
 
+#--------------------------------------------------------------------
+
+## read sheet 7 by sheet name 
+## Function to read in each sheet from Table F-07 xls file, clean column names,
+## and export df in a list object
+
+filename <- "2016_Family_Tables_1_to_18_Canada.xls"
+filefolder <- "data-raw"
+filepath <- here(filefolder, filename)
+
+my_custom_name_repair <- read_xls(filepath, sheet = 12, skip = 1, col_names = FALSE, n_max = 3) %>%
+  t() %>% 
+  as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
+  fill(one, two, three) %>%  # fill empty cells
+  mutate(sheet14_col_names = paste("F-07", one, two, three, sep = '_'),
+         sheet14_col_names = str_replace(sheet14_col_names, "_NA_NA|_NA", ""),
+         sheet14_col_names = str_replace_all(sheet14_col_names, c(" |/|'|"), "")) %>% 
+  select(sheet14_col_names) %>% 
+  pull()
+my_custom_header_repair <- str_replace_all(as.character(my_custom_name_repair), c(" |/|'|"), "")
+
+
+
+
+# read in sample xlsx data and use new column names
+
+sheet_data <- read_xls(filepath, sheet = 12,
+                       col_names = my_custom_header_repair)
+colnames(sheet_data)
+colnames(sheet_data) <- as.character(colnames(sheet_data))
+
+#OR
+colClean <- function(x){
+  colnames(x) <- gsub(".", "", perl=TRUE, colnames(x))
+}
+colClean(sheet_data)
+colnames(sheet_data)
+
+
+
+
+
+
+
+
+
+#--------------------------------------------------------------------
+
+
+
+
 
 ###########
 ## TO DO ##
@@ -97,7 +148,6 @@ tidy_sheets %>%
 
 ## Need to make one off column_name vector for F-07 as the approach used 
 ## does not work with header design of the tables (i.e. cannot paste contents to get unique names)
-
 ## Add in the filtering of BC rows into the function
 
 
