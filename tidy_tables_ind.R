@@ -19,8 +19,6 @@ library(tidyr)
 library(stringr)
 library(tibble)
 
-# update the latest readxl package
-# install.packages("readxl", lib="/Users/nnabavi/Library/R/3.5/library")
 
 ## Function to read in each sheet from Table I xls file, clean column names,
 ## and export df in a list object
@@ -60,9 +58,8 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
   return(tidy_df)
 }
 
-#--------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
-# changing folder structure to read in old R/readxl version
 ## example Table I .xls file
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
 filefolder <- "data-raw"
@@ -96,64 +93,53 @@ tidy_sheets %>%
 #--------------------------------------------------------------------
 
 
-## read sheet 8 by sheet name 
-## Function to read in each sheet from Table I-08 xls file, clean column names,
-## and export df in a list object
+## Fix sheet 8 column names
 
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
-filefolder <- "data-raw"
+filefolder <- "data-raw/ind"
 filepath <- here(filefolder, filename)
 
-my_custom_name_repair <- read_xls(filepath, sheet = 14, skip = 1, col_names = FALSE, n_max = 3) %>%
+sheet_8_colnames <- read_xls(filepath, sheet = "8", skip = 1, col_names = FALSE, n_max = 3) %>%
   t() %>% 
-  as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
-  fill(one, two, three) %>%  # fill empty cells
-  mutate(sheet14_col_names = paste("I-08", one, two, three, sep = '_'),
-         sheet14_col_names = str_replace(sheet14_col_names, "_NA_NA|_NA", ""),
-         sheet14_col_names = str_replace_all(sheet14_col_names, c(" |/|'|"), "")) %>% 
-  select(sheet14_col_names) %>% 
+  as_tibble(.name_repair = ~ c("one", "three")) %>% 
+  mutate(two = case_when(one == "$'000" ~ "$'000", TRUE ~ NA_character_),
+         one = case_when(two == "$'000" ~ NA_character_, TRUE ~ one)) %>% 
+  select(one, two, three) %>% 
+  fill(one, three) %>%  # fill empty cells
+  unite(sheet_8_colnames) %>% 
+  mutate(sheet_8_colnames = tolower(str_replace_all(sheet_8_colnames, "\\s", "|")),
+         sheet_8_colnames = paste("I", sheet, sheet_8_colnames, sep = '|'),
+         sheet_8_colnames = str_replace(sheet_8_colnames, "_na_na|_na", "")) %>% 
+  select(sheet_8_colnames) %>% 
   pull()
-my_custom_header_repair <- str_replace_all(as.character(my_custom_name_repair), c(" |/|'|"), "")
 
 
-
-  
 # read in sample xlsx data and use new column names
   
-sheet_data <- read_xls(filepath, sheet = 14,
-                          col_names = my_custom_header_repair)
-colnames(sheet_data)
-  colnames(sheet_data) <- as.character(colnames(sheet_data))
-  
+sheet_8_data <- read_xls(filepath, sheet = "8",
+                          col_names = sheet_8_colnames)
+
 
 #--------------------------------------------------------------------
   
-## read sheet 13 by sheet name 
-## Function to read in each sheet from Table I-08 xls file, clean column names,
-## and export df in a list object
-  
-  filename <- "2015_IND_Tables 1_to_13_Canada.xls"
-  filefolder <- "data-raw"
-  filepath <- here(filefolder, filename)
-  
-  my_custom_name_repair <- read_xls(filepath, sheet = 19, skip = 1, col_names = FALSE, n_max = 3) %>%
+## Fix sheet 13 column names
+
+sheet_13_colnames <- read_xls(filepath, sheet = "13", skip = 1, col_names = FALSE, n_max = 3) %>%
     t() %>% 
     as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
     fill(one, two, three) %>%  # fill empty cells
-    mutate(sheet14_col_names = paste("I-13", one, two, three, sep = '_'),
-           sheet14_col_names = str_replace(sheet14_col_names, "_NA_NA|_NA", ""),
-           sheet14_col_names = str_replace_all(sheet14_col_names, c(" |/|'|"), "")) %>% 
-    select(sheet14_col_names) %>% 
+    mutate(sheet13_colnames = paste("I-13", one, two, three, sep = '_'),
+           sheet13_colnames = str_replace(sheet14_col_names, "_NA_NA|_NA", ""),
+           sheet13_colnames = str_replace_all(sheet14_col_names, c(" |/|'|"), "")) %>% 
+    select(sheet13_colnames) %>% 
     pull()
-  my_custom_header_repair <- str_replace_all(as.character(my_custom_name_repair), c(" |/|'|"), "")
+
   
-  
-  
-  
+
 # read in sample xlsx data and use new column names
-  
-  sheet_data <- read_xls(filepath, sheet = 19,
-                         col_names = my_custom_header_repair)
+sheet_13_data <- read_xls(filepath, sheet = "13",
+                         col_names = sheet_13_colnames)
+
   View(sheet_data)
   colnames(sheet_data)
   colnames(sheet_data) <- as.character(colnames(sheet_data))
