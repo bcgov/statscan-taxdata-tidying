@@ -53,7 +53,7 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
                .name_repair = "unique") %>%
     tibble::add_column(year = file_year, .before = 1) 
   
-  # write_csv(tidy_df, paste0("data-tidy/", pathbase, "-", sheet, ".csv"))
+   write_csv(tidy_df, paste0("data-tidy/", file_year, "-I", sheet, ".csv"))
   
   return(tidy_df)
 }
@@ -62,7 +62,7 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
 
 ## example Table I .xls file
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
-filefolder <- "data-raw"
+filefolder <- "data-raw/ind"
 filepath <- here(filefolder, filename)
 
 ## get sheet names from example Table I .xls file
@@ -87,7 +87,7 @@ tidy_sheets <- filepath %>%
 ## Save all sheets as individual CSVs
 tidy_sheets %>%
   names(.) %>%
-  walk(~ write_csv(tidy_sheets[[.]], paste0("data-tidy/", "2015_Individuals_BC", "-", ., ".csv")))
+  walk(~ write_csv(tidy_sheets[[.]], paste0("data-tidy/", "2015", "-I", ., ".csv")))
 
 
 #--------------------------------------------------------------------
