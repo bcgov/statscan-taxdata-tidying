@@ -31,7 +31,54 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
   
   file_year <- pathbase %>% stringr::str_extract("^[0-9]{4}")
   
-  if (sheet %in% c("3A", "3B", "3C", "8", "9")) {
+  if(sheet == "8") {
+    
+    sheetcolnames <- read_xls(filepath, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3) %>%
+      t() %>% 
+      as_tibble(.name_repair = ~ c("one", "three")) %>% 
+      mutate(two = case_when(one == "$'000" ~ "$'000", TRUE ~ NA_character_),
+             one = case_when(two == "$'000" ~ NA_character_, TRUE ~ one)) %>% 
+      select(one, two, three) %>% 
+      fill(one, three) %>%  # fill empty cells
+      unite(sheet_col_names) %>% 
+      mutate(sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|")),
+             sheet_col_names = paste("I", sheet, sheet_col_names, sep = '|'),
+             sheet_col_names = str_replace(sheet_col_names, "_na_na|_na", "")) %>% 
+      select(sheet_col_names) %>% 
+      pull()
+    
+  }
+  
+  else if(sheet == "13") {
+    
+    types <- c("Couple Families",
+               "Lone-Parent Families",
+               "Census Families In Low Income",
+               "Non-Family Persons",
+               "All family units" )
+    
+    sheetcolnames <- read_xls(filepath, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3) %>%
+      t() %>% 
+      as_tibble(.name_repair = ~ c("one", "three", "four")) %>% 
+      mutate(two = NA) %>% 
+      select(one, two, three, four) %>% 
+      mutate(two = case_when(str_detect(three, "0-17") ~ "0-17",
+                             str_detect(three, "18-64") ~ "18-64",
+                             str_detect(three, "65 +") ~ "65+",
+                             one %in% types ~ "all_ages",
+                             TRUE ~ NA_character_)) %>% 
+      fill(one, two, three) %>%  # fill empty cells
+      unite(sheetcolnames) %>% 
+      mutate(sheetcolnames = tolower(str_replace_all(sheetcolnames, "\\s", "|")),
+             sheetcolnames = paste("I", sheet, sheetcolnames, sep = '|'),
+             sheetcolnames = str_replace_all(sheetcolnames, "_na_na|_na", "")) %>% 
+      select(sheetcolnames) %>% 
+      pull()
+
+  } else {
+  
+  
+  if (sheet %in% c("3A", "3B", "3C", "9")) {
     tempcols <- c("one", "two")
   } else tempcols <- c("one", "two", "three")
   
@@ -47,6 +94,8 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
     select(sheet_col_names) %>% 
     pull()
   
+  }
+  
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
                col_names = sheetcolnames,
@@ -57,6 +106,7 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
   
   return(tidy_df)
 }
+
 
 #-------------------------------------------------------------------------------
 
@@ -69,7 +119,7 @@ filepath <- here(filefolder, filename)
 sheets <- excel_sheets(filepath)
 
 ## read one sheet by sheet name 
-I_test <- tidy_tax_ind("1", path = filepath)
+I_test <- tidy_tax_ind("2", path = filepath)
 
 ## inspecting column names for duplicates (when )
 nocols <- colnames(I_test)
