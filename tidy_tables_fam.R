@@ -20,6 +20,11 @@ library(stringr)
 library(tibble)
 
 
+filename <- "2016_Family_Tables_1_to_18_Canada.xls"
+filefolder <- "data-raw"
+filepath <- here(filefolder, filename)
+
+#--------------------------------------------------------------------
 ## Function to read in each sheet from Table F xls file, clean column names,
 ## and export df in a list object
 
@@ -63,7 +68,7 @@ tidy_tax_fam <- function(sheet, skip, col_names, path) {
 
 ## example Table I .xls file
 filename <- "2016_Family_Tables_1_to_18_Canada.xls"
-filefolder <- "data-raw/fam"
+filefolder <- "data-raw/"
 filepath <- here(filefolder, filename)
 
 ## get sheet names from example Table I .xls file
@@ -92,26 +97,31 @@ tidy_sheets %>%
 
 #--------------------------------------------------------------------
 
-## read sheet 7 by sheet name 
-## Function to read in each sheet from Table F-07 xls file, clean column names,
-## and export df in a list object
+## Fix Table F-07 xls file
+
 
 filename <- "2016_Family_Tables_1_to_18_Canada.xls"
 filefolder <- "data-raw"
 filepath <- here(filefolder, filename)
 
-my_custom_name_repair <- read_xls(filepath, sheet = 12, skip = 1, col_names = FALSE, n_max = 3) %>%
+sheet_7_colnames <- read_xls(filepath, sheet = "7", skip = 1, col_names = FALSE, n_max = 3) %>%
   t() %>% 
   as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
-  fill(one, two, three) %>%  # fill empty cells
-  mutate(sheet14_col_names = paste("F-07", one, two, three, sep = '_'),
-         sheet14_col_names = str_replace(sheet14_col_names, "_NA_NA|_NA", ""),
-         sheet14_col_names = str_replace_all(sheet14_col_names, c(" |/|'|"), "")) %>% 
-  select(sheet14_col_names) %>% 
+  mutate(four = c("NA", (1:nrow))) %>% ##NOT
+  select(one, two, three, four) %>% ##NOT
+  fill(one, two, three, four) %>%  # fill empty cells
+  unite(sheet_7_colnames) %>% 
+  mutate(sheet_7_colnames = tolower(str_replace_all(sheet_7_colnames, "\\s", "|")),
+         sheet_7_colnames = paste("F",sheet = "7", sheet_7_colnames, sep = '|'),
+         sheet_7_colnames = str_replace(sheet_7_colnames, "_na_na|_na", "")) %>% 
+  select(sheet_7_colnames) %>% 
   pull()
+
+
+
+sheet_7_colnames
+
 my_custom_header_repair <- str_replace_all(as.character(my_custom_name_repair), c(" |/|'|"), "")
-
-
 
 
 # read in sample xlsx data and use new column names
@@ -119,7 +129,6 @@ my_custom_header_repair <- str_replace_all(as.character(my_custom_name_repair), 
 sheet_data <- read_xls(filepath, sheet = 12,
                        col_names = my_custom_header_repair)
 colnames(sheet_data)
-colnames(sheet_data) <- as.character(colnames(sheet_data))
 
 #OR
 colClean <- function(x){
@@ -129,15 +138,9 @@ colClean(sheet_data)
 colnames(sheet_data)
 
 
-#--------------------------------------------------------------------
 
 
-###########
-## TO DO ##
-###########
 
-## Need to make one off column_name vector for F-07 as the approach used 
-## does not work with header design of the tables (i.e. cannot paste contents to get unique names)
-## Add in the filtering of BC rows into the function
+
 
 
