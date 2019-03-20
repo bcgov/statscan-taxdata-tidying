@@ -19,6 +19,8 @@ library(tidyr)
 library(stringr)
 library(tibble)
 
+# update the latest readxl package
+# install.packages("readxl", lib="/Users/nnabavi/Library/R/3.5/library")
 
 ## Function to read in each sheet from Table I xls file, clean column names,
 ## and export df in a list object
@@ -58,11 +60,12 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
   return(tidy_df)
 }
 
+#--------------------------------------------------------------------
 
-
+# changing folder structure to read in old R/readxl version
 ## example Table I .xls file
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
-filefolder <- "data-raw/ind"
+filefolder <- "data-raw"
 filepath <- here(filefolder, filename)
 
 ## get sheet names from example Table I .xls file
@@ -90,12 +93,91 @@ tidy_sheets %>%
   walk(~ write_csv(tidy_sheets[[.]], paste0("data-tidy/", "2015_Individuals_BC", "-", ., ".csv")))
 
 
-###########
-## TO DO ##
-###########
+#--------------------------------------------------------------------
 
-## Need to make one off column_name vectors for I-08 and I-13 as the approach used 
-## does not work with header designs of these two tables (i.e. cannot paste contents to get unique names)
 
-## Add in the filtering of BC rows into the function
+## read sheet 8 by sheet name 
+## Function to read in each sheet from Table I-08 xls file, clean column names,
+## and export df in a list object
 
+filename <- "2015_IND_Tables 1_to_13_Canada.xls"
+filefolder <- "data-raw"
+filepath <- here(filefolder, filename)
+
+my_custom_name_repair <- read_xls(filepath, sheet = 14, skip = 1, col_names = FALSE, n_max = 3) %>%
+  t() %>% 
+  as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
+  fill(one, two, three) %>%  # fill empty cells
+  mutate(sheet14_col_names = paste("I-08", one, two, three, sep = '_'),
+         sheet14_col_names = str_replace(sheet14_col_names, "_NA_NA|_NA", ""),
+         sheet14_col_names = str_replace_all(sheet14_col_names, c(" |/|'|"), "")) %>% 
+  select(sheet14_col_names) %>% 
+  pull()
+my_custom_header_repair <- str_replace_all(as.character(my_custom_name_repair), c(" |/|'|"), "")
+
+
+
+  
+# read in sample xlsx data and use new column names
+  
+sheet_data <- read_xls(filepath, sheet = 14,
+                          col_names = my_custom_header_repair)
+colnames(sheet_data)
+  colnames(sheet_data) <- as.character(colnames(sheet_data))
+  
+
+#--------------------------------------------------------------------
+  
+## read sheet 13 by sheet name 
+## Function to read in each sheet from Table I-08 xls file, clean column names,
+## and export df in a list object
+  
+  filename <- "2015_IND_Tables 1_to_13_Canada.xls"
+  filefolder <- "data-raw"
+  filepath <- here(filefolder, filename)
+  
+  my_custom_name_repair <- read_xls(filepath, sheet = 19, skip = 1, col_names = FALSE, n_max = 3) %>%
+    t() %>% 
+    as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
+    fill(one, two, three) %>%  # fill empty cells
+    mutate(sheet14_col_names = paste("I-13", one, two, three, sep = '_'),
+           sheet14_col_names = str_replace(sheet14_col_names, "_NA_NA|_NA", ""),
+           sheet14_col_names = str_replace_all(sheet14_col_names, c(" |/|'|"), "")) %>% 
+    select(sheet14_col_names) %>% 
+    pull()
+  my_custom_header_repair <- str_replace_all(as.character(my_custom_name_repair), c(" |/|'|"), "")
+  
+  
+  
+  
+# read in sample xlsx data and use new column names
+  
+  sheet_data <- read_xls(filepath, sheet = 19,
+                         col_names = my_custom_header_repair)
+  View(sheet_data)
+  colnames(sheet_data)
+  colnames(sheet_data) <- as.character(colnames(sheet_data))
+  colnames(sheet_data) <- gsub("","..", colnames(sheet_data)) 
+  
+#OR
+  colClean <- function(x){
+    colnames(x) <- gsub("..", "", perl=TRUE, colnames(x))
+  }
+  colClean(sheet_data)
+  colnames(sheet_data)
+  
+#--------------------------------------------------------------------
+#future state
+## Function to read all xls data files for individuals
+# find all file names with Canada in the name
+  filefolder <- "data-raw"
+  files <- dir(filefolder, pattern = ".xls")
+  file.path <- here(filefolder, files)
+  
+  
+  data <- file.path %>%
+    map(excel_sheets) %>%    # read in all the file sheets individually, using
+    # the function excel_sheets() from the readxl package
+    reduce(rbind)        # reduce with rbind into one dataframe
+  data
+  
