@@ -96,8 +96,10 @@ tidy_sheets %>%
 ## Fix sheet 8 column names
 
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
-filefolder <- "data-raw/ind"
+filefolder <- "data-raw"
 filepath <- here(filefolder, filename)
+
+sheets <- excel_sheets(filepath)
 
 sheet_8_colnames <- read_xls(filepath, sheet = "8", skip = 1, col_names = FALSE, n_max = 3) %>%
   t() %>% 
@@ -108,50 +110,56 @@ sheet_8_colnames <- read_xls(filepath, sheet = "8", skip = 1, col_names = FALSE,
   fill(one, three) %>%  # fill empty cells
   unite(sheet_8_colnames) %>% 
   mutate(sheet_8_colnames = tolower(str_replace_all(sheet_8_colnames, "\\s", "|")),
-         sheet_8_colnames = paste("I", sheet, sheet_8_colnames, sep = '|'),
+         sheet_8_colnames = paste("I",sheet = "8", sheet_8_colnames, sep = '|'),
          sheet_8_colnames = str_replace(sheet_8_colnames, "_na_na|_na", "")) %>% 
   select(sheet_8_colnames) %>% 
   pull()
 
 
 # read in sample xlsx data and use new column names
-  
-sheet_8_data <- read_xls(filepath, sheet = "8",
-                          col_names = sheet_8_colnames)
 
+sheet_8_data <- read_xls(filepath, sheet = "8",
+                         col_names = sheet_8_colnames)
+
+colnames(sheet_8_data)
 
 #--------------------------------------------------------------------
   
 ## Fix sheet 13 column names
 
 sheet_13_colnames <- read_xls(filepath, sheet = "13", skip = 1, col_names = FALSE, n_max = 3) %>%
-    t() %>% 
-    as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
-    fill(one, two, three) %>%  # fill empty cells
-    mutate(sheet13_colnames = paste("I-13", one, two, three, sep = '_'),
-           sheet13_colnames = str_replace(sheet14_col_names, "_NA_NA|_NA", ""),
-           sheet13_colnames = str_replace_all(sheet14_col_names, c(" |/|'|"), "")) %>% 
-    select(sheet13_colnames) %>% 
-    pull()
+  t() %>% 
+  as_tibble(.name_repair = ~ c("one", "two", "three")) %>% 
+  mutate(four = case_when(two == "NA" ~ "NA_character_",  TRUE ~ NA_character_)) %>% ## NOT!
+  select(one, two, three, four) %>% 
+  fill(one, two, three, four) %>%  # fill empty cells
+  unite(sheet_13_colnames) %>% 
+  mutate(sheet_13_colnames = tolower(str_replace_all(sheet_13_colnames, "\\s", "|")),
+         sheet_13_colnames = paste("I", sheet = "13", sheet_13_colnames, sep = '|'),
+         sheet_13_colnames = str_replace(sheet_13_colnames, "_na_na|_na", "")) %>% 
+  select(sheet_13_colnames) %>% 
+  pull()
 
-  
 
 # read in sample xlsx data and use new column names
+
 sheet_13_data <- read_xls(filepath, sheet = "13",
                          col_names = sheet_13_colnames)
 
-  View(sheet_data)
-  colnames(sheet_data)
-  colnames(sheet_data) <- as.character(colnames(sheet_data))
-  colnames(sheet_data) <- gsub("","..", colnames(sheet_data)) 
-  
-#OR
-  colClean <- function(x){
-    colnames(x) <- gsub("..", "", perl=TRUE, colnames(x))
-  }
-  colClean(sheet_data)
-  colnames(sheet_data)
-  
+colnames(sheet_13_data)
+
+
+## read one sheet by sheet name 
+I_test <- tidy_tax_ind("13", path = filepath)
+
+## inspecting column names for duplicates (when )
+nocols <- colnames(I_test)
+dups <- unique(colnames(I_test))
+compare <- I_test %>% select(contains(".."))
+
+
+
+
 #--------------------------------------------------------------------
 #future state
 ## Function to read all xls data files for individuals
