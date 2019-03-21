@@ -158,7 +158,37 @@ colnames(sheet_7_data)
 ###########
 
 ## Add in the filtering of BC rows into the function
+
 ## Add loop to read all files
+
+filefolder <- "data-raw"
+files <- list.files(filefolder, pattern = "*.xls", full.names = TRUE)  # creates the list of all the xls files in the directory
+ldf <- list() # creates a list
+for (k in 1:length(filepath)){
+  ldf[[k]] <- read_xls(filepath[k], col_names =TRUE, col_types = NULL, skip = 0)
+}
+
+str(ldf[[1]]) 
+
+
+
+
+data <- filepath %>%
+  map(excel_sheets) %>%    # read in all the file sheets individually, using
+  # the function excel_sheets() from the readxl package
+  reduce(rbind)        # reduce with rbind into one dataframe
+data
+
+
 ## Add loop to read and bind csv by table
 
+filefolder <- "data-tidy"
+files <- list.files(filefolder, pattern = "*.csv", full.names = TRUE)  # creates the list of all the xls files in the directory
+list_of_csv <- lapply(files, read.csv)
+big_object <- do.call('rbind', list_of_csv)
+
+write.csv(
+  fileData,
+  paste0(filepath,"/",Sys.Date(),"FAM.csv", row.names = FALSE)
+  
 

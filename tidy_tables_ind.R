@@ -214,14 +214,25 @@ colnames(sheet_13_data)
 
 #--------------------------------------------------------------------
 #future state
-## Function to read all xls data files for individuals
 # find all file names with Canada in the name
+
+## Function to read all xls data files for individuals
+
+## Add loop to read all files
+
   filefolder <- "data-raw"
-  files <- dir(filefolder, pattern = ".xls")
-  file.path <- here(filefolder, files)
+  files <- list.files(filefolder, pattern = "*.xls", full.names = TRUE)  # creates the list of all the xls files in the directory
+  ldf <- list() # creates a list
+  for (k in 1:length(filepath)){
+    ldf[[k]] <- read_xls(filepath[k], col_names =TRUE, col_types = NULL, skip = 0)
+  }
+  
+  str(ldf[[1]]) 
+  
+
   
   
-  data <- file.path %>%
+  data <- filepath %>%
     map(excel_sheets) %>%    # read in all the file sheets individually, using
     # the function excel_sheets() from the readxl package
     reduce(rbind)        # reduce with rbind into one dataframe
