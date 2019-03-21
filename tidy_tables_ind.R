@@ -102,7 +102,7 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
                .name_repair = "unique") %>%
     tibble::add_column(year = file_year, .before = 1) 
   
-   write_csv(tidy_df, paste0("data-tidy/", file_year, "-I", sheet, ".csv"))
+   write_csv(tidy_df, paste0("data-tidy/", file_year, "-IND-", sheet, ".csv"))
   
   return(tidy_df)
 }
@@ -110,22 +110,21 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
 
 #-------------------------------------------------------------------------------
 
-## example Table I .xls file
+## Example Table I .xls file
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
 filefolder <- "data-raw/ind"
 filepath <- here(filefolder, filename)
 
-## get sheet names from example Table I .xls file
+## Get sheet names from example Table I .xls file
 sheets <- excel_sheets(filepath)
 
-## read one sheet by sheet name 
+## Read one sheet by sheet name 
 I_test <- tidy_tax_ind("2", path = filepath)
 
-## inspecting column names for duplicates (when )
+## Inspecting column names for duplicates
 nocols <- colnames(I_test)
 dups <- unique(colnames(I_test))
 compare <- I_test %>% select(contains(".."))
-
 
 ## Read in and add names to all sheets at once
 tidy_sheets <- filepath %>%
@@ -133,24 +132,35 @@ tidy_sheets <- filepath %>%
   set_names() %>% 
   map(tidy_tax_ind, path = filepath)
 
+## Read in all files and sheets at once
+file.list <- list.files(pattern = '.xls')
 
-## Save all sheets as individual CSVs
-tidy_sheets %>%
-  names(.) %>%
-  walk(~ write_csv(tidy_sheets[[.]], paste0("data-tidy/", "2015", "-I", ., ".csv")))
+
+# ## Save all sheets as individual CSVs
+# tidy_sheets %>%
+#   names(.) %>%
+#   walk(~ write_csv(tidy_sheets[[.]], paste0("data-tidy/", "2015", "-IND-", ., ".csv")))
+
+
+
+###########
+## TO DO ##
+###########
+
+## Add in the filtering of BC rows into the function
+## Add loop to read all files
+## Add loop to read and bind csv by table
+
 
 
 #--------------------------------------------------------------------
-
-
-## Fix sheet 8 column names
+## Fix sheet 8 and sheet 12 column names
 
 filename <- "2015_IND_Tables 1_to_13_Canada.xls"
 filefolder <- "data-raw/ind"
 filepath <- here(filefolder, filename)
 
-sheets <- excel_sheets(filepath)
-
+# fix sheet 8 column names
 sheet_8_colnames <- read_xls(filepath, sheet = "8", skip = 1, col_names = FALSE, n_max = 3) %>%
   t() %>% 
   as_tibble(.name_repair = ~ c("one", "three")) %>% 
@@ -165,18 +175,13 @@ sheet_8_colnames <- read_xls(filepath, sheet = "8", skip = 1, col_names = FALSE,
   select(sheet_8_colnames) %>% 
   pull()
 
-
-# read in sample xlsx data and use new column names
-
+#read in sample xlsx data and use new column names
 sheet_8_data <- read_xls(filepath, sheet = "8", skip = 4,
                          col_names = sheet_8_colnames)
-
 colnames(sheet_8_data)
 
-#--------------------------------------------------------------------
-  
-## Fix sheet 13 column names
 
+# fix sheet 13 column names
 types <- c("Couple Families",
            "Lone-Parent Families",
            "Census Families In Low Income",
@@ -201,21 +206,10 @@ sheet_13_colnames <- read_xls(filepath, sheet = "13", skip = 1, col_names = FALS
   select(sheet_13_colnames) %>% 
   pull()
 
-
 # read in sample xlsx data and use new column names
-
 sheet_13_data <- read_xls(filepath, sheet = "13", skip = 4,
                          col_names = sheet_13_colnames)
-
 colnames(sheet_13_data)
-
-
-## inspecting column names for duplicates (when )
-nocols <- colnames(sheet_8_data)
-dups <- unique(colnames(sheet_8_data))
-compare <- sheet_8_data %>% select(contains(".."))
-
-
 
 
 #--------------------------------------------------------------------
