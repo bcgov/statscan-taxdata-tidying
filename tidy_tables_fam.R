@@ -171,8 +171,6 @@ for (k in 1:length(filepath)){
 str(ldf[[1]]) 
 
 
-
-
 data <- filepath %>%
   map(excel_sheets) %>%    # read in all the file sheets individually, using
   # the function excel_sheets() from the readxl package
@@ -180,15 +178,19 @@ data <- filepath %>%
 data
 
 
-## Add loop to read and bind csv by table
+## Add loop to write and bind csv by table
 
 filefolder <- "data-tidy"
 files <- list.files(filefolder, pattern = "*.csv", full.names = TRUE)  # creates the list of all the xls files in the directory
 list_of_csv <- lapply(files, read.csv)
-big_object <- do.call('rbind', list_of_csv)
+big_object <- do.call("rbind", list_of_csv)
 
-write.csv(
-  fileData,
-  paste0(filepath,"/",Sys.Date(),"FAM.csv", row.names = FALSE)
+##do.call("rbind", list(DF1, DF2, DF3))
+
+for (i in 1:300)  {
+  write.csv(data,
+            paste0("Table", "sheet", "Sys.Date()","FAM.csv", sep="-", row.names = FALSE, col.names = TRUE))
+}
+
   
 

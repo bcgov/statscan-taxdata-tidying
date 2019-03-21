@@ -231,10 +231,26 @@ colnames(sheet_13_data)
   
 
   
-  
   data <- filepath %>%
     map(excel_sheets) %>%    # read in all the file sheets individually, using
     # the function excel_sheets() from the readxl package
     reduce(rbind)        # reduce with rbind into one dataframe
   data
+ 
+   
+## Add loop to write and bind csv by table
+  
+  
+  filefolder <- "data-tidy"
+  files <- list.files(filefolder, pattern = "*.csv", full.names = TRUE)  # creates the list of all the xls files in the directory
+  list_of_csv <- lapply(files, read.csv)
+  big_object <- do.call("rbind", list_of_csv)
+  
+  ##do.call("rbind", list(DF1, DF2, DF3))
+  
+  for (i in 1:300)  {
+    write.csv(data,
+              paste0("Table", "sheet", "Sys.Date()","FAM.csv", sep="-", row.names = FALSE, col.names = TRUE))
+  }
+  
   
