@@ -11,7 +11,25 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-# filtering for BC Geos
+#load libraries and dependencies
+library(here)
+library(data.table)
+library(stringr)
+
+### BC GEO ###
+# download BC Geo csv from STATCAN's website: https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/prof/details/download-telecharger/comp/page_dl-tc.cfm?Lang=E&
+# load table: Geo_starting_row_BRITISH_COLUMBIA_CSV.csv into R
+
+folder <- "geo-conversions"
+filename <- "Geo_starting_row_BRITISH_COLUMBIA_CSV.csv"
+filepath <-  here(folder, filename)
+
+
+bcgeo <- fread(filepath)
+locs2016 <- bcgeo$`Geo Name`
+
+
+# filtering for BC Geos (based on data inspection)
 
 locs <- c("59001", "591023", "597051", "59002",
           "59003", "591017", "515950","595041", "59004",
