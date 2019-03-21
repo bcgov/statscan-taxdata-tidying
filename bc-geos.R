@@ -16,7 +16,7 @@ library(here)
 library(data.table)
 library(stringr)
 
-### BC GEO ###
+### BC GEO from 2016 Census ###
 # download BC Geo csv from STATCAN's website: https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/prof/details/download-telecharger/comp/page_dl-tc.cfm?Lang=E&
 # load table: Geo_starting_row_BRITISH_COLUMBIA_CSV.csv into R
 
@@ -26,7 +26,7 @@ filepath <-  here(folder, filename)
 
 
 bcgeo <- fread(filepath)
-locs2016 <- bcgeo$`Geo Name`
+locs2016 <- bcgeo$`Geo Name` #assign geo names from Census 2016 to a new list for filtering 
 
 
 # filtering for BC Geos (based on data inspection)
@@ -49,7 +49,7 @@ locs <- c("59001", "591023", "597051", "59002",
           "59038", "59039", "59040", "59041", "59042")
 
 dat1.new <- subset(dat1[dat1$Geo_Level == "11" | dat1$Geo_Level == "12",])
-dat2.new <- dat1[,names(dat1) %in% locs]
+dat2.new <- dat1[,names(dat1) %in% locs] #OR dat2.new <- dat1[,names(dat1) %in% locs2016]
 dat3.new <-subset(dat1, grepl("^V", Postal_Area))
 dat4.new <-subset(dat1, grepl("^9", Postal_Area))
 
