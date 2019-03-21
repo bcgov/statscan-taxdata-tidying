@@ -43,7 +43,7 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
       unite(sheet_col_names) %>% 
       mutate(sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|")),
              sheet_col_names = paste("I", sheet, sheet_col_names, sep = '|'),
-             sheet_col_names = str_replace(sheet_col_names, "_na_na|_na", "")) %>% 
+             sheet_col_names = str_replace_all(sheet_col_names, "_na_na|_na", "")) %>% 
       select(sheet_col_names) %>% 
       pull()
     
@@ -90,7 +90,7 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
     unite(sheet_col_names) %>% 
     mutate(sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|")),
            sheet_col_names = paste("I", sheet, sheet_col_names, sep = '|'),
-           sheet_col_names = str_replace(sheet_col_names, "_na_na|_na", "")) %>% 
+           sheet_col_names = str_replace_all(sheet_col_names, "_na_na|_na", "")) %>% 
     select(sheet_col_names) %>% 
     pull()
   
@@ -100,7 +100,7 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
     read_excel(sheet = sheet, skip = 4,
                col_names = sheetcolnames,
                .name_repair = "unique") %>%
-    tibble::add_column(year = file_year, .before = 1) 
+    tibble::add_column(year = file_year, .before = 1)
   
    write_csv(tidy_df, paste0("data-tidy/", file_year, "-IND-", sheet, ".csv"))
   
@@ -150,66 +150,6 @@ file.list <- list.files(pattern = '.xls')
 ## Add in the filtering of BC rows into the function
 ## Add loop to read all files
 ## Add loop to read and bind csv by table
-
-
-
-#--------------------------------------------------------------------
-## Fix sheet 8 and sheet 12 column names
-
-filename <- "2015_IND_Tables 1_to_13_Canada.xls"
-filefolder <- "data-raw/ind"
-filepath <- here(filefolder, filename)
-
-# fix sheet 8 column names
-sheet_8_colnames <- read_xls(filepath, sheet = "8", skip = 1, col_names = FALSE, n_max = 3) %>%
-  t() %>% 
-  as_tibble(.name_repair = ~ c("one", "three")) %>% 
-  mutate(two = case_when(one == "$'000" ~ "$'000", TRUE ~ NA_character_),
-         one = case_when(two == "$'000" ~ NA_character_, TRUE ~ one)) %>% 
-  select(one, two, three) %>% 
-  fill(one, three) %>%  # fill empty cells
-  unite(sheet_8_colnames) %>% 
-  mutate(sheet_8_colnames = tolower(str_replace_all(sheet_8_colnames, "\\s", "|")),
-         sheet_8_colnames = paste("I", sheet = "8", sheet_8_colnames, sep = '|'),
-         sheet_8_colnames = str_replace(sheet_8_colnames, "_na_na|_na", "")) %>% 
-  select(sheet_8_colnames) %>% 
-  pull()
-
-#read in sample xlsx data and use new column names
-sheet_8_data <- read_xls(filepath, sheet = "8", skip = 4,
-                         col_names = sheet_8_colnames)
-colnames(sheet_8_data)
-
-
-# fix sheet 13 column names
-types <- c("Couple Families",
-           "Lone-Parent Families",
-           "Census Families In Low Income",
-           "Non-Family Persons",
-           "All family units" )
-
-sheet_13_colnames <- read_xls(filepath, sheet = "13", skip = 1, col_names = FALSE, n_max = 3) %>%
-  t() %>% 
-  as_tibble(.name_repair = ~ c("one", "three", "four")) %>% 
-  mutate(two = NA) %>% 
-  select(one, two, three, four) %>% 
-  mutate(two = case_when(str_detect(three, "0-17") ~ "0-17",
-                         str_detect(three, "18-64") ~ "18-64",
-                         str_detect(three, "65 +") ~ "65+",
-                         one %in% types ~ "all_ages",
-                         TRUE ~ NA_character_)) %>% 
-  fill(one, two, three) %>%  # fill empty cells
-  unite(sheet_13_colnames) %>% 
-  mutate(sheet_13_colnames = tolower(str_replace_all(sheet_13_colnames, "\\s", "|")),
-         sheet_13_colnames = paste("I", sheet = "13", sheet_13_colnames, sep = '|'),
-         sheet_13_colnames = str_replace_all(sheet_13_colnames, "_na_na|_na", "")) %>% 
-  select(sheet_13_colnames) %>% 
-  pull()
-
-# read in sample xlsx data and use new column names
-sheet_13_data <- read_xls(filepath, sheet = "13", skip = 4,
-                         col_names = sheet_13_colnames)
-colnames(sheet_13_data)
 
 
 #--------------------------------------------------------------------

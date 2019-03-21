@@ -119,38 +119,6 @@ tidy_fam_sheets <- filepath %>%
 
 
 #--------------------------------------------------------------------
-## Fix sheet 7  column names
-filename <- "2016_Family_Tables_1_to_18_Canada.xls"
-filefolder <- "data-raw/fam"
-filepath <- here(filefolder, filename)
-
-sheet_7_colnames <- read_xls(filepath, sheet = "7", skip = 1, col_names = FALSE, n_max = 3) %>%
-  t() %>% 
-  as_tibble(.name_repair = ~ c("one", "two", "three"))
-
-sheet_7_colnames$three[141] <- "$'000"
-sheet_7_colnames$three[144] <- "$'000"
-sheet_7_colnames$three[142] <- "EDR"
-sheet_7_colnames$three[145] <- "$EDR"
-  
-sheet_7_colnames <- sheet_7_colnames %>% 
-  fill(one, two) %>%  # fill empty cells
-  unite(sheet_col_names) %>% 
-  mutate(sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|")),
-         sheet_col_names = paste("F", sheet = "7", sheet_col_names, sep = '|'),
-         sheet_col_names = str_replace(sheet_col_names, "_na_na|_na", "")) %>% 
-  select(sheet_col_names) %>% 
-  pull()
-
-
-# read in sample xlsx data and use new column names
-
-sheet_7_data <- read_xls(filepath, sheet = "7",
-                       col_names = sheet_7_colnames)
-colnames(sheet_7_data)
-
-
-#--------------------------------------------------------------------
 
 
 ###########
@@ -158,7 +126,6 @@ colnames(sheet_7_data)
 ###########
 
 ## Add in the filtering of BC rows into the function
-
 ## Add loop to read all files
 
 filefolder <- "data-raw"
