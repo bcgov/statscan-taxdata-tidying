@@ -18,6 +18,7 @@ library(here)
 library(tidyr)
 library(stringr)
 library(tibble)
+library(janitor)
 
 
 ## Function to read in each sheet from Table I xls file, clean column names,
@@ -100,6 +101,7 @@ tidy_tax_ind <- function(sheet, skip, col_names, path) {
     read_excel(sheet = sheet, skip = 4,
                col_names = sheetcolnames,
                .name_repair = "unique") %>%
+    remove_empty_rows() %>% 
     tibble::add_column(year = file_year, .before = 1)
   
    write_csv(tidy_df, paste0("data-tidy/", file_year, "-IND-", sheet, ".csv"))
@@ -119,7 +121,7 @@ filepath <- here(filefolder, filename)
 sheets <- excel_sheets(filepath)
 
 ## Read one sheet by sheet name 
-I_test <- tidy_tax_ind("2", path = filepath)
+I_test <- tidy_tax_ind("1", path = filepath)
 
 ## Inspecting column names for duplicates
 nocols <- colnames(I_test)
