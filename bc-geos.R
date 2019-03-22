@@ -11,48 +11,45 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
+
 #load libraries and dependencies
 library(here)
 library(data.table)
 library(stringr)
+library(dplyr)
+library(tidyr)
 
-### BC GEO from 2016 Census ###
-# download BC Geo csv from STATCAN's website: https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/prof/details/download-telecharger/comp/page_dl-tc.cfm?Lang=E&
-# load table: Geo_starting_row_BRITISH_COLUMBIA_CSV.csv into R
+# the code is divided into 3 parts based on three iterations, part 1 contains the final code implemented in tidying tables
 
-folder <- "geo-conversions"
-filename <- "Geo_starting_row_BRITISH_COLUMBIA_CSV.csv"
-filepath <-  here(folder, filename)
+#--------------------------------------------------------------------------------------------------------------
 
+### Part 1. BC Geo extraction code ###
+# reiteration of code in part 2 
 
-bcgeo <- fread(filepath)
-locs2016 <- bcgeo$`Geo Name` #assign geo names from Census 2016 to a new list for filtering 
+# examine data.frame for NA's
+I_test <- I_test[!is.na(I_test$`I|2|postal|area`),]
+  
 
+                              
+## 1A. extract all geographical concepts in BC
+bc_filter <- I_test %>% filter(str_detect(`I|2|postal|area`, "^V") |
+                        str_detect(`I|2|postal|area`, "^9") | 
+                        str_detect(`I|2|postal|area`, "^59[0-9]{3}") & `I|2|level|of|geo` == "31" |
+                        str_detect(`I|2|postal|area`, "^59[0-9]{4}") & `I|2|level|of|geo` == "21" | 
+                        str_detect(`I|2|postal|area`, "^515[0-9]{3}") & `I|2|level|of|geo` == "51" |
+                        `I|2|level|of|geo` == "11" |
+                        `I|2|level|of|geo` == "12")
 
-# filtering for BC Geos (based on data inspection)
+  
+# 1B. Counter test:
+# extract all Canada-wide geographical concepts that are NOT in BC
+not_bc_filter <-  I_test %>% filter(str_detect(`I|2|postal|area`, "^V", negate = TRUE) &
+                                  str_detect(`I|2|postal|area`, "^9", negate = TRUE) & 
+                                    str_detect(`I|2|postal|area`, "^59[0-9]{3}", negate = TRUE) & `I|2|level|of|geo` != "31" &
+                                    str_detect(`I|2|postal|area`, "^59[0-9]{4}", negate = TRUE) & `I|2|level|of|geo` != "21" &
+                                    str_detect(`I|2|postal|area`, "^515[0-9]{3}", negate = TRUE) & `I|2|level|of|geo` != "51" &
+                                  `I|2|level|of|geo` != "11" &
+                                  `I|2|level|of|geo` != "12")
 
-locs <- c("59001", "591023", "597051", "59002",
-          "59003", "591017", "515950","595041", "59004",
-          "591045","594003","593035", "59005", "59006",
-          "59007", "593039","591026","59008", "59009",
-          "591019", "59010", "59011", "594001", "59026",
-          "59012", "592009", "595053", "592015", "59013",
-          "59014","596049","515940", "594005", "59015",
-          "59016", "515920", "59017", "591043", "591021",
-          "59018", "515970","59019", "515960", "59037",
-          "593037", "59020", "59021","515980", "598059",
-          "593007", "598055", "59022", "59023", "591027",
-          "59024", "59025", "59027", "59028", "596047",
-          "59029", "59030", "592031", "59031", "597057",
-          "591024", "592029", "59032", "59033", "515930",
-          "593033", "59034", "59035", "59036", "515910",
-          "59038", "59039", "59040", "59041", "59042")
-
-dat1.new <- subset(dat1[dat1$Geo_Level == "11" | dat1$Geo_Level == "12",])
-dat2.new <- dat1[,names(dat1) %in% locs] #OR dat2.new <- dat1[,names(dat1) %in% locs2016]
-dat3.new <-subset(dat1, grepl("^V", Postal_Area))
-dat4.new <-subset(dat1, grepl("^9", Postal_Area))
-
-df <- rbind(dat1.new, dat2.new, dat3.new, dat4.new)
-
-df <- distinct(df)
+# e.g. test whether level of geo for 11, 12, 31, 21, and 51 are still present
+unique(not_bc_filter$`I|2|level|of|geo`) #they aren't
