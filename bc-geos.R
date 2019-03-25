@@ -40,6 +40,7 @@ bc_filter <- I_test %>% filter(str_detect(`I|2|postal|area`, "^V") |
                         `I|2|level|of|geo` == "11" |
                         `I|2|level|of|geo` == "12")
 
+test <- I_test %>% filter(str_detect(.[,3], "^V"))
   
 # 1B. Counter test:
 # extract all Canada-wide geographical concepts that are NOT in BC

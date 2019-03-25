@@ -7,3 +7,6 @@
 *.html
 statscan-tables.pdf
 /tmp
+data-output/
+data-raw/
+data-tidy/
