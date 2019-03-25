@@ -38,7 +38,7 @@ mutate_col_names <- function(sheet_col_names) {
 # function to tidy sheets in multiple sheet years for individual table 13  
 
 tidy_tax_i13sheet <- function(sheet, skip, col_names, path) {
-  print(paste0("proceesing sheet ", sheet))
+  print(paste0("processing sheet ", sheet))
   
   types <- c("Couple Families",
              "Lone-Parent Families",
