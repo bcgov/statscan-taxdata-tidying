@@ -10,6 +10,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
+
+## Source setup script
+if (!exists(".setup_sourced")) source("setup.R")
+
 # load dependencies
 pkgs <-c("plyr", "janitor", "tibble", "stringr", "tidyr", "here", "readr", "purrr", "readxl", "dplyr")
 check <- sapply(pkgs,require,warn.conflicts = TRUE,character.only = TRUE)
