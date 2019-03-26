@@ -14,28 +14,6 @@
 ## Source setup script
 if (!exists(".setup_sourced")) source("setup.R")
 
-# load dependencies
-
-pkgs <-c("plyr", "janitor", "tibble", "stringr", "tidyr", "here", "readr", "purrr", "readxl", "dplyr")
-check <- sapply(pkgs,require,warn.conflicts = TRUE,character.only = TRUE)
-if(any(!check)){
-  pkgs.missing <- pkgs[!check]
-  install.packages(pkgs.missing)
-  check <- sapply(pkgs.missing,require,warn.conflicts = TRUE, character.only = TRUE)
-}
-
-#-----------------------------------------------------------------
-
-# function to clean column sheet names  
-mutate_col_names <- function(sheet_col_names) {
-  sheet_col_names = str_trim(sheet_col_names)
-  sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
-  sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
-  sheet_col_names = str_replace_all(sheet_col_names, "na|na||", "")
-  sheet_col_names = str_replace_all(sheet_col_names, "\\|\\|", "|")
-  sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years")
-  return(sheet_col_names)
-}
 
 #-----------------------------------------------------------------
 
@@ -94,11 +72,17 @@ sheet_13_colnames = str_replace_all(sheet_13_colnames, "\\|\\|", "|")
 
 #-----------------------------------------------------------------
 
+## function that lists all the xls files with '2004_to_2015' designation in the data-tidy folder 
 
 list_input_files <- function(input_folder) {
   files <- list.files(input_folder, pattern = "*.xls", full.names = TRUE)  
-  return(files[grep("_IND_", files)]) 
+  return(files[grep("_2004_to_2015_", files)]) 
 }
+
+#-----------------------------------------------------------------
+
+## function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
+## It then saves all the tidied sheets into a temporary "accumulate" folder with IND as part of file name
 
 save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   sheet = tidy_sheet$sheet
@@ -108,6 +92,11 @@ save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   return(tidy)
 }
 
+#-----------------------------------------------------------------
+
+## function that reiteratively takes one sheet from each of IND files for table 13, cleans the column headers according to tidy_tax_i13sheet function, and applies save function to all files
+## bi-directional function communicating with 'save_tidy_sheet' and 'tidy_tax_i13sheet' functions
+
 clean_taxfile <- function(filepath, tidy_folder){
   tidy_sheets <- filepath %>%
     excel_sheets() %>%
@@ -116,13 +105,10 @@ clean_taxfile <- function(filepath, tidy_folder){
     map(save_tidy_sheet, tidy_folder = tidy_folder, path = filepath)
 }
 
-clean_taxfiles <- function(input_folder, tidy_folder) {
-  files <- list_input_files(input_folder)
-  for (file in files) {
-    clean_taxfile(file, tidy_folder)
-  }
-  
-}
+#-----------------------------------------------------------------
+
+## function that takes applies the tidy_tax_i13sheet function to all sheets and then the save_tidy_sheet function to all sheets
+## bidirectional function communicating with 'tidy_tax_i13sheet' and 'save_tidy_sheet' functions
 
 merge_taxfile <- function(tidy_folder) {
   tidy_sheets <- filepath %>%
@@ -133,20 +119,11 @@ merge_taxfile <- function(tidy_folder) {
   
 }
 
-get_sub_folders <- function(tidy_folder) {
-  return(list.dirs(tidy_folder))
-}
+#-----------------------------------------------------------------
 
-merge_subfolder <- function(sub_folder) {
-  print(paste0("processing ", sub_folder))
-  csv_files <- list.files(sub_folder, pattern = "*.csv", full.names = TRUE) %>% 
-    lapply(function(file){
-      read.csv(file = file, header = TRUE,  check.names = FALSE)
-    }) 
-  big_object <- do.call(plyr::rbind.fill, csv_files)
-  return(big_object)
-  
-}
+## function that takes merged csvs for sheet13 for all years for individuals and outputs them as one csv in the data-tidy folder
+## this bidirectional function calls 'merge_subfolder' and 'merged_taxfile' functions
+## and assigns the suffix 'merge_13_IND' to saved csvs
 
 merge_taxfiles <- function(tidy_folder, output_folder) {
   sub_folders <- get_sub_folders(tidy_folder) 
@@ -156,11 +133,4 @@ merge_taxfiles <- function(tidy_folder, output_folder) {
   }
 }
 
-clean_merge_write <- function(input_folder, tidy_folder, output_folder) {
- clean_taxfiles(input_folder, tidy_folder)
-  merge_taxfiles(tidy_folder, output_folder)
-}
 
-#-----------------------------------------------------------------
-
-clean_merge_write("data-raw", "data-tidy", "data-output")

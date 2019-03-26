@@ -14,44 +14,11 @@
 ## Source setup script
 if (!exists(".setup_sourced")) source("setup.R")
 
-# load dependencies
-pkgs <-c("plyr", "janitor", "tibble", "stringr", "tidyr", "here", "readr", "purrr", "readxl", "dplyr")
-check <- sapply(pkgs,require,warn.conflicts = TRUE,character.only = TRUE)
-if(any(!check)){
-  pkgs.missing <- pkgs[!check]
-  install.packages(pkgs.missing)
-  check <- sapply(pkgs.missing,require,warn.conflicts = TRUE,character.only = TRUE)
-}
-
 #-----------------------------------------------------------------
 
-# function to tidy sheets in one year individual files 
 
+# tax data tidying function for individual tables
 
-get_file_year <- function(path) {
-  # find file_year
-  pathbase <- path %>%
-    basename() %>%
-    tools::file_path_sans_ext()
-  
-  # assign file_year
-  file_year <- pathbase %>% stringr::str_extract("^[0-9]{4}")
-  return(file_year)
-}
-
-# function to clean column sheet names  
-mutate_col_names <- function(sheet_col_names) {
-  sheet_col_names = str_trim(sheet_col_names)
-  sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
-  sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
-  sheet_col_names = str_replace_all(sheet_col_names, "na|na||", "")
-  sheet_col_names = str_replace_all(sheet_col_names, "\\|\\|", "|")
-  sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years")
-  return(sheet_col_names)
-}
-
-
-# tax data tidying function
 tidy_tax_ind <- function(sheet, path) {
 
   print(paste0("processing ", sheet, " of ", path))
@@ -100,22 +67,24 @@ tidy_tax_ind <- function(sheet, path) {
       mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
       select(sheet_col_names) %>% 
       pull()
+  }
     
-    #process sheet 7A,B,C for some years as necessary (note the errors and implement when running code)/clean column headers
-  } # else if (sheet %in% c("7A", "7B", "7C")) {
+    # process sheet 7A,B,C for some years as necessary 
+    # note: pay attention to the errors and implement when running code for clean column headers because not all years require this loop
+    # else if (sheet %in% c("7A", "7B", "7C")) {
     #tempcols <- c("one", "two", "three")
     
     #  sheetcolnames <- path %>%
-     # read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE) %>%
+    # read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE) %>%
     #  t() %>% 
     #  as_tibble(.name_repair = ~ tempcols) %>% 
     #  slice(1:(n()-2)) %>%
-     # fill(tempcols) %>% 
+    # fill(tempcols) %>% 
     #  unite(sheet_col_names) %>% 
     #      mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
       #select(sheet_col_names) %>%
       #pull()
- # }
+    # }
   else {
     
     #process sheet 3A, 3B, 3C, 9 and other sheets/clean column headers
@@ -161,10 +130,17 @@ tidy_tax_ind <- function(sheet, path) {
 
 #-----------------------------------------------------------------
 
+## function that lists all the xls files with 'IND' designation in the data-tidy folder 
+
 list_input_files <- function(input_folder) {
   files <- list.files(input_folder, pattern = "*.xls", full.names = TRUE)  
   return(files[grep("_IND_", files)]) 
 }
+
+#-----------------------------------------------------------------
+
+## function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
+## It then saves all the tidied sheets into data-tidy folder with IND as part of file name
 
 save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   sheet = tidy_sheet$sheet
@@ -178,6 +154,12 @@ save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   return(tidy)
 }
 
+#-----------------------------------------------------------------
+
+## function that reiteratively takes one sheet from each of IND files for table 13, cleans the column headers according to tidy_tax_ind function, and applies save function to all files
+## bi-directional function communicating with 'save_tidy_sheet' and 'tidy_tax_ind' functions
+
+
 clean_taxfile <- function(filepath, tidy_folder){
   tidy_sheets <- filepath %>%
     excel_sheets() %>%
@@ -186,13 +168,10 @@ clean_taxfile <- function(filepath, tidy_folder){
     map(save_tidy_sheet, tidy_folder = tidy_folder, path = filepath)
 }
 
-clean_taxfiles <- function(input_folder, tidy_folder) {
-  files <- list_input_files(input_folder)
-  for (file in files) {
-    clean_taxfile(file, tidy_folder)
-  }
-  
-}
+#-----------------------------------------------------------------
+
+## function that takes applies the tidy_tax_ind function to all sheets and applies the save_tidy_sheet function to all sheets
+## bidirectional function communicating with 'tidy_tax_ind' and 'save_tidy_sheet' functions
 
 merge_taxfile <- function(tidy_folder) {
   tidy_sheets <- filepath %>%
@@ -203,20 +182,11 @@ merge_taxfile <- function(tidy_folder) {
   
 }
 
-get_sub_folders <- function(tidy_folder) {
-  return(list.dirs(tidy_folder))
-}
+#-----------------------------------------------------------------
 
-merge_subfolder <- function(sub_folder) {
-  print(paste0("processing ", sub_folder))
-  csv_files <- list.files(sub_folder, pattern = "*.csv", full.names = TRUE) %>% 
-    lapply(function(file){
-      read.csv(file = file, header = TRUE,  check.names = FALSE)
-    }) 
-  big_object <- do.call(plyr::rbind.fill, csv_files)
-  return(big_object)
-  
-}
+## function that takes the merged IND csvs and outputs them as one csv in the data-tidy folder
+## this bidirectional function calls 'merge_subfolder' and 'merged_taxfile' functions
+## and assigns the suffix 'IND' to saved csvs
 
 merge_taxfiles <- function(tidy_folder, output_folder) {
   sub_folders <- get_sub_folders(tidy_folder) 
@@ -225,14 +195,5 @@ merge_taxfiles <- function(tidy_folder, output_folder) {
   write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_IND.csv"))
   }
 }
-
-clean_merge_write <- function(input_folder, tidy_folder, output_folder) {
-  clean_taxfiles(input_folder, tidy_folder)
-  merge_taxfiles(tidy_folder, output_folder)
-}
-
-#-----------------------------------------------------------------
-
-clean_merge_write("data-raw", "data-tidy", "data-output")
 
 
