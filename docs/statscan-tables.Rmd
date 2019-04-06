@@ -13,7 +13,7 @@ Integrated Data Division (CITZ) has acquired historical annual t1 tax data from 
 
 The data are in .xls format and are housed in the folder named Individuals xls and Family xls
 
-In this project, the xls files are cleaned and merged into one csv sheet per year using open source RStudio. The cleaned data are in Provincial Extract folder and the codes used to wrangle the data are within R script folder respectively.
+In this project, the xls files are cleaned and merged into one csv sheet for all years using open source RStudio. The cleaned data are in tidied folder and the codes used to wrangle the data are within R script folder respectively.
 
 The BC Gov GitHub repository about this project can found here: https://github.com/bcgov/statscan-taxdata-tidying
 
@@ -25,9 +25,9 @@ This data (from Statistics Canada) includes information copied with permission f
 
 # Data table structures for individuals and families
 
-Currently, the fully anonymized data includes income estimates for individuals ranging from years 2000 up to 2015. Each table in a year is an aggregation of sub-tables as listed in Table 1. The anonymized income estimates for families range from years 2004 up to 2016. Each table in a year is an aggregation of all sub-tables as listed in Table 2. 
+Currently, the fully anonymized data includes area-based income estimates for individuals ranging from years 2000 up to 2015. Each table in a year is an aggregation of sub-tables as listed in Table 1. The anonymized income estimates for families range from years 2004 up to 2016. Each table in a year is an aggregation of all sub-tables as listed in Table 2. 
 
-The original data came in xls format with spaces in names. They were opened in microsoft excel and their names were fixed with no space and re-saved as xlsx. RStudio was then used to wrangle the data into machine readable csv's. 
+The original data came in xls format with spaces in names. RStudio was used to wrangle the data into machine readable csv's. 
 
 
 ```{r echo= FALSE}
