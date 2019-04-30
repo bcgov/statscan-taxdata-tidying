@@ -16,9 +16,18 @@ if (!exists(".setup_sourced")) source("setup.R")
 
 #-----------------------------------------------------------------
 
+# Function to clean column names for IND files
+mutate_col_names <- function(sheet_col_names) {
+  sheet_col_names = str_replace_all(sheet_col_names, "_NA_NA|_NA", "") # strip out introduced NAs
+  sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
+  sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
+  sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years") #deals with changing dates of 5 yr windows
+  return(sheet_col_names)
+}
 
-# tax data tidying function for individual tables
 
+## Tax data tidying function for individual tables 
+## (uses get_file_year() from setup.R)
 tidy_tax_ind <- function(sheet, path) {
 
   print(paste0("processing ", sheet, " of ", path))
@@ -39,11 +48,9 @@ tidy_tax_ind <- function(sheet, path) {
       mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
       select(sheet_col_names) %>% 
       pull()
-    
   }
   
   #process sheet 13/clean column headers
-  
   else if(sheet == "13") {
     
     types <- c("Couple Families",
@@ -69,22 +76,6 @@ tidy_tax_ind <- function(sheet, path) {
       pull()
   }
     
-    # process sheet 7A,B,C for some years as necessary 
-    # note: pay attention to the errors and implement when running code for clean column headers because not all years require this loop
-    # else if (sheet %in% c("7A", "7B", "7C")) {
-    #tempcols <- c("one", "two", "three")
-    
-    #  sheetcolnames <- path %>%
-    # read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE) %>%
-    #  t() %>% 
-    #  as_tibble(.name_repair = ~ tempcols) %>% 
-    #  slice(1:(n()-2)) %>%
-    # fill(tempcols) %>% 
-    #  unite(sheet_col_names) %>% 
-    #      mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
-      #select(sheet_col_names) %>%
-      #pull()
-    # }
   else {
     
     #process sheet 3A, 3B, 3C, 9 and other sheets/clean column headers
@@ -100,13 +91,12 @@ tidy_tax_ind <- function(sheet, path) {
       fill(tempcols) %>% 
       unite(sheet_col_names) %>% 
       mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
+      mutate(sheet_col_names = str_replace(sheet_col_names, "l.o.g.", "level|of|geo")) %>% 
       select(sheet_col_names) %>% 
       pull()
-    
   }
   
   # generate data.table with fixed sheet column names
-  
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
                col_names = sheetcolnames,
@@ -115,32 +105,51 @@ tidy_tax_ind <- function(sheet, path) {
     tibble::add_column(year = file_year, .before = 1)  
   
   # filter out only BC Geographies
-  
-  tidy_df <- tidy_df %>% filter(str_detect(`postal|area|`, "^V") |
-                                  str_detect(`postal|area|`, "^9") | 
-                                  str_detect(`postal|area|`, "^59[0-9]{3}") & `level|of|geo|` == "31" |
-                                  str_detect(`postal|area|`, "^59[0-9]{4}") & `level|of|geo|` == "21" | 
-                                  str_detect(`postal|area|`, "^515[0-9]{3}") & `level|of|geo|` == "51" |
-                                  `level|of|geo|` == "11" |
-                                  `level|of|geo|` == "12") 
+  tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
+                                  str_detect(`postal|area`, "^9") | 
+                                  str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
+                                  str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" | 
+                                  str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
+                                  `level|of|geo` == "11" |
+                                  `level|of|geo` == "12") 
 
-  
   return(list("data" = tidy_df, "sheet" = sheet))
 }
 
+#######################
+## TESTING SNIPPET ####
+#######################
+
+## Example Table I .xls file
+filename <- "2002_IND_Tables 1_to_7_Canada.xls"
+filefolder <- "data-raw/ind"
+filepath <- here(filefolder, filename)
+
+## Read one sheet by sheet name
+I_test <- tidy_tax_ind("7A", path = filepath)
+
+## Read in and add names to all sheets at once
+tidy_sheets <- filepath %>%
+  excel_sheets() %>%
+  set_names() %>%
+  map(tidy_tax_ind, path = filepath)
+
+
 #-----------------------------------------------------------------
 
-## function that lists all the xls files with 'IND' designation in the data-tidy folder 
-
+## Function that lists all the xls files with 'IND' designation
+## in a destination` folder 
 list_input_files <- function(input_folder) {
   files <- list.files(input_folder, pattern = "*.xls", full.names = TRUE)  
   return(files[grep("_IND_", files)]) 
 }
 
+list_input_files("data-raw/ind")
+
 #-----------------------------------------------------------------
 
-## function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
-## It then saves all the tidied sheets into data-tidy folder with IND as part of file name
+## Function to save each tidied CSV sheet to a table folder with year as a filename prefix  
+##  (takes the name using the get_file_year() from setup.R) and IND as part of filename
 
 save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   sheet = tidy_sheet$sheet
@@ -154,10 +163,12 @@ save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   return(tidy)
 }
 
+
 #-----------------------------------------------------------------
 
-## function that reiteratively takes one sheet from each of IND files for table 13, cleans the column headers according to tidy_tax_ind function, and applies save function to all files
-## bi-directional function communicating with 'save_tidy_sheet' and 'tidy_tax_ind' functions
+## Function that iterates over each IND xls file and
+## imports each sheet using clean column headers according to tidy_tax_ind(), saves
+## each sheet with save_tidy_sheet()'
 
 
 clean_taxfile <- function(filepath, tidy_folder){
@@ -168,9 +179,19 @@ clean_taxfile <- function(filepath, tidy_folder){
     map(save_tidy_sheet, tidy_folder = tidy_folder, path = filepath)
 }
 
+
+clean_taxfiles("data-raw/ind", "data-tidy")
+
+#### 2002 Table 7A not working: last 2 columns empty, so when read in w/o headers
+#### these are dropped by read_excel and then the column name vector is too long
+
+
+
+
 #-----------------------------------------------------------------
 
-## function that takes applies the tidy_tax_ind function to all sheets and applies the save_tidy_sheet function to all sheets
+## function that takes applies the tidy_tax_ind function to all sheets and applies 
+## the save_tidy_sheet function to all sheets
 ## bidirectional function communicating with 'tidy_tax_ind' and 'save_tidy_sheet' functions
 
 merge_taxfile <- function(tidy_folder) {
