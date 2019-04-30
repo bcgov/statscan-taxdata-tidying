@@ -18,9 +18,10 @@ if (!exists(".setup_sourced")) source("setup.R")
 
 # Function to clean column names for IND files
 mutate_col_names <- function(sheet_col_names) {
-  sheet_col_names = str_replace_all(sheet_col_names, "_NA_NA|_NA", "")
+  sheet_col_names = str_replace_all(sheet_col_names, "_NA_NA|_NA", "") # strip out introduced NAs
   sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
   sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
+  sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years") #deals with changing dates of 5 yr windows
   return(sheet_col_names)
 }
 
