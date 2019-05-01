@@ -15,7 +15,7 @@
 .setup_sourced <- TRUE
 
 
-## Install Packages
+## Install Packages/dependencies
 library("plyr")
 library("janitor")
 library("tibble")
@@ -28,97 +28,14 @@ library("readxl")
 library("dplyr")
 
 
-# pkgs <-c("plyr", "janitor", "tibble", "stringr", "tidyr", "here", "readr",
-#          "purrr", "readxl", "dplyr")
-# check <- sapply(pkgs, library, warn.conflicts = TRUE, character.only = TRUE)
-# if(any(!check)) {
-#   pkgs.missing <- pkgs[!check]
-#   install.packages(pkgs.missing)
-#   check <- sapply(pkgs.missing, library,
-#                   warn.conflicts = TRUE,
-#                   character.only = TRUE)
-# }
-
-
 #-------------------------------------------------------------------------------
 
-## Function to get year from xls file name 
-get_file_year <- function(path) {
-  # find file_year
-  pathbase <- path %>%
-    basename() %>%
-    tools::file_path_sans_ext()
-  
-  # assign file_year to d 
-  file_year <- pathbase %>% stringr::str_extract("^[0-9]{4}")
-  return(file_year)
-}
+## Make new directories if they do not exist
 
-#----------------------------------------------------------------------------------------------------
+if (!exists(here("data-tidy"))) dir.create(here("data-tidy"), showWarnings = FALSE)
+if (!exists(here("data-raw"))) dir.create(here("data-raw"), showWarnings = FALSE)
 
-## Function to clean column sheet names  (for most sheets)
+.setup_sourced <- TRUE
 
-# mutate_col_names <- function(sheet_col_names) {
-#   sheet_col_names = str_trim(sheet_col_names)
-#   sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
-#   sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
-#   sheet_col_names = str_replace_all(sheet_col_names, "na|na||", "")
-#   sheet_col_names = str_replace_all(sheet_col_names, "\\|\\|", "|")
-#   sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years")
-#   return(sheet_col_names)
-# }
-
-#-----------------------------------------------------------------
-
-## Function for taking the list of all xls files in the data-raw folder 
-## and impement clean_taxfile() for cleaning column header and saving 
-## resulting CSVs in data-tidy folders
-
-clean_taxfiles <- function(input_folder, tidy_folder) {
-  files <- list_input_files(input_folder)
-  for (file in files) {
-    clean_taxfile(file, tidy_folder)
-  }
-}
-
-#-----------------------------------------------------------------
-
-## Function that returns a list of all working directories in the data-tidy folder
-get_sub_folders <- function(tidy_folder) {
-  return(list.dirs(tidy_folder))
-}
-
-#-----------------------------------------------------------------
-
-## Function that takes the list of all tidied processed csv sheets in each subfolder 
-## and merge them according to sheet number
-## the function returns one merged csv for each 
-
-merge_subfolder <- function(sub_folder) {
-  print(paste0("processing ", sub_folder))
-  csv_files <- list.files(sub_folder, pattern = "*.csv", full.names = TRUE) %>% 
-    lapply(function(file){
-      read.csv(file = file, header = TRUE,  check.names = FALSE)
-    }) 
-  big_object <- do.call(plyr::rbind.fill, csv_files)
-  return(big_object)
-}
-
-#-----------------------------------------------------------------
-
-
-## Function to clean, merge, and output the tidy sheets
-
-clean_merge_write <- function(input_folder, tidy_folder, output_folder) {
-  clean_taxfiles(input_folder, tidy_folder)
-  merge_taxfiles(tidy_folder, output_folder)
-}
-
-#-----------------------------------------------------------------
-
-## Calling folders (works upwards) and communicate with clean_merge_write functions based on 3 designated data folders
-# clean_merge_write("data-raw", "data-tidy", "data-output")
-
-#-----------------------------------------------------------------
 
 
