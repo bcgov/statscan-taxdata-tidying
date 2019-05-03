@@ -1,21 +1,21 @@
 ---
-title: "Income Tax Data Project"
-date: '`r format(Sys.time(), "%d %B, %Y")`'
-output:
-  pdf_document: default
-  html_document: default
-urlcolor: blue
+title: "Income Tax Data Cleaning Project"
+author: "Noushin Nabavi"
 ---
 
 # Introduction 
 
-Integrated Data Division (CITZ) has acquired historical annual t1 tax data from BC Stats (JTT) who has in turn purchased the data tables from Statistics Canada.
+Integrated Data Division (OCIO, CITZ) has acquired historical annual t1 tax data from BC Stats (JTT) who has in turn purchased the data tables from Statistics Canada.
 
-The data are in .xls format and are housed in the folder named Individuals xls and Family xls
+The data are in .xls format and are housed in the folder named data-raw.
 
-In this project, the xls files are cleaned and merged into one csv sheet for all years using open source RStudio. The cleaned data are in tidied folder and the codes used to wrangle the data are within R script folder respectively.
 
-The BC Gov GitHub repository about this project can found here: https://github.com/bcgov/statscan-taxdata-tidying
+In this project, the xls files are cleaned and merged into one csv sheet using R. 
+
+For more questions, please consult with Director of Data Insights (Dan Mackenzie, Dan.Mackenzie@gov.bc.ca) or data scientists at IDD (Stephanie.Hazlitt@gov.bc.ca; Ashlin.Richardson@gov.bc.ca; Cindy.Wang@gov.bc.ca; or Noushin.Nabavi@gov.bc.ca). 
+
+
+The BC Gov GitHub repository for this project can found here: https://github.com/bcgov/statscan-taxdata-tidying
 
 The technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors can be found in the `/Documentation` folder. For information about this product or the wide range of services and data available from Statistics Canada, visit their [website](www.statcan.gc.ca).
 For further questions, the Statistics Canada email is <STATCAN.infostats-infostats.STATCAN@canada.ca>. 
@@ -25,11 +25,12 @@ This data (from Statistics Canada) includes information copied with permission f
 
 # Data table structures for individuals and families
 
-Currently, the fully anonymized data includes area-based income estimates for individuals ranging from years 2000 up to 2015. Each table in a year is an aggregation of sub-tables as listed in Table 1. The anonymized income estimates for families range from years 2004 up to 2016. Each table in a year is an aggregation of all sub-tables as listed in Table 2. 
 
-The original data came in xls format with spaces in names. RStudio was used to wrangle the data into machine readable csv's. 
+Currently, the fully anonymized data includes income estimates for individuals for various geographical areas in BC ranging from years 2000 up to 2015. Income estimates for families range from years 2004 up to 2016. Each table is an aggregation of all years for that table.
 
 
+
+# Individual table structures 
 ```{r echo= FALSE}
 library(knitr)
 library(kableExtra)
@@ -49,6 +50,8 @@ Individuals <- data.frame(
 kable(cbind(Individuals), "latex", booktabs = T, caption = "Structure for Individual Tables") %>%
   kable_styling(latex_options = c("striped", "scale_down", font_size=200))
 ```
+
+# Family table structures 
 
 
 ```{r echo= FALSE}

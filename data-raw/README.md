@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and limitations 
 
 
 
-# Raw Data Folder
+# data-raw folder
 
-The `*.xls` files from Statistics Canada need to be in the `data-raw` folder
+This folder houses the `*.xls` files from Statistics Canada and is divided into `ind`, `fam`, and `ind-13` sub-folders.
 
 e.g. 
 
