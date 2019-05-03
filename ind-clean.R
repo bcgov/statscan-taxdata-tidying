@@ -11,12 +11,13 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-## Source setup script
+## Source setup and function scripts
+
 if (!exists(".setup_sourced")) source(here::here("setup.R"))
 if (!exists(".functions_sourced")) source(here("functions.R"))
 
 #-------------------------------------------------------------------------------
-# identifying sheets with extra empty columns in Sheets 7A-7B-7C
+# Identifying sheets with extra empty columns in Sheets 7A-7B-7C
 messy_years <- c("2002", "2003", "2004", "2005", "2006")
 messy_tables <- c("7A", "7B", "7C")
 
@@ -145,7 +146,6 @@ list_input_files("data-raw/ind")
 #-------------------------------------------------------------------------------
 
 ## Function to save each tidied CSV sheet to a table folder with year as a filename prefix  
-##  (takes the name using the get_file_year() from setup.R) and IND as part of filename
 
 save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   sheet = tidy_sheet$sheet
@@ -189,8 +189,12 @@ clean_taxfiles <- function(input_folder, tidy_folder) {
 
 #-------------------------------------------------------------------------------
 
+## Calling function for cleaning taxfiles
+
 clean_taxfiles("data-raw/ind", "data-tidy")
 
 #-------------------------------------------------------------------------------
+
+## Establish connection to current script
 
 .ind_clean_sourced <- TRUE

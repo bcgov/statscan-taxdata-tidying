@@ -11,7 +11,8 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-## Source setup script
+## Source setup and function scripts
+
 if (!exists(".setup_sourced")) source(here::here("setup.R"))
 if (!exists(".functions_sourced")) source(here:("functions.R"))
 
@@ -86,7 +87,7 @@ tidy_tax_fam <- function(sheet, path) {
 
 #-------------------------------------------------------------------------------
 
-## function that lists all the xls files with 'Family' designation in the data-tidy folder 
+## Function that lists all the xls files with 'Family' designation in the data-tidy folder 
 
 list_input_files <- function(input_folder) {
   files <- list.files(input_folder, pattern = "*.xls", full.names = TRUE)  
@@ -95,7 +96,7 @@ list_input_files <- function(input_folder) {
 
 #-------------------------------------------------------------------------------
 
-## function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
+## Function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
 ## It then saves all the tidied sheets into data-tidy folder with FAM as part of file name
 
 save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
@@ -111,7 +112,7 @@ save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
 }
 
 #-------------------------------------------------------------------------------
-## function that reiteratively takes one sheet from each family file, cleans the column headers according to tidy_tax_fam function, and applies save function to all files
+## Function that reiteratively takes one sheet from each family file, cleans the column headers according to tidy_tax_fam function, and applies save function to all files
 ## bi-directional function communicating with 'save_tidy_sheet' and 'tidy_tax_fam' functions
 
 clean_taxfile <- function(filepath, tidy_folder){
@@ -123,8 +124,11 @@ clean_taxfile <- function(filepath, tidy_folder){
 }
 
 #-------------------------------------------------------------------------------
+## Calling function for cleaning taxfiles
 
 clean_taxfiles("data-raw/fam", "data-tidy")
 #-------------------------------------------------------------------------------
+
+## Establish connection to current script
 
 .fam_clean_sourced <- TRUE

@@ -10,12 +10,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-
-## Invisible header object
-.setup_sourced <- TRUE
-
-
 ## Install Packages/dependencies
+
 library("plyr")
 library("janitor")
 library("tibble")
@@ -35,6 +31,11 @@ library("dplyr")
 if (!exists(here("data-tidy"))) dir.create(here("data-tidy"), showWarnings = FALSE)
 if (!exists(here("data-raw"))) dir.create(here("data-raw"), showWarnings = FALSE)
 if (!exists(here("data-output"))) dir.create(here("data-output"), showWarnings = FALSE)
+
+
+#-------------------------------------------------------------------------------
+
+## Establish connection to current setup script
 
 .setup_sourced <- TRUE
 

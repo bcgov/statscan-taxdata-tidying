@@ -55,7 +55,7 @@ get_sub_folders <- function(tidy_folder) {
 
 ## Function that takes the list of all tidied processed csv sheets in each subfolder 
 ## and merge them according to sheet number
-## the function returns one merged csv for each 
+## the function returns one merged csv for each file 
 
 merge_subfolder <- function(sub_folder) {
   print(paste0("processing ", sub_folder))
@@ -77,6 +77,8 @@ clean_merge_write <- function(input_folder, tidy_folder, output_folder) {
 }
 
 #-------------------------------------------------------------------------------
+
+## Establish connection to current function script
 
 .functions_sourced <- TRUE
 

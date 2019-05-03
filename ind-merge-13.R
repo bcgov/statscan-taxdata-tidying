@@ -10,7 +10,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-## Source setup script
+## Source setup, function, and ind-clean-13 scripts
 #if (!exists(".setup_sourced")) source(here::here("setup.R"))
 #if (!exists(".functions_sourced")) source(here("functions.R"))
 if (!exists(".ind_clean_13_sourced")) source(here("ind-clean-13.R"))
@@ -31,16 +31,17 @@ merge_taxfile_13_ <- function(tidy_folder) {
 
 #-------------------------------------------------------------------------------
 
-## function that takes merged csvs for sheet13 for all years for individuals and outputs them as one csv in the data-tidy folder
-## this bidirectional function calls 'merge_subfolder' and 'merged_taxfile' functions
-## and assigns the suffix 'merge_13_IND' to saved csvs
-
+## Function that returns a list of all files in the data-tidy folder
 
 get_sub_files_13 <- function(tidy_folder) {
   return(list.files(tidy_folder))
 }
 
 #-------------------------------------------------------------------------------
+
+## Function that takes the list of all tidied processed csv sheets in each subfolder 
+## and merge them according to sheet number
+## the function returns one merged csv for each file 
 
 merge_subfile_13 <- function(subfile) {
   print(paste0("processing ", subfile))
@@ -54,6 +55,8 @@ merge_subfile_13 <- function(subfile) {
 
 #-------------------------------------------------------------------------------
 
+## Function returns one merged csv by merging all files in tidyfolder
+
 merge_taxfiles_13 <- function(tidy_folder, output_folder) {
   subfiles <- get_sub_files_13(tidy_folder) 
   for (subfile in subfiles[-1]) {
@@ -63,6 +66,8 @@ merge_taxfiles_13 <- function(tidy_folder, output_folder) {
 }
 
 #-------------------------------------------------------------------------------
+
+## Function that cross-talks with clean taxfiles and merge taxfiles and designates folders to each
 
 clean_merge_write_13 <- function(input_folder, tidy_folder, output_folder) {
   clean_taxfiles_13(input_folder, tidy_folder)

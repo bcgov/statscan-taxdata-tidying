@@ -10,13 +10,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
 
-## Source setup script
+## Source setup and function scripts
+
 if (!exists(".setup_sourced")) source(here::here("setup.R"))
 if (!exists(".functions_sourced")) source(here("functions.R"))
 
 #-------------------------------------------------------------------------------
 
-# function to tidy sheets in multiple sheet years for individual table 13  
+# Function to tidy sheets in multiple sheet years for individual table 13  
 
 tidy_tax_i13sheet <- function(sheet, skip, col_names, path) {
   print(paste0("processing sheet ", sheet))
@@ -70,7 +71,7 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path) {
 
 #-------------------------------------------------------------------------------
 
-## function that lists all the xls files with '2004_to_2015' designation in the data-tidy folder 
+## Function that lists all the xls files with '2004_to_2015' designation in the data-tidy folder 
 
 list_input_files_13 <- function(input_folder) {
   files <- list.files(input_folder, pattern = "*.xls", full.names = TRUE)  
@@ -81,7 +82,7 @@ list_input_files_13("data-raw/ind-13")
 
 #-------------------------------------------------------------------------------
 
-## function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
+## Function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
 ## It then saves all the tidied sheets into a temporary folder with IND and sheet as part of file name
 
 save_tidy_sheet_13 <- function(tidy_sheet, tidy_folder, path) {
@@ -95,7 +96,7 @@ save_tidy_sheet_13 <- function(tidy_sheet, tidy_folder, path) {
 
 #-------------------------------------------------------------------------------
 
-## function that reiteratively takes one sheet from each of IND files for table 13, cleans the column headers according to tidy_tax_i13sheet function, and applies save function to all files
+## Function that reiteratively takes one sheet from each of IND files for table 13, cleans the column headers according to tidy_tax_i13sheet function, and applies save function to all files
 ## bi-directional function communicating with 'save_tidy_sheet' and 'tidy_tax_i13sheet' functions
 
 clean_taxfile_13 <- function(filepath, tidy_folder){
@@ -107,6 +108,9 @@ clean_taxfile_13 <- function(filepath, tidy_folder){
 }
 
 #-------------------------------------------------------------------------------
+## Function for taking the list of all xls files in the data-raw folder 
+## and impement clean_taxfile() for cleaning column header and saving 
+## resulting CSVs in data-tidy folders
 
 clean_taxfiles_13 <- function(input_folder, tidy_folder) {
   files <- list_input_files_13(input_folder)
@@ -118,8 +122,12 @@ clean_taxfiles_13 <- function(input_folder, tidy_folder) {
 
 #-------------------------------------------------------------------------------
 
+## Calling function for cleaning taxfiles
+
 clean_taxfiles_13("data-raw/ind-13", "data-tidy")
 
 #-------------------------------------------------------------------------------
+
+## Establish connection to current script
 
 .ind_clean_13_sourced <- TRUE

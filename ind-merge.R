@@ -11,12 +11,16 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-## Source setup script
+## Source setup, function, and ind-clean scripts
+
 if (!exists(".setup_sourced")) source(here::here("setup.R"))
 if (!exists(".functions_sourced")) source(here:("functions.R"))
 if (!exists(".ind_clean_sourced")) source(here:("ind-clean.R"))
 
 #-------------------------------------------------------------------------------
+
+## function that takes applies the tidy_tax_ind function to all sheets and then the save_tidy_sheet function to all sheets
+## bidirectional function communicating with 'tidy_tax_ind' and 'save_tidy_sheet' functions
 
 merge_taxfile <- function(tidy_folder) {
   tidy_sheets <- filepath %>%
@@ -28,6 +32,10 @@ merge_taxfile <- function(tidy_folder) {
 }
 
 #-------------------------------------------------------------------------------
+
+## Function that takes the list of all tidied processed csv sheets in each subfolder 
+## and merge them according to sheet number
+## the function returns one merged csv for each file 
 
 merge_subfolder <- function(sub_folder) {
   print(paste0("processing ", sub_folder))
@@ -42,6 +50,8 @@ merge_subfolder <- function(sub_folder) {
 
 #-------------------------------------------------------------------------------
 
+## Function returns one merged csv by merging all files in subfolders
+
 merge_taxfiles <- function(tidy_folder, output_folder) {
   sub_folders <- get_sub_folders(tidy_folder) 
   for (sub_folder in sub_folders[-1]) {
@@ -52,6 +62,8 @@ merge_taxfiles <- function(tidy_folder, output_folder) {
 
 
 #-------------------------------------------------------------------------------
+
+## Function that cross-talks with clean taxfiles and merge taxfiles and designates folders to each
 
 clean_merge_write <- function(input_folder, tidy_folder, output_folder) {
   clean_taxfiles(input_folder, tidy_folder)
