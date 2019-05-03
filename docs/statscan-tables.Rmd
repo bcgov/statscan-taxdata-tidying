@@ -1,11 +1,6 @@
 ---
 title: "Income Tax Data Cleaning Project"
 author: "Noushin Nabavi"
-date: '`r format(Sys.time(), "%d %B, %Y")`'
-output:
-  pdf_document: default
-  html_document: default
-urlcolor: blue
 ---
 
 # Introduction 
@@ -14,9 +9,11 @@ Integrated Data Division (OCIO, CITZ) has acquired historical annual t1 tax data
 
 The data are in .xls format and are housed in the folder named data-raw.
 
+
 In this project, the xls files are cleaned and merged into one csv sheet using R. 
 
 For more questions, please consult with Director of Data Insights (Dan Mackenzie, Dan.Mackenzie@gov.bc.ca) or data scientists at IDD (Stephanie.Hazlitt@gov.bc.ca; Ashlin.Richardson@gov.bc.ca; Cindy.Wang@gov.bc.ca; or Noushin.Nabavi@gov.bc.ca). 
+
 
 The BC Gov GitHub repository for this project can found here: https://github.com/bcgov/statscan-taxdata-tidying
 
@@ -28,7 +25,9 @@ This data (from Statistics Canada) includes information copied with permission f
 
 # Data table structures for individuals and families
 
+
 Currently, the fully anonymized data includes income estimates for individuals for various geographical areas in BC ranging from years 2000 up to 2015. Income estimates for families range from years 2004 up to 2016. Each table is an aggregation of all years for that table.
+
 
 
 # Individual table structures 
