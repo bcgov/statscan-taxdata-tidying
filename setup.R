@@ -34,6 +34,7 @@ library("dplyr")
 
 if (!exists(here("data-tidy"))) dir.create(here("data-tidy"), showWarnings = FALSE)
 if (!exists(here("data-raw"))) dir.create(here("data-raw"), showWarnings = FALSE)
+if (!exists(here("data-output"))) dir.create(here("data-output"), showWarnings = FALSE)
 
 .setup_sourced <- TRUE
 

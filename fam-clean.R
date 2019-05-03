@@ -12,9 +12,10 @@
 
 
 ## Source setup script
-if (!exists(".setup_sourced")) source("setup.R")
+if (!exists(".setup_sourced")) source(here::here("setup.R"))
+if (!exists(".functions_sourced")) source(here:("functions.R"))
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 # tax data tidying function for each sheet depending on sheet number
 
@@ -41,7 +42,7 @@ tidy_tax_fam <- function(sheet, path) {
       mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
       select(sheet_col_names) %>% 
       pull()
-  
+    
   }
   
   else {
@@ -71,20 +72,19 @@ tidy_tax_fam <- function(sheet, path) {
     tibble::add_column(year = file_year, .before = 1) 
   
   # filter out only BC Geographies
-  tidy_df <- tidy_df %>% filter(str_detect(`postal|area|`, "^V") |
-                                  str_detect(`postal|area|`, "^9") | 
-                                  str_detect(`postal|area|`, "^59[0-9]{3}") & `level|of|geo|` == "31" |
-                                  str_detect(`postal|area|`, "^59[0-9]{4}") & `level|of|geo|` == "21" | 
-                                  str_detect(`postal|area|`, "^515[0-9]{3}") & `level|of|geo|` == "51" |
-                                  `level|of|geo|` == "11" |
-                                  `level|of|geo|` == "12") 
+  tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
+                                  str_detect(`postal|area`, "^9") | 
+                                  str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
+                                  str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" | 
+                                  str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
+                                  `level|of|geo` == "11" |
+                                  `level|of|geo` == "12") 
   
   
   return(list("data" = tidy_df, "sheet" = sheet))
 }
-  
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 ## function that lists all the xls files with 'Family' designation in the data-tidy folder 
 
@@ -93,7 +93,7 @@ list_input_files <- function(input_folder) {
   return(files[grep("_Family_", files)]) 
 }
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 ## function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
 ## It then saves all the tidied sheets into data-tidy folder with FAM as part of file name
@@ -110,7 +110,7 @@ save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   return(tidy)
 }
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 ## function that reiteratively takes one sheet from each family file, cleans the column headers according to tidy_tax_fam function, and applies save function to all files
 ## bi-directional function communicating with 'save_tidy_sheet' and 'tidy_tax_fam' functions
 
@@ -122,31 +122,9 @@ clean_taxfile <- function(filepath, tidy_folder){
     map(save_tidy_sheet, tidy_folder = tidy_folder, path = filepath)
 }
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
-## function that takes applies the tidy_tax_fam function to all sheets and applies the save_tidy_sheet function to all sheets
-## bidirectional function communicating with 'tidy_tax_fam' and 'save_tidy_sheet' functions
+clean_taxfiles("data-raw/fam", "data-tidy")
+#-------------------------------------------------------------------------------
 
-merge_taxfile <- function(tidy_folder) {
-  tidy_sheets <- filepath %>%
-    excel_sheets() %>%
-    set_names() %>% 
-    map(tidy_tax_fam, path = filepath) %>%
-    map(save_tidy_sheet, tidy_folder = tidy_folder, path = filepath)
-  
-}
-
-#-----------------------------------------------------------------
-
-## function that takes the merged csvs and outputs them as one csv per year into the data-tidy folder
-## this bidirectional function calls 'merge_subfolder' and 'merged_taxfile' functions
-## and assigns the suffix FAM to all saved csvs
-
-merge_taxfiles <- function(tidy_folder, output_folder) {
-  sub_folders <- get_sub_folders(tidy_folder) 
-  for (sub_folder in sub_folders[-1]) {
-    merged_taxfile <- merge_subfolder(sub_folder)
-    write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_FAM.csv"))
-  }
-}
-
+.fam_clean_sourced <- TRUE

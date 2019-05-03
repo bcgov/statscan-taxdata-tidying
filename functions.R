@@ -13,22 +13,25 @@
 # source setup script
 if (!exists(".setup_sourced")) source(here::here("setup.R"))
 
-## Function to clean column sheet names  (for most sheets)
+#-------------------------------------------------------------------------------
 
-# mutate_col_names <- function(sheet_col_names) {
-#   sheet_col_names = str_trim(sheet_col_names)
-#   sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
-#   sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
-#   sheet_col_names = str_replace_all(sheet_col_names, "na|na||", "")
-#   sheet_col_names = str_replace_all(sheet_col_names, "\\|\\|", "|")
-#   sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years")
-#   return(sheet_col_names)
-# }
+## Function to clean column sheet names 
 
-#-----------------------------------------------------------------
+mutate_col_names <- function(sheet_col_names) {
+  sheet_col_names = str_trim(sheet_col_names)
+  sheet_col_names = str_replace_all(sheet_col_names, "_NA_NA|_NA", "") # strip out introduced NAs
+  sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
+  sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
+  sheet_col_names = str_replace_all(sheet_col_names, "\\|\\|", "|")
+  sheet_col_names = str_replace_all(sheet_col_names, "na|na||", "")
+  sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years") #deals with changing dates of 5 yr windows
+  return(sheet_col_names)
+}
 
+#-------------------------------------------------------------------------------
 
 ## Function to get year from xls file name 
+
 get_file_year <- function(path) {
   # find file_year
   pathbase <- path %>%
@@ -40,27 +43,15 @@ get_file_year <- function(path) {
   return(file_year)
 }
 
-#----------------------------------------------------------------------------------------------------
-
-## Function for taking the list of all xls files in the data-raw folder 
-## and impement clean_taxfile() for cleaning column header and saving 
-## resulting CSVs in data-tidy folders
-
-clean_taxfiles <- function(input_folder, tidy_folder) {
-  files <- list_input_files(input_folder)
-  for (file in files) {
-    clean_taxfile(file, tidy_folder)
-  }
-}
-
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 ## Function that returns a list of all working directories in the data-tidy folder
+
 get_sub_folders <- function(tidy_folder) {
   return(list.dirs(tidy_folder))
 }
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 ## Function that takes the list of all tidied processed csv sheets in each subfolder 
 ## and merge them according to sheet number
@@ -76,8 +67,7 @@ merge_subfolder <- function(sub_folder) {
   return(big_object)
 }
 
-#-----------------------------------------------------------------
-
+#-------------------------------------------------------------------------------
 
 ## Function to clean, merge, and output the tidy sheets
 
@@ -86,11 +76,9 @@ clean_merge_write <- function(input_folder, tidy_folder, output_folder) {
   merge_taxfiles(tidy_folder, output_folder)
 }
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
-## Calling folders (works upwards) and communicate with clean_merge_write functions based on 3 designated data folders
-# clean_merge_write("data-raw", "data-tidy", "data-output")
+.functions_sourced <- TRUE
 
-#-----------------------------------------------------------------
 
 

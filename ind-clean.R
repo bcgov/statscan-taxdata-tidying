@@ -12,30 +12,45 @@
 
 
 ## Source setup script
-if (!exists(".setup_sourced")) source("setup.R")
+if (!exists(".setup_sourced")) source(here::here("setup.R"))
+if (!exists(".functions_sourced")) source(here("functions.R"))
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# identifying sheets with extra empty columns in Sheets 7A-7B-7C
+messy_years <- c("2002", "2003", "2004", "2005", "2006")
+messy_tables <- c("7A", "7B", "7C")
 
-# Function to clean column names for IND files
-mutate_col_names <- function(sheet_col_names) {
-  sheet_col_names = str_replace_all(sheet_col_names, "_NA_NA|_NA", "") # strip out introduced NAs
-  sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
-  sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
-  sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years") #deals with changing dates of 5 yr windows
-  return(sheet_col_names)
-}
+#-------------------------------------------------------------------------------
+## Tax data tidying function for individual tables:
 
-
-## Tax data tidying function for individual tables 
-## (uses get_file_year() from setup.R)
 tidy_tax_ind <- function(sheet, path) {
-
+  
   print(paste0("processing ", sheet, " of ", path))
   file_year <- get_file_year(path)
+
   
+  # process sheet 7A-7C differently for years 2002:2006
+  
+  if (file_year %in% messy_years & sheet %in% messy_tables)   {
+    
+    # process sheet 7A,B,C for some years as necessary 
+    sheet %in% c("7A", "7B", "7C")
+    tempcols <- c("one", "two", "three")
+    sheetcolnames <- path %>%
+      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE) %>%
+      t() %>% 
+      as_tibble(.name_repair = ~ tempcols) %>% 
+      slice(1:(n()-2)) %>%
+      fill(tempcols) %>% 
+      unite(sheet_col_names) %>% 
+      mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
+      select(sheet_col_names) %>%
+      pull()
+  }  
+    
   #process sheet 8/clean column headers
   
-  if(sheet == "8") {
+  else if(sheet == "8") {
     
     sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3) %>%
       t() %>% 
@@ -75,7 +90,7 @@ tidy_tax_ind <- function(sheet, path) {
       select(sheet_col_names) %>% 
       pull()
   }
-    
+  
   else {
     
     #process sheet 3A, 3B, 3C, 9 and other sheets/clean column headers
@@ -112,30 +127,11 @@ tidy_tax_ind <- function(sheet, path) {
                                   str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
                                   `level|of|geo` == "11" |
                                   `level|of|geo` == "12") 
-
+  
   return(list("data" = tidy_df, "sheet" = sheet))
 }
 
-#######################
-## TESTING SNIPPET ####
-#######################
-
-## Example Table I .xls file
-filename <- "2002_IND_Tables 1_to_7_Canada.xls"
-filefolder <- "data-raw/ind"
-filepath <- here(filefolder, filename)
-
-## Read one sheet by sheet name
-I_test <- tidy_tax_ind("7A", path = filepath)
-
-## Read in and add names to all sheets at once
-tidy_sheets <- filepath %>%
-  excel_sheets() %>%
-  set_names() %>%
-  map(tidy_tax_ind, path = filepath)
-
-
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 ## Function that lists all the xls files with 'IND' designation
 ## in a destination` folder 
@@ -146,7 +142,7 @@ list_input_files <- function(input_folder) {
 
 list_input_files("data-raw/ind")
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 ## Function to save each tidied CSV sheet to a table folder with year as a filename prefix  
 ##  (takes the name using the get_file_year() from setup.R) and IND as part of filename
@@ -157,19 +153,18 @@ save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   file_year <- get_file_year(path)
   if (!(dir.exists(paste0(tidy_folder, "/", sheet)))) {
     dir.create(paste0(tidy_folder, "/", sheet))
- 
+    
   }
   write_csv(tidy, paste0(tidy_folder, "/", sheet, "/", file_year, "-IND-", sheet, ".csv"))
   return(tidy)
 }
 
 
-#-----------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 ## Function that iterates over each IND xls file and
 ## imports each sheet using clean column headers according to tidy_tax_ind(), saves
 ## each sheet with save_tidy_sheet()'
-
 
 clean_taxfile <- function(filepath, tidy_folder){
   tidy_sheets <- filepath %>%
@@ -179,42 +174,23 @@ clean_taxfile <- function(filepath, tidy_folder){
     map(save_tidy_sheet, tidy_folder = tidy_folder, path = filepath)
 }
 
+#-------------------------------------------------------------------------------
 
-clean_taxfiles("data-raw/ind", "data-tidy")
+## Function for taking the list of all xls files in the data-raw folder 
+## and impement clean_taxfile() for cleaning column header and saving 
+## resulting CSVs in data-tidy folders
 
-#### 2002 Table 7A not working: last 2 columns empty, so when read in w/o headers
-#### these are dropped by read_excel and then the column name vector is too long
-
-
-
-
-#-----------------------------------------------------------------
-
-## function that takes applies the tidy_tax_ind function to all sheets and applies 
-## the save_tidy_sheet function to all sheets
-## bidirectional function communicating with 'tidy_tax_ind' and 'save_tidy_sheet' functions
-
-merge_taxfile <- function(tidy_folder) {
-  tidy_sheets <- filepath %>%
-    excel_sheets() %>%
-    set_names() %>% 
-    map(tidy_tax_ind, path = filepath) %>%
-    map(save_tidy_sheet, tidy_folder = tidy_folder, path = filepath)
-  
-}
-
-#-----------------------------------------------------------------
-
-## function that takes the merged IND csvs and outputs them as one csv in the data-tidy folder
-## this bidirectional function calls 'merge_subfolder' and 'merged_taxfile' functions
-## and assigns the suffix 'IND' to saved csvs
-
-merge_taxfiles <- function(tidy_folder, output_folder) {
-  sub_folders <- get_sub_folders(tidy_folder) 
-  for (sub_folder in sub_folders[-1]) {
-  merged_taxfile <- merge_subfolder(sub_folder)
-  write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_IND.csv"))
+clean_taxfiles <- function(input_folder, tidy_folder) {
+  files <- list_input_files(input_folder)
+  for (file in files) {
+    clean_taxfile(file, tidy_folder)
   }
 }
 
+#-------------------------------------------------------------------------------
 
+clean_taxfiles("data-raw/ind", "data-tidy")
+
+#-------------------------------------------------------------------------------
+
+.ind_clean_sourced <- TRUE
