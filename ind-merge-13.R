@@ -61,7 +61,7 @@ merge_taxfiles_13 <- function(tidy_folder, output_folder) {
   subfiles <- get_sub_files_13(tidy_folder) 
   for (subfile in subfiles[-1]) {
     merged_taxfile <- merge_subfile_13(subfile)
-    write_csv(merged_taxfile, paste0(output_folder, "/", "merge_13_IND.csv"))
+    write.csv(merged_taxfile, paste0(output_folder, "/", "merge_13_IND.csv"))
   }
 }
 
