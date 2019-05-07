@@ -23,7 +23,6 @@ mutate_col_names <- function(sheet_col_names) {
   sheet_col_names = tolower(str_replace_all(sheet_col_names, "\\s", "|"))
   sheet_col_names = str_replace_all(sheet_col_names, "_", "|")
   sheet_col_names = str_replace_all(sheet_col_names, "\\|\\|", "|")
-  sheet_col_names = str_replace_all(sheet_col_names, "na|na||", "")
   sheet_col_names = str_replace_all(sheet_col_names, "change\\|\\d{4}-\\d{4}", "range|last|5years") #deals with changing dates of 5 yr windows
   return(sheet_col_names)
 }
@@ -54,7 +53,7 @@ get_sub_folders <- function(tidy_folder) {
 #-------------------------------------------------------------------------------
 
 ## Function that takes the list of all tidied processed csv sheets in each subfolder 
-## and merge them according to sheet number
+## and merges them according to sheet number
 ## the function returns one merged csv for each file 
 
 merge_subfolder <- function(sub_folder) {
@@ -67,18 +66,10 @@ merge_subfolder <- function(sub_folder) {
   return(big_object)
 }
 
-#-------------------------------------------------------------------------------
-
-## Function to clean, merge, and output the tidy sheets
-
-clean_merge_write <- function(input_folder, tidy_folder, output_folder) {
-  clean_taxfiles(input_folder, tidy_folder)
-  merge_taxfiles(tidy_folder, output_folder)
-}
 
 #-------------------------------------------------------------------------------
 
-## Establish connection to current function script
+## Object to source function script
 
 .functions_sourced <- TRUE
 

@@ -28,14 +28,20 @@ library("dplyr")
 
 ## Make new directories if they do not exist
 
-if (!exists(here("data-tidy"))) dir.create(here("data-tidy"), showWarnings = FALSE)
 if (!exists(here("data-raw"))) dir.create(here("data-raw"), showWarnings = FALSE)
+if (!exists(here("data-raw/fam"))) dir.create(here("data-raw/fam"), showWarnings = FALSE)
+if (!exists(here("data-raw/ind"))) dir.create(here("data-raw/ind"), showWarnings = FALSE)
+if (!exists(here("data-raw/ind13"))) dir.create(here("data-raw/ind13"), showWarnings = FALSE)
+if (!exists(here("data-tidy"))) dir.create(here("data-tidy"), showWarnings = FALSE)
+if (!exists(here("data-tidy/fam"))) dir.create(here("data-tidy/fam"), showWarnings = FALSE)
+if (!exists(here("data-tidy/ind"))) dir.create(here("data-tidy/ind"), showWarnings = FALSE)
+if (!exists(here("data-tidy/ind13"))) dir.create(here("data-tidy/ind13"), showWarnings = FALSE)
 if (!exists(here("data-output"))) dir.create(here("data-output"), showWarnings = FALSE)
 
 
 #-------------------------------------------------------------------------------
 
-## Establish connection to current setup script
+## Object to source setup script
 
 .setup_sourced <- TRUE
 
