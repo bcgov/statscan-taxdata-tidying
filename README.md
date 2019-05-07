@@ -1,42 +1,34 @@
-<a id="devex-badge" rel="Exploration" href="https://github.com/BCDevExchange/assets/blob/master/README.md"><img alt="Being designed and built, but in the lab. May change, disappear, or be buggy." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/exploration.svg" title="Being designed and built, but in the lab. May change, disappear, or be buggy." /></a>[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+<a id="devex-badge" rel="Delivery" href="https://github.com/BCDevExchange/assets/blob/master/README.md"><img alt="In production, but maybe in Alpha or Beta. Intended to persist and be supported." style="border-width:0" src="https://assets.bcdevexchange.org/images/badges/delivery.svg" title="In production, but maybe in Alpha or Beta. Intended to persist and be supported." /></a>[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # statscan-taxdata-tidying
  
-A set of R scripts to load, clean, and merge anonymized annual Statistics Canada income tax data for British Columbia. 
+A set of R scripts to read, tidy, merge & write anonymized annual Statistics Canada income tax data for British Columbia. 
 
-<!--
-## Structure
-
-This repo contains the following contents:
-- Documents in `/Documentation/` folder
-- The Public-Data folder is divided into Raw and Derived `/Data/raw-data/` and `/Data/derived-data/` subfolders
-- R scripts are in `/R/` folder
-- Exercises are in `/Scratch/` folder
-
-The scripts in this repository wrangle and tidy purchased anonymized annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for anonymized individuals and anonymized families. Metadata provided by Statistics Canada is in `/Documentation/` folder. 
+The scripts in this repository tidy purchased anonymized annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for anonymized individuals and anonymized families. Metadata provided by Statistics Canada is in `/docs` folder.
 
 
 ## Usage
 
-Untidy .xls files per year for anonymized individual and family income tax data must be placed in the `/Data/` folder `/Data/raw-data/`.
+#### Raw Data
 
-The .xls files were converted to .xlsx and their empty spaces in the names were removed for more convenient data wrangling. This can also be done with readxl and tidyxl package in RStudio.
+The source .xls files per year (or per table in the case of Individual Table 13) for anonymized individual and family income tax data must be manually placed in the appropriate subfolders: `/data-raw/fam`, `/data-raw/ind`, and `/data-raw/ind13`.
 
-Tidied .csv equivalent files are written to `/Data/derived-data/` folder. The `/R/` folder contains all the R scripts used to read xlsx, clean, merge, and output the merged csv files.
+#### Code
 
+There are three core scripts that are required, they should to be run in order:
 
+- `fam-clean.R`
+- `ind-clean.R`
+- `ind-clean-13.R`
 
-## Scratch folder 
+The `run-all.R` script can be `source`ed to run the scripts all at once. The `setup.R` and `functions.R` scripts in the `/R` folder are sourced programatically.
 
-There are six scripts located in the `/Scratch/` folder that are not required for the analysis, and are written after the R scripts were generated and before functions were discovered. The aim is to generate a reproducible workflow for file load, clean, merge, and output in one go.  
+All packages used in the analysis can be installed from CRAN using `install.packages()`.
 
-- 01_load.R # only an example to load files for one year and the sample column names 
-- 02_clean.R # how to extract BC geographies 
-- 03_merge.R # merging all sub-sheets into one 
-- 04_output.R # write out the merged csv's
-- 05_encrypt.R # how to encrypt files for security (was not used, also note warning and latest version when using)
-- 06_scratch.R # functions to use for efficiency (i.e. use to load, clean, merge, and output in one go)
--->
+#### Tidy Data Outputs
+
+Tidied .CSV equivalent files for each Table&mdash;individuals and families&mdash;are written to the `/data-output` folder.
+
 
 ## Getting Help or Reporting an Issue
 
