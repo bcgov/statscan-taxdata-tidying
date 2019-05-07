@@ -12,13 +12,12 @@
 
 
 ## Source setup and function scripts
+if (!exists(".setup_sourced")) source(here::here("R/setup.R"))
+if (!exists(".functions_sourced")) source(here::here("R/functions.R"))
 
-if (!exists(".setup_sourced")) source(here::here("setup.R"))
-if (!exists(".functions_sourced")) source(here:("functions.R"))
 
 #-------------------------------------------------------------------------------
-
-# tax data tidying function for each sheet depending on sheet number
+# Family tax data tidying function for each sheet depending on sheet number
 
 tidy_tax_fam <- function(sheet, path) {
   
@@ -49,7 +48,6 @@ tidy_tax_fam <- function(sheet, path) {
   else {
     
     #process other sheets/clean column headers
-    
     if (sheet %in% c("2", "3A", "3B", "3C", "13", "14A", "14B")) {
       tempcols <- c("one", "two")
     } else tempcols <- c("one", "two", "three")
@@ -65,14 +63,14 @@ tidy_tax_fam <- function(sheet, path) {
       pull()
     
   }
-  # generate data.table with fixed sheet column names
+  #generate data.table with fixed sheet column names
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
                col_names = sheetcolnames,
                .name_repair = "unique") %>%
     tibble::add_column(year = file_year, .before = 1) 
   
-  # filter out only BC Geographies
+  #filter out only BC Geographies
   tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
                                   str_detect(`postal|area`, "^9") | 
                                   str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
@@ -85,21 +83,22 @@ tidy_tax_fam <- function(sheet, path) {
   return(list("data" = tidy_df, "sheet" = sheet))
 }
 
+
 #-------------------------------------------------------------------------------
+## Function that lists all the xls files with 'Family' designation in the data-tidy/fam folder 
 
-## Function that lists all the xls files with 'Family' designation in the data-tidy folder 
-
-list_input_files <- function(input_folder) {
+list_input_files_fam <- function(input_folder) {
   files <- list.files(input_folder, pattern = "*.xls", full.names = TRUE)  
   return(files[grep("_Family_", files)]) 
 }
 
+
 #-------------------------------------------------------------------------------
+## Function that takes each tidy sheet and assigns a year as a prefix to its name
+## (takes the name from get_file_year function)
+## It then saves all the tidied sheets into data-tidy/fam folder with FAM as part of file name
 
-## Function that applies takes each tidy sheet and assigns a year as a prefix to its name (takes the name from get_file_year function)
-## It then saves all the tidied sheets into data-tidy folder with FAM as part of file name
-
-save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
+save_tidy_sheet_fam <- function(tidy_sheet, tidy_folder, path) {
   sheet = tidy_sheet$sheet
   tidy = tidy_sheet$data
   file_year <- get_file_year(path)
@@ -111,24 +110,51 @@ save_tidy_sheet <- function(tidy_sheet, tidy_folder, path) {
   return(tidy)
 }
 
-#-------------------------------------------------------------------------------
-## Function that reiteratively takes one sheet from each family file, cleans the column headers according to tidy_tax_fam function, and applies save function to all files
-## bi-directional function communicating with 'save_tidy_sheet' and 'tidy_tax_fam' functions
 
-clean_taxfile <- function(filepath, tidy_folder){
+#-------------------------------------------------------------------------------
+## Function that takes one sheet from each family file, cleans the column headers 
+## according to tidy_tax_fam function, and saves with 'save_tidy_sheet_fam' and 'tidy_tax_fam' functions
+
+clean_taxfile_fam <- function(filepath, tidy_folder){
   tidy_sheets <- filepath %>%
     excel_sheets() %>%
     set_names() %>% 
     map(tidy_tax_fam, path = filepath) %>%
-    map(save_tidy_sheet, tidy_folder = tidy_folder, path = filepath)
+    map(save_tidy_sheet_fam, tidy_folder = tidy_folder, path = filepath)
 }
 
+
 #-------------------------------------------------------------------------------
-## Calling function for cleaning taxfiles
+## Function for taking the list of all xls files in the data-raw/fam folder 
+## and implement clean_taxfile_fam() for cleaning column header and saving 
+## resulting CSVs in data-tidy/fam folders
 
-clean_taxfiles("data-raw/fam", "data-tidy")
+clean_taxfiles_fam <- function(input_folder, tidy_folder) {
+  files <- list_input_files_fam(input_folder)
+  for (file in files) {
+    clean_taxfile_fam(file, tidy_folder)
+  }
+}
+
+
 #-------------------------------------------------------------------------------
+## Calling functions for cleaning and saving Family CSV taxfiles
+clean_taxfiles_fam("data-raw/fam", "data-tidy/fam")
 
-## Establish connection to current script
+#-------------------------------------------------------------------------------
+## Function writes one merged family csv per Table by merging all files in data-tidy/fam subfolders
 
-.fam_clean_sourced <- TRUE
+merge_taxfiles_fam <- function(tidy_folder, output_folder) {
+  sub_folders <- get_sub_folders(tidy_folder) 
+  for (sub_folder in sub_folders[-1]) {
+    merged_taxfile <- merge_subfolder(sub_folder)
+    write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_FAM.csv"))
+  }
+}
+
+
+#-------------------------------------------------------------------------------
+## Calling function for merging and saving 1 CSV per family taxfile table
+merge_taxfiles_fam("data-tidy/fam", "data-output")
+
+
