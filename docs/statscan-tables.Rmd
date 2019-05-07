@@ -9,26 +9,20 @@ Integrated Data Division (OCIO, CITZ) has acquired historical annual t1 tax data
 
 The data are in .xls format and are housed in the folder named data-raw.
 
-
-In this project, the xls files are cleaned and merged into one csv sheet using R. 
+In this project, the xls files are cleaned and merged into one csv sheet per table using R and RStudio. 
 
 For more questions, please consult with Director of Data Insights (Dan Mackenzie, Dan.Mackenzie@gov.bc.ca) or data scientists at IDD (Stephanie.Hazlitt@gov.bc.ca; Ashlin.Richardson@gov.bc.ca; Cindy.Wang@gov.bc.ca; or Noushin.Nabavi@gov.bc.ca). 
 
-
 The BC Gov GitHub repository for this project can found here: https://github.com/bcgov/statscan-taxdata-tidying
 
-The technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors can be found in the `/Documentation` folder. For information about this product or the wide range of services and data available from Statistics Canada, visit their [website](www.statcan.gc.ca).
+The technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors can be found in the `/docs` folder. For information about this product or the wide range of services and data available from Statistics Canada, visit their [website](www.statcan.gc.ca).
 For further questions, the Statistics Canada email is <STATCAN.infostats-infostats.STATCAN@canada.ca>. 
-
 
 This data (from Statistics Canada) includes information copied with permission from Canada Post Corporation. Information about Statistics Canada Open Licence Grants can be found here: https://www.statcan.gc.ca/eng/reference/licence 
 
 # Data table structures for individuals and families
 
-
-Currently, the fully anonymized data includes income estimates for individuals for various geographical areas in BC ranging from years 2000 up to 2015. Income estimates for families range from years 2004 up to 2016. Each table is an aggregation of all years for that table.
-
-
+Currently, the fully anonymized data includes income estimates for individuals for various geographical areas in B.C. ranging from years 2000 up to 2015. Income estimates for families range from years 2004 up to 2016. Each table is an aggregation of all years for that table.
 
 # Individual table structures 
 ```{r echo= FALSE}
