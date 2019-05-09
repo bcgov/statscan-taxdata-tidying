@@ -14,13 +14,7 @@ See the License for the specific language governing permissions and limitations 
 
 
 
-# data-raw folder
+# data-tidy folder
 
-This folder houses the `*.xls` files from Statistics Canada and is divided into `ind`, `fam`, and `ind-13` sub-folders.
-
-e.g. 
-
-- `data-raw/ind/2015_IND_Tables_1 to_13_Canada.xls`  
-- `data-raw/fam/2015_Family_Tables_1_to_18_Canada.xls`  
-- `data-raw/ind-13/2004_to_2015_IND_Table_13.xls`  
+This folder houses the tidied temporary `*.csv` files for each sheet before they are merged. 
 
