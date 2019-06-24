@@ -63,6 +63,15 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path) {
                                   `level|of|geo` == "11" |
                                   `level|of|geo` == "12") 
   
+  tidy_df1 <- tidy_df %>%
+    filter(`level|of|geo` == 61) %>%
+    mutate(`postal|area` = formatC(as.numeric(`postal|area`), format="f", digits=2))
+  
+  tidy_df2 <- tidy_df %>%
+    filter(`level|of|geo` != 61)
+  
+  tidy_df <- bind_rows(tidy_df1, tidy_df2) %>%
+    arrange(desc(year))
   
   return(list("data" = tidy_df, "sheet" = sheet))
 }
