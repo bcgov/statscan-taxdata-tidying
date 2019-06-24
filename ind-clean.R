@@ -12,8 +12,8 @@
 
 
 ## Source setup and function scripts
-if (!exists(".setup_sourced")) source(here::here("setup.R"))
-if (!exists(".functions_sourced")) source(here("functions.R"))
+if (!exists(".setup_sourced")) source(here::here("R", "setup.R"))
+if (!exists(".functions_sourced")) source(here("R", "functions.R"))
 
 
 #-------------------------------------------------------------------------------
@@ -126,10 +126,19 @@ tidy_tax_ind <- function(sheet, path) {
                                   str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
                                   `level|of|geo` == "11" |
                                   `level|of|geo` == "12") 
+ 
+  tidy_df1 <- tidy_df %>%
+    filter(`level|of|geo` == 61) %>%
+    mutate(`postal|area` = formatC(as.numeric(`postal|area`), format="f", digits=2))
+  
+  tidy_df2 <- tidy_df %>%
+    filter(`level|of|geo` != 61)
+  
+  tidy_df <- bind_rows(tidy_df1, tidy_df2) %>%
+    arrange(desc(year))
   
   return(list("data" = tidy_df, "sheet" = sheet))
 }
-
 
 #-------------------------------------------------------------------------------
 ## Function that lists all the xls files with 'IND' designation
