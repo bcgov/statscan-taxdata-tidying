@@ -79,6 +79,7 @@ tidy_tax_fam <- function(sheet, path) {
                                   `level|of|geo` == "11" |
                                   `level|of|geo` == "12") 
   
+  # clean out the extra decimal places introduced by reading xls into R
   tidy_df1 <- tidy_df %>%
     filter(`level|of|geo` == 61) %>%
     mutate(`postal|area` = formatC(as.numeric(`postal|area`), format="f", digits=2))
