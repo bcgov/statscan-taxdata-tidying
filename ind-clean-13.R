@@ -19,7 +19,7 @@ if (!exists(".functions_sourced")) source(here::here("R/functions.R"))
 #-------------------------------------------------------------------------------
 # Function to tidy individual table 13 provided in one file with multiple sheets by year 
 
-tidy_tax_i13sheet <- function(sheet, skip, col_names, path) {
+tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
   print(paste0("processing sheet ", sheet))
   
   types <- c("Couple Families",
@@ -54,14 +54,16 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path) {
                .name_repair = "unique") %>%
     tibble::add_column(year = sheet, .before = 1) 
   
-  #filter out only BC Geographies
-  tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
-                                  str_detect(`postal|area`, "^9") | 
-                                  str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
-                                  str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" | 
-                                  str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
-                                  `level|of|geo` == "11" |
-                                  `level|of|geo` == "12") 
+  if (filter_BC == TRUE){
+     #filter out only BC Geographies
+     tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
+                                     str_detect(`postal|area`, "^9") | 
+                                     str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
+                                     str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" | 
+                                     str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
+                                     `level|of|geo` == "11" |
+                                     `level|of|geo` == "12") 
+  }
   
   # clean out the extra decimal places introduced by reading xls into R
   tidy_df1 <- tidy_df %>%
@@ -107,11 +109,11 @@ save_tidy_sheet_13 <- function(tidy_sheet, tidy_folder, path) {
 ## Function that takes one sheet from each of IND files for table 13, cleans the column headers according to tidy_tax_i13sheet function, and applies save function to all files
 ## bi-directional function communicating with 'save_tidy_sheet' and 'tidy_tax_i13sheet' functions
 
-clean_taxfile_13 <- function(filepath, tidy_folder){
+clean_taxfile_13 <- function(filepath, tidy_folder, filter_BC = TRUE){
   tidy_sheets <- filepath %>%
     excel_sheets() %>%
     set_names() %>% 
-    map(tidy_tax_i13sheet, path = filepath) %>%
+    map(tidy_tax_i13sheet, path = filepath, filter_BC = filter_BC) %>%
     map(save_tidy_sheet_13, tidy_folder = tidy_folder, path = filepath)
 }
 
@@ -121,31 +123,14 @@ clean_taxfile_13 <- function(filepath, tidy_folder){
 ## and implement clean_taxfile() for cleaning column header and saving 
 ## resulting CSVs in data-tidy folders
 
-clean_taxfiles_13 <- function(input_folder, tidy_folder) {
+clean_taxfiles_13 <- function(input_folder, tidy_folder, filter_BC = TRUE) {
   files <- list_input_files_13(input_folder)
-  for (file in files) {
-    clean_taxfile_13(file, tidy_folder)
-  }
+  purrr::walk(files, ~clean_taxfile_13(.x, tidy_folder, filter_BC = filter_BC))
+  
   
 }
 
-#-------------------------------------------------------------------------------
-## Calling function for cleaning taxfiles
-clean_taxfiles_13("data-raw/ind13", "data-tidy/ind13")
 
-
-#-------------------------------------------------------------------------------
-## Map over tidy sheets and bind rows to make one Table 13
-## Write out IND Table 13 CSV
-
-ind13_path <- here("data-tidy/ind13")   
-ind13_files <- dir(ind13_path, pattern = "*.csv") 
-
-table13 <- ind13_files %>%
-  map(~ read_csv(file.path(ind13_path, .))) %>% 
-  reduce(rbind)
-
-write_csv(table13, here("data-output/13_IND.csv"))
 
 
 
