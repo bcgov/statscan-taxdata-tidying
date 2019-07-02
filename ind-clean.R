@@ -25,7 +25,7 @@ messy_tables <- c("7A", "7B", "7C")
 #-------------------------------------------------------------------------------
 ## Tax data tidying function for individual tables:
 
-tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
+tidy_tax_ind <- function(sheet, path) {
   
   print(paste0("processing ", sheet, " of ", path))
   file_year <- get_file_year(path)
@@ -119,17 +119,13 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
     tibble::add_column(year = file_year, .before = 1)  
   
   #filter out only BC Geographies
-  if(filter_BC == TRUE){
-    #filter out only BC Geographies
-    tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
-                                    str_detect(`postal|area`, "^9") | 
-                                    str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
-                                    str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" | 
-                                    str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
-                                    `level|of|geo` == "11" |
-                                    `level|of|geo` == "12") 
-  }
-  
+  tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
+                                  str_detect(`postal|area`, "^9") | 
+                                  str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
+                                  str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" | 
+                                  str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
+                                  `level|of|geo` == "11" |
+                                  `level|of|geo` == "12") 
  
   # clean out the extra decimal places introduced by reading xls into R
   tidy_df1 <- tidy_df %>%
@@ -178,11 +174,11 @@ save_tidy_sheet_ind <- function(tidy_sheet, tidy_folder, path) {
 ## imports each sheet using clean column headers according to tidy_tax_ind(), saves
 ## each sheet with save_tidy_sheet()'
 
-clean_taxfile_ind <- function(filepath, tidy_folder, filter_BC = TRUE){
+clean_taxfile_ind <- function(filepath, tidy_folder){
   tidy_sheets <- filepath %>%
     excel_sheets() %>%
     set_names() %>% 
-    map(tidy_tax_ind, path = filepath, filter_BC = filter_BC) %>%
+    map(tidy_tax_ind, path = filepath) %>%
     map(save_tidy_sheet_ind, tidy_folder = tidy_folder, path = filepath)
 }
 
@@ -192,10 +188,17 @@ clean_taxfile_ind <- function(filepath, tidy_folder, filter_BC = TRUE){
 ## and implements clean_taxfile_ind() for cleaning column header and saving 
 ## resulting CSVs in data-tidy/ind folders
 
-clean_taxfiles_ind <- function(input_folder, tidy_folder, filter_BC = TRUE) {
+clean_taxfiles_ind <- function(input_folder, tidy_folder) {
   files <- list_input_files_ind(input_folder)
-  purrr::walk(files, ~clean_taxfile_ind(.x, tidy_folder, filter_BC = filter_BC))
+  for (file in files) {
+    clean_taxfile_ind(file, tidy_folder)
+  }
 }
+
+
+#-------------------------------------------------------------------------------
+## Calling function for cleaning taxfiles
+clean_taxfiles_ind("data-raw/ind", "data-tidy/ind")
 
 
 #-------------------------------------------------------------------------------
@@ -210,6 +213,9 @@ merge_taxfiles_ind <- function(tidy_folder, output_folder) {
 }
 
 
+#-------------------------------------------------------------------------------
+## Calling function for merging and saving 1 CSV per individual taxfile table
+merge_taxfiles_ind("data-tidy/ind", "data-output")
 
 
 

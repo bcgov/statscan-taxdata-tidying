@@ -11,52 +11,11 @@
 # See the License for the specific language governing permissions and limitations under the License.
 
 
-## Run 3 data wrangling scripts in order:
+## Run 3 data wanlging scripts in order:
 
-
-# family ------------------------------------------------------------------
-
-## Load functions
 source("fam-clean.R")
-
-## Runs functions
-## Calling functions for cleaning and saving Family CSV taxfiles
-clean_taxfiles_fam("data-raw/fam", "data-tidy/fam")
-
-## Calling function for merging and saving 1 CSV per family taxfile table
-merge_taxfiles_fam("data-tidy/fam", "data-output")
-
-
-
-# Individual --------------------------------------------------------------
-
 source("ind-clean.R")
-
-## Calling function for cleaning taxfiles
-clean_taxfiles_ind("data-raw/ind", "data-tidy/ind")
-
-## Calling function for merging and saving 1 CSV per individual taxfile table
-merge_taxfiles_ind("data-tidy/ind", "data-output")
-
-
-# Individual Table 13 -----------------------------------------------------
-
 source("ind-clean-13.R")
-
-## Calling function for cleaning taxfiles
-clean_taxfiles_13("data-raw/ind13", "data-tidy/ind13")
-
-## Map over tidy sheets and bind rows to make one Table 13
-## Write out IND Table 13 CSV
-
-ind13_path <- here("data-tidy/ind13")   
-ind13_files <- dir(ind13_path, pattern = "*.csv") 
-
-table13 <- ind13_files %>%
-  map(~ read_csv(file.path(ind13_path, .))) %>% 
-  reduce(rbind)
-
-write_csv(table13, here("data-output/13_IND.csv"))
 
 
 
