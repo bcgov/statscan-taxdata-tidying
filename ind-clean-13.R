@@ -100,7 +100,7 @@ save_tidy_sheet_13 <- function(tidy_sheet, tidy_folder, path) {
   tidy = tidy_sheet$data
   file_year <- get_file_year(path)
 
-  write_csv(tidy, paste0(tidy_folder, "/", "IND-", sheet, ".csv"))
+  write_csv(tidy, paste0(tidy_folder, "/", "IND-", sheet, ".csv"), na = "")
   return(tidy)
 }
 

@@ -168,7 +168,7 @@ save_tidy_sheet_ind <- function(tidy_sheet, tidy_folder, path) {
     dir.create(paste0(tidy_folder, "/", sheet))
     
   }
-  write_csv(tidy, paste0(tidy_folder, "/", sheet, "/", file_year, "-IND-", sheet, ".csv"))
+  write_csv(tidy, paste0(tidy_folder, "/", sheet, "/", file_year, "-IND-", sheet, ".csv"), na = "")
   return(tidy)
 }
 
@@ -205,7 +205,7 @@ merge_taxfiles_ind <- function(tidy_folder, output_folder) {
   sub_folders <- get_sub_folders(tidy_folder) 
   for (sub_folder in sub_folders[-1]) {
     merged_taxfile <- merge_subfolder(sub_folder)
-    write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_IND.csv"))
+    write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_IND.csv"), na = "")
   }
 }
 
