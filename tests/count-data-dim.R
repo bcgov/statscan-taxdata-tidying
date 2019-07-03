@@ -102,12 +102,13 @@ ind_file_names <- function(path) {
 
 read_ind_files <- function(path) {
   file <- path %>% 
-  map(function(x) data.table::setnames(data.table::fread(x), c("table", "year"))) %>% 
+    map(function(x) data.table::setnames(data.table::fread(x), c("table", "year"))) %>% 
     select(table <- s)
   
   merged_table <- do.call(plyr::rbind.fill, file) 
   write_csv(merged_table, here("docs", "individual_table_years.csv"))
 }
+
 
 s <- ind_file_names(IND_years)
 i <- read_ind_files(IND_years)
