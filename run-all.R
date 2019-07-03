@@ -56,7 +56,7 @@ table13 <- ind13_files %>%
   map(~ read_csv(file.path(ind13_path, .))) %>% 
   reduce(rbind)
 
-write_csv(table13, here("data-output/13_IND.csv"))
+write_csv(table13, here("data-output/13_IND.csv"), na = "")
 
 
 

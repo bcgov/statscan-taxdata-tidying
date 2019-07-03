@@ -43,7 +43,7 @@ clean_taxfiles_13("data-raw/ind13", "tests/data-test/ind13", filter_BC = FALSE)
 
 ## Chose a random family data file
 set.seed(42)
-random_path <- sample(list_input_files_ind(here("data-raw/ind13/")), 1)
+random_path <- sample(list_input_files_13(here("data-raw/ind13/")), 1)
 random_sheet <- sample(excel_sheets(random_path), 1)
 
 ## Read in random sheet
@@ -52,7 +52,7 @@ raw <- read_excel(random_path, sheet = random_sheet, skip = 4, col_names = FALSE
 raw <- raw[1:(nrow(raw)-4),]
 
 ## Parse random raw to get corresponding tidied
-file_year <- substr(basename(random_path), 1,4)
+file_year <- random_sheet
 tidied_path <- list.files(path = file.path("tests/data-test/ind13"), pattern = file_year, full.names = TRUE)
 
 tidy <- read_csv(tidied_path, col_types = tidy_spec_from_raw(raw))

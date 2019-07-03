@@ -38,15 +38,6 @@ compare_raw_to_tidy <- function(col, raw, tidy) {
   sorted_tidy <- sort(tidy[[col_position_integer]])
   sorted_raw <- sort(raw[[col_position_integer - 1]]) ## tidy adds year.
   
-  ## Not checking character vector
-  ## Justified because:
-  ##  - character vectors are the cols meant to change
-  ##  - numeric cols will catch any changes
-  classes <- c(class(sorted_raw), class(sorted_tidy))
-  if (any("character" %in% classes)) {
-    return(data.frame(col = col, valid = NA))
-  }
-  
   if (all(sorted_raw %in% sorted_tidy)) {
     return(data.frame(col = col, valid = TRUE))
   } else{
