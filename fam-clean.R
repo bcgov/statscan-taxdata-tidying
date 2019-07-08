@@ -27,7 +27,7 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
   # process table 7/clean column headers
   if(sheet == "7") {
     
-    sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3) %>%
+    sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3,  na = c("", "X", "x")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ c("one", "two", "three"))
     
@@ -53,7 +53,7 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
     } else tempcols <- c("one", "two", "three")
     
     sheetcolnames <- path %>%
-      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE) %>%
+      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE,  na = c("", "X", "x")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ tempcols) %>% 
       fill(tempcols) %>% 
@@ -67,7 +67,7 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
                col_names = sheetcolnames,
-               .name_repair = "unique") %>%
+               .name_repair = "unique",  na = c("", "X", "x")) %>%
     tibble::add_column(year = file_year, .before = 1) 
   
   if(filter_BC == TRUE){
@@ -119,7 +119,7 @@ save_tidy_sheet_fam <- function(tidy_sheet, tidy_folder, path) {
     dir.create(paste0(tidy_folder, "/", sheet))
     
   }
-  write_csv(tidy, paste0(tidy_folder, "/", sheet, "/", file_year, "-FAM-", sheet, ".csv"), na = "")
+  write_csv(tidy, paste0(tidy_folder, "/", sheet, "/", file_year, "-FAM-", sheet, ".csv"),  na = "")
   return(tidy)
 }
 
@@ -159,7 +159,7 @@ merge_taxfiles_fam <- function(tidy_folder, output_folder) {
   sub_folders <- get_sub_folders(tidy_folder) 
   for (sub_folder in sub_folders[-1]) {
     merged_taxfile <- merge_subfolder(sub_folder)
-    write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_FAM.csv"), na = "")
+    write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_FAM.csv"),  na = "")
   }
 }
 
