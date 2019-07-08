@@ -29,7 +29,7 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
              "All family units" )
   
   #process sheets/clean column headers
-  sheet_13_colnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3,  na = c("", "X", "x")) %>%
+  sheet_13_colnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3,  na = c("", "X")) %>%
     t() %>% 
     as_tibble(.name_repair = ~ c("one", "three", "four")) %>% 
     mutate(two = NA) %>% 
@@ -51,7 +51,7 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
                col_names = sheet_13_colnames,
-               .name_repair = "unique",  na = c("", "X", "x")) %>%
+               .name_repair = "unique",  na = c("", "X")) %>%
     tibble::add_column(year = sheet, .before = 1) 
   
   if (filter_BC == TRUE){
@@ -100,7 +100,7 @@ save_tidy_sheet_13 <- function(tidy_sheet, tidy_folder, path) {
   tidy = tidy_sheet$data
   file_year <- get_file_year(path)
 
-  write_csv(tidy, paste0(tidy_folder, "/", "IND-", sheet, ".csv"),   na = "")
+  write_csv(tidy, paste0(tidy_folder, "/", "IND-", sheet, ".csv"),   na = "X")
   return(tidy)
 }
 
