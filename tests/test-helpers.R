@@ -59,7 +59,10 @@ check_numeric_cols_for_rounding <- function(x){
     summarise_if(is.numeric, is_decimal) %>% 
     gather()
   
-  non_num_names <- select_if(read_csv(x, na = c("", "X")), !is.numeric) %>% 
+  char_names <- select_if(read_csv(x, na = c("", "X")), is.character) %>% 
+    names()
+  
+  logi_names <- select_if(read_csv(x, na = c("", "X")), is.logical) %>% 
     names()
   
   rounding_cols <- any(trans_sum$value)
@@ -69,14 +72,16 @@ check_numeric_cols_for_rounding <- function(x){
       file = basename(x),
       rounding = rounding_cols,
       cols = paste0(trans_sum$key[trans_sum$value], collapse = ","),
-      non_num_col = paste0(non_num_names, collapse = ",")
+      char_col = paste0(char_names, collapse = ","),
+      logi_col = paste0(logi_names, collapse = ",")
     ) 
   } else(
     data.frame(
       file = basename(x),
       rounding = rounding_cols,
       cols = NA_character_,
-      non_num_col = paste0(non_num_names, collapse = ",")
+      char_col = paste0(char_names, collapse = ","),
+      logi_col = paste0(logi_names, collapse = ",")
     )
   )
 }
