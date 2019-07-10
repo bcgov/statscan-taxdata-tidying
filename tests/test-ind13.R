@@ -70,6 +70,6 @@ comparisons[!is.na(comparisons$valid),]
 
 
 # Take all numeric columns read in with readr::read_csv and check if there any decimal places
-tidy_ind13_path <-  list.files("tests/data-test/ind13/", pattern = ".csv", recursive = TRUE, full.names = TRUE)
+tidy_ind13_path <-  list.files("data-tidy/ind13/", pattern = ".csv", recursive = TRUE, full.names = TRUE)
 map_dfr(tidy_ind13_path, check_numeric_cols_for_rounding)
 

@@ -69,5 +69,5 @@ comparisons <- map_dfr(col, ~compare_raw_to_tidy(.x, raw, tidy))
 comparisons[!is.na(comparisons$valid),]
 
 # Take all numeric columns read in with readr::read_csv and check if there any decimal places
-tidy_ind_path <-  list.files("tests/data-test/ind", pattern = ".csv", recursive = TRUE, full.names = TRUE)
+tidy_ind_path <-  list.files("data-tidy/ind/", pattern = ".csv", recursive = TRUE, full.names = TRUE)
 map_dfr(tidy_ind_path, check_numeric_cols_for_rounding)
