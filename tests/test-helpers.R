@@ -44,3 +44,34 @@ compare_raw_to_tidy <- function(col, raw, tidy) {
     data.frame(col = col, valid = FALSE)
   }
 }
+
+
+## Take a vector of numbers and determines if any decimals exist
+is_decimal <- function(x){
+  x <- x[!is.na(x)]
+  any(!(floor(x) == x))
+}
+
+## Create summary data.frame of rounding errors
+check_numeric_cols_for_rounding <- function(x){
+  message(basename(x))
+  trans_sum <- read_csv(x, na = c("", "X")) %>% 
+    summarise_if(is.numeric, is_decimal) %>% 
+    gather()
+  
+  rounding_cols <- any(trans_sum$value)
+  
+  if(rounding_cols == TRUE){
+    data.frame(
+      file = basename(x),
+      rounding = rounding_cols,
+      cols = paste0(trans_sum$key[trans_sum$value], collapse = ",")
+    ) 
+  } else(
+    data.frame(
+      file = basename(x),
+      rounding = rounding_cols,
+      cols = NA_character_
+    )
+  )
+}
