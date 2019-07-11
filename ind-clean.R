@@ -38,7 +38,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
     sheet %in% c("7A", "7B", "7C")
     tempcols <- c("one", "two", "three")
     sheetcolnames <- path %>%
-      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, na = c("", "X")) %>%
+      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, col_types = "text", na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ tempcols) %>% 
       slice(1:(n()-2)) %>%
@@ -52,7 +52,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
   #process sheet 8/clean column headers
   else if(sheet == "8") {
     
-    sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3,  na = c("", "X")) %>%
+    sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3, col_types = "text", na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ c("one", "three")) %>% 
       mutate(two = case_when(one == "$'000" ~ "$'000", TRUE ~ NA_character_),
@@ -74,7 +74,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
                "Non-Family Persons",
                "All family units" )
     
-    sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3,  na = c("", "X")) %>%
+    sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3, col_types = "text", na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ c("one", "three", "four")) %>% 
       mutate(two = NA) %>% 
@@ -99,7 +99,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
     } else tempcols <- c("one", "two", "three")
     
     sheetcolnames <- path %>%
-      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE,  na = c("", "X")) %>%
+      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, col_types = "text", na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ tempcols) %>% 
       fill(tempcols) %>% 
@@ -114,7 +114,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
                col_names = sheetcolnames,
-               .name_repair = "unique",  na = c("", "X")) %>%
+               .name_repair = "unique", col_types = "text", na = c("", "X")) %>%
     remove_empty_rows() %>% 
     tibble::add_column(year = file_year, .before = 1)  
   
