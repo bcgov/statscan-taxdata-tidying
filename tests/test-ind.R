@@ -43,7 +43,7 @@ clean_taxfiles_ind("data-raw/ind", "tests/data-test/ind", filter_BC = FALSE)
 
 ## Chose a random family data file
 set.seed(42)
-random_path <- sample(list_input_files_ind(here("data-raw/ind/")), 1)
+(random_path <- sample(list_input_files_ind(here("data-raw/ind/")), 1))
 random_sheet <- sample(c("1", "2", "3A", "3B", "3C", "4", "5A", "5B", "5C", "6"), 1)
 
 ## Read in random sheet
@@ -68,3 +68,6 @@ comparisons <- map_dfr(col, ~compare_raw_to_tidy(.x, raw, tidy))
 ## comparisons minus characters
 comparisons[!is.na(comparisons$valid),]
 
+# Take all numeric columns read in with readr::read_csv and check if there any decimal places
+tidy_ind_path <-  list.files("data-tidy/ind/", pattern = ".csv", recursive = TRUE, full.names = TRUE)
+map_dfr(tidy_ind_path, check_numeric_cols_for_rounding)

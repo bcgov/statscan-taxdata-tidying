@@ -28,34 +28,34 @@ if (!exists(here("/tests/data-test/ind13"))) dir.create(here("tests/data-test/in
 
 
 
-# Regenerate all the tidied data for all of Canada ------------------------
-
-## Load functions
-source("fam-clean.R")
-source("tests/test-helpers.R")
-
-## Runs functions
-## Calling functions for cleaning and saving Family CSV taxfiles for all data
-clean_taxfiles_fam("data-raw/fam", "tests/data-test/fam", filter_BC = FALSE)
-
-
-# Choose and import random raw data file and then import correspon --------
-
-## Chose a random family data file
-set.seed(42)
-random_path <- sample(list_input_files_fam(here("data-raw/fam/")), 1)
-random_sheet <- as.character(sample(c(19, 20), 1))
-
-## Read in random sheet
-raw <- read_excel(random_path, sheet = random_sheet, skip = 4, col_names = FALSE)
-## Always four trailing rows with no data. Removing them here
-raw <- raw[1:(nrow(raw)-4),]
-
-## Parse random raw to get corresponding tidied
-file_year <- substr(basename(random_path), 1,4)
-tidied_path <- list.files(path = file.path("tests/data-test/fam", random_sheet), pattern = file_year, full.names = TRUE)
-
-tidy <- read_csv(tidied_path, col_types = tidy_spec_from_raw(raw))
+  # Regenerate all the tidied data for all of Canada ------------------------
+  
+  ## Load functions
+  source("fam-clean.R")
+  source("tests/test-helpers.R")
+  
+  ## Runs functions
+  ## Calling functions for cleaning and saving Family CSV taxfiles for all data
+  clean_taxfiles_fam("data-raw/fam", "tests/data-test/fam", filter_BC = FALSE)
+  
+  
+  # Choose and import random raw data file and then import correspon --------
+  
+  ## Chose a random family data file
+  set.seed(42)
+  random_path <- sample(list_input_files_fam(here("data-raw/fam/")), 1)
+  random_sheet <- as.character(sample(c(19, 20), 1))
+  
+  ## Read in random sheet
+  raw <- read_excel(random_path, sheet = random_sheet, skip = 4, col_names = FALSE, na = c("", "X"))
+  ## Always four trailing rows with no data. Removing them here
+  raw <- raw[1:(nrow(raw)-4),]
+  
+  ## Parse random raw to get corresponding tidied
+  file_year <- substr(basename(random_path), 1,4)
+  tidied_path <- list.files(path = file.path("tests/data-test/fam", random_sheet), pattern = file_year, full.names = TRUE)
+  
+  tidy <- read_csv(tidied_path, col_types = tidy_spec_from_raw(raw), na = c("", "X"))
 
 
 
@@ -67,4 +67,15 @@ comparisons <- map_dfr(col, ~compare_raw_to_tidy(.x, raw, tidy))
 
 ## comparisons minus characters
 comparisons[!is.na(comparisons$valid),]
+
+
+# Take all numeric columns read in with readr::read_csv and check if there any decimal places
+tidy_fam_path <-  list.files("data-tidy/fam/", pattern = ".csv", recursive = TRUE, full.names = TRUE)
+map_dfr(tidy_fam_path, check_numeric_cols_for_rounding)
+
+
+
+  
+
+
 
