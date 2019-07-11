@@ -29,7 +29,7 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
              "All family units" )
   
   #process sheets/clean column headers
-  sheet_13_colnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, col_types = "text", n_max = 3,  na = c("", "X")) %>%
+  sheet_13_colnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3,  na = c("", "X")) %>%
     t() %>% 
     as_tibble(.name_repair = ~ c("one", "three", "four")) %>% 
     mutate(two = NA) %>% 
@@ -51,7 +51,7 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
                col_names = sheet_13_colnames,
-               .name_repair = "unique", col_types = "text", na = c("", "X")) %>%
+               .name_repair = "unique", na = c("", "X")) %>%
     tibble::add_column(year = sheet, .before = 1) 
   
   if (filter_BC == TRUE){
@@ -75,6 +75,13 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
   
   tidy_df <- bind_rows(tidy_df1, tidy_df2) %>%
     arrange(desc(year))
+  
+  
+  tidy_df[, 7:ncol(tidy_df)] <-  tidy_df[, 7:ncol(tidy_df)] %>% 
+    mutate_if(is.character, as.numeric) 
+  
+  
+  tidy_df[, 7:ncol(tidy_df)] <- purrr::modify_if(tidy_df[, 7:ncol(tidy_df)], ~is.double(.), ~round(., 1))
   
   return(list("data" = tidy_df, "sheet" = sheet))
 }

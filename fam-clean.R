@@ -27,7 +27,7 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
   # process table 7/clean column headers
   if(sheet == "7") {
     
-    sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, col_types = "text", n_max = 3,  na = c("", "X")) %>%
+    sheetcolnames <- read_xls(path, sheet = sheet, skip = 1, col_names = FALSE, n_max = 3,  na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ c("one", "two", "three"))
     
@@ -53,7 +53,7 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
     } else tempcols <- c("one", "two", "three")
     
     sheetcolnames <- path %>%
-      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, col_types = "text", na = c("", "X")) %>%
+      read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ tempcols) %>% 
       fill(tempcols) %>% 
@@ -67,7 +67,7 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
   tidy_df <- path %>%
     read_excel(sheet = sheet, skip = 4,
                col_names = sheetcolnames,
-               .name_repair = "unique", col_types = "text", na = c("", "X")) %>%
+               .name_repair = "unique", na = c("", "X")) %>%
     tibble::add_column(year = file_year, .before = 1) 
   
   if(filter_BC == TRUE){
@@ -91,6 +91,13 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
   
   tidy_df <- bind_rows(tidy_df1, tidy_df2) %>%
     arrange(desc(year))
+  
+  
+  tidy_df[, 7:ncol(tidy_df)] <-  tidy_df[, 7:ncol(tidy_df)] %>% 
+    mutate_if(is.character, as.numeric) 
+  
+  
+  tidy_df[, 7:ncol(tidy_df)] <- purrr::modify_if(tidy_df[, 7:ncol(tidy_df)], ~is.double(.), ~round(., 1))
   
   
   return(list("data" = tidy_df, "sheet" = sheet))
