@@ -17,13 +17,11 @@ if (!exists(".functions_sourced")) source(here("R", "functions.R"))
 #-------------------------------------------------------------------------------
 
 # Take a random table from cleanedup files 
-# and test for decimal places
+# and test for number of decimal places 
 
 random_table <- sample(list.files(here("data-output"),  pattern = "*.csv"), 1)
 TableX <- data.table::fread(here::here("data-output", random_table))
 glimpse(TableX) 
-
-#-------------------------------------------------------------------------------
 
 ## For any random table:
 # function to find number of characters in postal|area field for all postal codes
@@ -44,6 +42,17 @@ TableX$`postal|area`[989]
 
 pa_count <- data.frame(Group=TableX$`postal|area`, col=nchar(TableX$`postal|area`))
 range(pa_count$col)
+
+#-------------------------------------------------------------------------------
+
+## For any random table:
+# similar to above: i.e. check for a particular column and count range of characters per row
+range(nchar(gsub("(.*\\.)|([0]*$)", "", as.character(TableX$`postal|area`)))) 
+
+# or: calculate the number of characters of every string in all the rows of a column 
+z <- data.frame(Group=TableX$`postal|area`, col=nchar(TableX$`postal|area`))
+range(z$col)
+
 #-------------------------------------------------------------------------------
 
 ## For any random table:
@@ -55,17 +64,17 @@ levels(TableX_ct$CTs)
 
 #-------------------------------------------------------------------------------
 
+# For any random table:
+# To return the maximum length (nchar) values for each row of the matrix:
+chars <- nchar(as.matrix(TableX[,-(1:6)]))
+return_matrix <- chars[cbind(1:nrow(chars), max.col(chars))]
+range(return_matrix)
 
-## For any random table:
-# explore a random column in TableX and count the decimal places
-# e.g. check for a particular column and count range of characters per row
-range(nchar(gsub("(.*\\.)|([0]*$)", "", as.character(TableX$`male|partners|in|couple|families|cctb|$'000`)))) # note: column names are unique for each table
+# check whether the length of any row exceeds 10 characters
+apply(chars, 2, function(x) which(x > 10))
 
-# or: calculate the number of characters of every string in all the rows of a column 
-z <- data.frame(Group=TableX$`male|partners|in|couple|families|cctb|$'000`, col=nchar(TableX$`male|partners|in|couple|families|cctb|$'000`))
-range(z$col)
 
-#-------------------------------------------------------------------------------
+
 
 
 
