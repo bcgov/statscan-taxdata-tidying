@@ -31,9 +31,9 @@ char_counts<-function(x){stopifnot(class(x)=="character")
   nchar(x)
 }
 
-x <- char_counts(TableX$`postal|area`)
-y <- as.data.frame(x)
-range(y$x) 
+postal_area_char <- char_counts(TableX$`postal|area`)
+postal_area_char_count <- as.data.frame(postal_area_char)
+range(postal_area_char_count$postal_area_char) 
 
 # explore where the characters are coming from in TableX
 TableX$`postal|area`[1] # the census tracts ara not picked up by this function
@@ -50,8 +50,8 @@ range(pa_count$col)
 range(nchar(gsub("(.*\\.)|([0]*$)", "", as.character(TableX$`postal|area`)))) 
 
 # or: calculate the number of characters of every string in all the rows of a column 
-z <- data.frame(Group=TableX$`postal|area`, col=nchar(TableX$`postal|area`))
-range(z$col)
+pa_char_count <- data.frame(Group=TableX$`postal|area`, col=nchar(TableX$`postal|area`))
+range(pa_char_count$col)
 
 #-------------------------------------------------------------------------------
 
@@ -73,8 +73,24 @@ range(return_matrix)
 # check whether the length of any row exceeds 10 characters
 apply(chars, 2, function(x) which(x > 10))
 
+#-------------------------------------------------------------------------------
 
+# Function to read all tables and check for character length of data matrix (not yet working)
 
+path <- here("data-output")
+file_path <- list.files(path, pattern = "*.csv")
+print(file_path)
 
+read_csv_files <- function(file_path) {
+  
+  file <- file_path %>% 
+  map(function(x) data.table::setnames(data.table::fread(x), c("table", "character"))) %>%
+  char_length <- apply(chars, 2, function(x) which(x > 10))
+  
+  
+  merged_table <- do.call(plyr::rbind.fill, file) 
+  write_csv(merged_table, here("docs", "character_test.csv"))
+}
 
+char_length <- read_csv_files(file_path)
 
