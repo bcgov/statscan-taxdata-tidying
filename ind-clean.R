@@ -142,12 +142,14 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
   tidy_df <- bind_rows(tidy_df1, tidy_df2) %>%
     arrange(desc(year))
 
-  
+  if (colnames(tidy_df[,6]) == "place|name" | colnames(tidy_df[,6]) == "place|name|geo") {
   tidy_df[, 7:ncol(tidy_df)] <-  tidy_df[, 7:ncol(tidy_df)] %>% 
     mutate_if(is.character, as.numeric) 
   
+  tidy_df[, 7:ncol(tidy_df)] <- purrr::modify_if(tidy_df[, 7:ncol(tidy_df)], ~is.numeric(.), ~round(., 1))
+  }
   
-  tidy_df[, 7:ncol(tidy_df)] <- purrr::modify_if(tidy_df[, 7:ncol(tidy_df)], ~is.double(.), ~round(., 1))
+  else print("not 6th column")
   
   return(list("data" = tidy_df, "sheet" = sheet))
 }

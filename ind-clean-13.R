@@ -77,12 +77,14 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
     arrange(desc(year))
   
   
-  tidy_df[, 7:ncol(tidy_df)] <-  tidy_df[, 7:ncol(tidy_df)] %>% 
-    mutate_if(is.character, as.numeric) 
+  if (colnames(tidy_df[,5]) == "place|name" | colnames(tidy_df[,5]) == "place|name|geo") {
+    tidy_df[, 6:ncol(tidy_df)] <-  tidy_df[, 6:ncol(tidy_df)] %>% 
+      mutate_if(is.character, as.numeric) 
+    
+    tidy_df[, 6:ncol(tidy_df)] <- purrr::modify_if(tidy_df[, 6:ncol(tidy_df)], ~is.numeric(.), ~round(., 1))
+  }
   
-  
-  tidy_df[, 7:ncol(tidy_df)] <- purrr::modify_if(tidy_df[, 7:ncol(tidy_df)], ~is.double(.), ~round(., 1))
-  
+  else print("not 5th column")  # note structure of table 13 is different
   return(list("data" = tidy_df, "sheet" = sheet))
 }
 

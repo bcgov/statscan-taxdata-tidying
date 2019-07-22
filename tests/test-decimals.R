@@ -84,7 +84,7 @@ print(file_path)
 read_csv_files <- function(file_path) {
   
   file <- file_path %>% 
-  map(function(x) data.table::setnames(data.table::fread(x), c("table", "character"))) %>%
+  map(function(x) data.table::fread(x)) %>%
   char_length <- apply(chars, 2, function(x) which(x > 10))
   
   
