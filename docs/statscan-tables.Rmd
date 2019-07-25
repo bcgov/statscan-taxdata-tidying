@@ -1,17 +1,17 @@
 ---
 title: "Income Tax Data Cleaning Project"
-author: "Noushin Nabavi"
+author: ""
 ---
 
 # Introduction 
 
-Integrated Data Division (OCIO, CITZ) has acquired historical annual t1 tax data from BC Stats (JTT) who has in turn purchased the data tables from Statistics Canada.
+Integrated Data Division (IDD, OCIO, CITZ) has acquired historical annual t1 tax data from BC Stats (JTT) who has in turn purchased the data tables from Statistics Canada.
 
-The data are in .xls format and are housed in the folder named data-raw.
+The data comes in .xls format and are housed in the folder named data-raw.
 
-In this project, the xls files are cleaned and merged into one csv sheet per table using R and RStudio. 
+In this project, the xls files are cleaned and merged into one csv sheet per table merging all years using R Statistical Software. 
 
-For more questions, please consult with Director of Data Insights (Dan Mackenzie, Dan.Mackenzie@gov.bc.ca) or data scientists at IDD (Stephanie.Hazlitt@gov.bc.ca; Ashlin.Richardson@gov.bc.ca; Cindy.Wang@gov.bc.ca; or Noushin.Nabavi@gov.bc.ca). 
+For more questions, please consult with Director of Data Insights (Dan Mackenzie, Dan.Mackenzie@gov.bc.ca) or data scientists at IDD (Stephanie.Hazlitt@gov.bc.ca; Ashlin.Richardson@gov.bc.ca or Sam.Albers@gov.bc.ca; Noushin.Nabavi@gov.bc.ca). 
 
 The BC Gov GitHub repository for this project can found here: https://github.com/bcgov/statscan-taxdata-tidying
 
@@ -25,6 +25,7 @@ This data (from Statistics Canada) includes information copied with permission f
 Currently, the fully anonymized data includes income estimates for individuals for various geographical areas in B.C. ranging from years 2000 up to 2015. Income estimates for families range from years 2004 up to 2016. Each table is an aggregation of all years for that table.
 
 # Individual table structures 
+
 ```{r echo= FALSE}
 library(knitr)
 library(kableExtra)
@@ -47,7 +48,6 @@ kable(cbind(Individuals), "latex", booktabs = T, caption = "Structure for Indivi
 
 # Family table structures 
 
-
 ```{r echo= FALSE}
 library(knitr)
 library(kableExtra)
@@ -61,6 +61,10 @@ Family <- data.frame(
   
  stringsAsFactors = FALSE)
 ``` 
+
+# Data Tidying
+
+The data comes in messy format (empty cells, duplicate column names, table names in each sheet, nested tables, source declaration at end, etc). The individuals, individuals table 13, and families have various different formats and require their unique clean-up. The scripts are designed to preserve data integrity and work automatically in order to clean the tables in batches. We are also complying with Population Data BC's data intake requirements for generating the final merged csv tables. 
 
 
 ```{r echo = FALSE}
