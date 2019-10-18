@@ -56,7 +56,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ```
 
-This repository is maintained by [Integrated Data Division (OCIO)](https://github.com/orgs/bcgov/teams/idd).
+This repository is maintained by [Data Science & Analytics Branch (OCIO) ](https://github.com/orgs/bcgov/teams/dsab).
 
 ---
 *This project was created using the [bcgovr](https://github.com/bcgov/bcgovr) package.* 
