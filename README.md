@@ -23,12 +23,16 @@ There are three core scripts that are required, they should to be run in order:
 
 The `run-all.R` script can be `source`ed to run the scripts all at once. The `setup.R` and `functions.R` scripts in the `/R` folder are sourced programatically.
 
-All packages used in the analysis can be installed from CRAN using `install.packages()`.
+All packages used in the analysis can be installed from CRAN using `install.packages()`.  
 
 #### Tidy Data Outputs
 
-Tidied .CSV equivalent files for each Table&mdash;individuals and families&mdash;are written to the `/data-output` folder.
+Tidied .CSV equivalent files for each Table&mdash;individuals and families&mdash;are written to the `/data-output` folder.  
 
+#### Testing
+
+To test the integrity of data after tidying, the `test` scripts in test subfolder can be used. 
+These scripts contain code that compares the tidied outputs for individuals and families with the raw data, ensuring data cleanup does not  the change original files.  
 
 ## Getting Help or Reporting an Issue
 
