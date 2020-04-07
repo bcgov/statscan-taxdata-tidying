@@ -56,7 +56,7 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
       read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ tempcols) %>% 
-      fill(tempcols) %>% 
+      fill(all_of(tempcols)) %>% 
       unite(sheet_col_names) %>% 
       mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
       select(sheet_col_names) %>% 
