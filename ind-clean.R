@@ -131,7 +131,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
   }
   
  
-  # clean out the extra decimal places introduced by reading xls into R
+  # clean out the extra decimal places added by excel
   tidy_df1 <- tidy_df %>%
     filter(`level|of|geo` == 61) %>%
     mutate(`postal|area` = formatC(as.numeric(`postal|area`), format="f", digits=2))
