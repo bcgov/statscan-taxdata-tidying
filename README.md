@@ -11,7 +11,7 @@ The scripts in this repository tidy purchased anonymized annual Statistics Canad
 
 #### Raw Data
 
-The source .xls files per year (or per table in the case of Individual Table 13) for anonymized individual and family income tax data must be manually placed in the appropriate subfolders: `/data-raw/fam`, `/data-raw/ind`, and `/data-raw/ind13`.
+The source .xls files per year (or per table in the case of Individual Table 13) for anonymized individual and family income tax data must be manually placed in the appropriate subfolders: `/data-raw/fam`, `/data-raw/ind`, and `/data-raw/ind13`. Table 13 is being handled individually to accomodate a diversity of data structures. 
 
 #### Code
 
