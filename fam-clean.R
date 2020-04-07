@@ -167,7 +167,7 @@ clean_taxfiles_fam <- function(input_folder, tidy_folder, filter_BC = TRUE) {
 merge_taxfiles_fam <- function(tidy_folder, output_folder) {
   sub_folders <- get_sub_folders(tidy_folder) 
   for (sub_folder in sub_folders[-1]) {
-    merged_taxfile <- merge_subfolder(sub_folder)
+    merged_taxfile <- merge_subfolder_fam(sub_folder)
     write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_FAM.csv"),  na = "X")
   }
 }
