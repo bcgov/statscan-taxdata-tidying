@@ -26,7 +26,7 @@ messy_tables <- c("7A", "7B", "7C")
 ## Tax data tidying function for individual tables:
 
 tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
-  
+
   print(paste0("processing ", sheet, " of ", path))
   file_year <- get_file_year(path)
 
@@ -96,7 +96,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
     #process sheet 3A, 3B, 3C, 9 and other sheets/clean column headers
     if (sheet %in% c("3A", "3B", "3C", "9")) {
       tempcols <- c("one", "two") 
-    } else tempcols <- c("one", "two", "three")
+    } else {tempcols <- c("one", "two", "three")}
     
     sheetcolnames <- path %>%
       read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, na = c("", "X")) %>%
