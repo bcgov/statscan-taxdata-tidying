@@ -110,13 +110,28 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
       pull()
   }
   
-  #generate data.table with fixed sheet column names
-  tidy_df <- path %>%
-    read_excel(sheet = sheet, skip = 4,
-               col_names = sheetcolnames,
-               .name_repair = "unique", na = c("", "X")) %>%
-    remove_empty_rows() %>% 
-    tibble::add_column(year = file_year, .before = 1)  
+  
+  ## handle the specific case of duplicated columns in #2. Choosing to create a 
+  ## unique conditional to ensure no inadvertent behaviour towards other sheets
+  if (sheet == "2") {
+    #generate data.table with fixed sheet column names
+    tidy_df <- path %>%
+      read_excel(sheet = sheet, skip = 4,
+                 col_names = sheetcolnames,
+                 .name_repair = make.unique, na = c("", "X")) %>%
+      remove_empty("rows") %>% 
+      select(all_of(sheetcolnames)) %>% 
+      tibble::add_column(year = file_year, .before = 1)
+    
+  } else {
+    #generate data.table with fixed sheet column names
+    tidy_df <- path %>%
+      read_excel(sheet = sheet, skip = 4,
+                 col_names = sheetcolnames,
+                 .name_repair = "unique", na = c("", "X")) %>%
+      remove_empty("rows") %>% 
+      tibble::add_column(year = file_year, .before = 1)  
+  }
   
   #filter out only BC Geographies
   if(filter_BC == TRUE){
@@ -142,6 +157,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
   tidy_df <- bind_rows(tidy_df1, tidy_df2) %>%
     arrange(desc(year))
 
+  ## this probably isn't doing anything anymore. will leave in because it doesn't hurt anyone
   if (colnames(tidy_df[,6]) == "place|name" | colnames(tidy_df[,6]) == "place|name|geo") {
   tidy_df[, 7:ncol(tidy_df)] <-  tidy_df[, 7:ncol(tidy_df)] %>% 
     mutate_if(is.character, as.numeric) 
