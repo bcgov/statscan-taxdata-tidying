@@ -144,6 +144,17 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
                                     `level|of|geo` == "11" |
                                     `level|of|geo` == "12") 
   }
+if (filter_BC == TRUE) {
+  # filter out only BC Geographies
+  tidy_df <- tidy_df %>%
+    filter(str_detect(`postal|area`, "^V") |
+      str_detect(`postal|area`, "^9") |
+      str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
+      str_detect(`postal|area`, "^59[0-9]{2}") & `level|of|geo` == "21" |
+      str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" |
+      str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
+      `level|of|geo` == "11" |
+      `level|of|geo` == "12") %>%
   
  
   # clean out the extra decimal places added by excel
