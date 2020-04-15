@@ -32,7 +32,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
 
   
   #process sheet 7A-7C differently for years 2002:2006
-  if (file_year %in% messy_years & sheet %in% messy_tables)   {
+  if (file_year %in% messy_years && sheet %in% messy_tables) {
     
     # process sheet 7A,B,C for some years as necessary 
     sheet %in% c("7A", "7B", "7C")
