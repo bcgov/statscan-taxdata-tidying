@@ -130,7 +130,8 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
                  col_names = sheetcolnames,
                  .name_repair = "unique", na = c("", "X")) %>%
       remove_empty("rows") %>% 
-      tibble::add_column(year = file_year, .before = 1)  
+      tibble::add_column(year = file_year, .before = 1) %>% 
+      mutate(`place|name|geo` = iconv(`place|name|geo`, from = "latin1", to = "ASCII//TRANSLIT"))
   }
   
   #filter out only BC Geographies
