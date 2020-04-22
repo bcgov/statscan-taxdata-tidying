@@ -130,11 +130,10 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
                  col_names = sheetcolnames,
                  .name_repair = "unique", na = c("", "X")) %>%
       remove_empty("rows") %>% 
-      tibble::add_column(year = file_year, .before = 1) %>% 
-      mutate(`place|name|geo` = iconv(`place|name|geo`, from = "latin1", to = "ASCII//TRANSLIT"))
+      tibble::add_column(year = file_year, .before = 1) 
   }
   
-  #filter out only BC Geographies
+#filter out only BC Geographies
 if (filter_BC == TRUE) {
   # filter out only BC Geographies
   tidy_df <- tidy_df %>%
@@ -145,14 +144,21 @@ if (filter_BC == TRUE) {
       str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" |
       str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
       `level|of|geo` == "11" |
-      `level|of|geo` == "12") %>%
-    filter(str_detect(`place|name|geo`, "YUKON", negate = TRUE) & ## filtering out territories and those cities
+      `level|of|geo` == "12") 
+  
+  
+  if (any(names(tidy_df) == "place|name|geo")) {
+
+    tidy_df <- tidy_df %>% 
+      mutate(`place|name|geo` = iconv(`place|name|geo`, from = "latin1", to = "ASCII//TRANSLIT")) %>% 
+      filter(str_detect(`place|name|geo`, "YUKON", negate = TRUE) & ## filtering out territories and those cities
              str_detect(`place|name|geo`, "WHITEHORSE", negate = TRUE) &
              str_detect(`place|name|geo`, "NORTHWEST", negate = TRUE) &
              str_detect(`place|name|geo`, "YELLOWKNIFE", negate = TRUE) &
              str_detect(`place|name|geo`, "IQALUIT", negate = TRUE) &
              str_detect(`place|name|geo`, "NUNAVUT", negate = TRUE)
              )
+  }
 }
   
  
