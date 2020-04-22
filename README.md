@@ -2,16 +2,18 @@
 
 # statscan-taxdata-tidying
  
-A set of R scripts to read, tidy, merge & write anonymized annual Statistics Canada income tax data for British Columbia. 
+A set of R scripts to read, tidy, merge & write de-identified annual Statistics Canada income tax data for British Columbia. 
 
-The scripts in this repository tidy purchased anonymized annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for anonymized individuals and anonymized families. Metadata provided by Statistics Canada is in `/docs` folder.
+The scripts in this repository tidy de-identified annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for de-identified individuals and families. The Technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors is available on the Statistics Canada website:
+[T1 Family File, Final Estimates, 2016](
+https://www150.statcan.gc.ca/n1/pub/72-212-x/72-212-x2018001-eng.htm).
 
 
 ## Usage
 
 #### Raw Data
 
-The source .xls files per year (or per table in the case of Individual Table 13) for anonymized individual and family income tax data must be manually placed in the appropriate subfolders: `/data-raw/fam`, `/data-raw/ind`, and `/data-raw/ind13`. Table 13 is being handled individually to accomodate a diversity of data structures. 
+The source .xls files per year (or per table in the case of Individual Table 13) for de-identified individual and family income tax data must be manually placed in the appropriate subfolders: `/data-raw/fam`, `/data-raw/ind`, and `/data-raw/ind13`. Table 13 is being handled individually to accomodate a diversity of data structures. 
 
 #### Code
 
@@ -60,7 +62,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and limitations under the License.
 ```
 
-This repository is maintained by [Data Science & Analytics Branch (OCIO) ](https://github.com/orgs/bcgov/teams/dsab).
+This repository is maintained by [Data Science Partnerships Team (OCIO) ](https://github.com/orgs/bcgov/teams/dsp).
 
 ---
 *This project was created using the [bcgovr](https://github.com/bcgov/bcgovr) package.* 
