@@ -2,9 +2,9 @@
 
 # statscan-taxdata-tidying
  
-A set of R scripts to read, tidy, merge & write de-identified annual Statistics Canada income tax data for British Columbia. 
+A set of R scripts to read, tidy, merge & write aggregated annual Statistics Canada income tax data for British Columbia. 
 
-The scripts in this repository tidy de-identified annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file for each year for de-identified individuals and families. The Technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors is available on the Statistics Canada website:
+The scripts in this repository tidy aggregated annual Statistics Canada data similar to ['Tax filers and dependants with income by source of income' Table: 11-10-0007-01](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1110000701). The aggregated annual data are provided as sheets in .xls format under the [Statistics Canada Open Licence](https://www.statcan.gc.ca/eng/reference/licence), one .xls file per year for aggregated individual tables and aggregated family tables. The Technical Reference Guide for the Annual Income Estimates for Census Families, Individuals and Seniors is available on the Statistics Canada website:
 [T1 Family File, Final Estimates, 2016](
 https://www150.statcan.gc.ca/n1/pub/72-212-x/72-212-x2018001-eng.htm).
 
@@ -13,17 +13,17 @@ https://www150.statcan.gc.ca/n1/pub/72-212-x/72-212-x2018001-eng.htm).
 
 #### Raw Data
 
-The source .xls files per year (or per table in the case of Individual Table 13) for de-identified individual and family income tax data must be manually placed in the appropriate subfolders: `/data-raw/fam`, `/data-raw/ind`, and `/data-raw/ind13`. Table 13 is being handled individually to accomodate a diversity of data structures. 
+The source .xls files per year (or per table in the case of Individual Table 13) must be manually placed in the appropriate subfolders: `/data-raw/fam`, `/data-raw/ind`, and `/data-raw/ind13`. Table 13 is being handled individually to accomodate a diversity of data structures. 
 
 #### Code
 
-There are three core scripts that are required, they should to be run in order:
+There are three core scripts, one for each table type (Individuals, Families and Individual Table 13):
 
 - `fam-clean.R`
 - `ind-clean.R`
 - `ind-clean-13.R`
 
-The `run-all.R` script can be `source`ed to run the scripts all at once. The `setup.R` and `functions.R` scripts in the `/R` folder are sourced programatically.
+The `run-all.R` script should be `source`ed to run the scripts all at once. The `setup.R` and `functions.R` scripts in the `/R` folder are sourced programatically.
 
 All packages used in the analysis can be installed from CRAN using `install.packages()`.  
 
@@ -33,8 +33,7 @@ Tidied .CSV equivalent files for each Table&mdash;individuals and families&mdash
 
 #### Testing
 
-To test the integrity of data after tidying, the `test` scripts in test subfolder can be used. 
-These scripts contain code that compares the tidied outputs for individuals and families with the raw data, ensuring data cleanup does not  the change original files.  
+The `test` scripts in the `/test` subfolder can be used to test the integrity of the data after tidying. These scripts contain code that compares the tidied outputs for individuals and families with the raw data, ensuring data cleanup does not the change original files.  
 
 ## Getting Help or Reporting an Issue
 
