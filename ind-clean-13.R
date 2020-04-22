@@ -67,7 +67,7 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
                `level|of|geo` == "11" |
                `level|of|geo` == "12") 
     
-    
+    browser()
     if (any(names(tidy_df) == "place|name|geo")) {
       
       tidy_df <- tidy_df %>% 
@@ -78,6 +78,18 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
                  str_detect(`place|name|geo`, "YELLOWKNIFE", negate = TRUE) &
                  str_detect(`place|name|geo`, "IQALUIT", negate = TRUE) &
                  str_detect(`place|name|geo`, "NUNAVUT", negate = TRUE)
+        )
+    }
+    
+    if (any(names(tidy_df) == "place|name")) {
+      tidy_df <- tidy_df %>% 
+        mutate(`place|name` = iconv(`place|name`, from = "latin1", to = "ASCII//TRANSLIT")) %>% 
+        filter(str_detect(`place|name`, "YUKON", negate = TRUE) & ## filtering out territories and those cities
+                 str_detect(`place|name`, "WHITEHORSE", negate = TRUE) &
+                 str_detect(`place|name`, "NORTHWEST", negate = TRUE) &
+                 str_detect(`place|name`, "YELLOWKNIFE", negate = TRUE) &
+                 str_detect(`place|name`, "IQALUIT", negate = TRUE) &
+                 str_detect(`place|name`, "NUNAVUT", negate = TRUE)
         )
     }
   }

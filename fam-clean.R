@@ -96,6 +96,18 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
                  str_detect(`place|name|geo`, "NUNAVUT", negate = TRUE)
         )
     }
+    
+    if (any(names(tidy_df) == "place|name")) {
+      tidy_df <- tidy_df %>% 
+        mutate(`place|name` = iconv(`place|name`, from = "latin1", to = "ASCII//TRANSLIT")) %>% 
+        filter(str_detect(`place|name`, "YUKON", negate = TRUE) & ## filtering out territories and those cities
+                 str_detect(`place|name`, "WHITEHORSE", negate = TRUE) &
+                 str_detect(`place|name`, "NORTHWEST", negate = TRUE) &
+                 str_detect(`place|name`, "YELLOWKNIFE", negate = TRUE) &
+                 str_detect(`place|name`, "IQALUIT", negate = TRUE) &
+                 str_detect(`place|name`, "NUNAVUT", negate = TRUE)
+        )
+    }
   }
   
   # clean out the extra decimal places introduced by reading xls into R
