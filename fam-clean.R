@@ -56,7 +56,7 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
       read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ tempcols) %>% 
-      fill(tempcols) %>% 
+      fill(all_of(tempcols)) %>% 
       unite(sheet_col_names) %>% 
       mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
       select(sheet_col_names) %>% 
@@ -70,15 +70,44 @@ tidy_tax_fam <- function(sheet, path, filter_BC = TRUE) {
                .name_repair = "unique", na = c("", "X")) %>%
     tibble::add_column(year = file_year, .before = 1) 
   
-  if(filter_BC == TRUE){
-      #filter out only BC Geographies
-      tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
-                                      str_detect(`postal|area`, "^9") | 
-                                      str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
-                                      str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" | 
-                                      str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
-                                      `level|of|geo` == "11" |
-                                      `level|of|geo` == "12") 
+  #filter out only BC Geographies
+  if (filter_BC == TRUE) {
+    # filter out only BC Geographies
+    tidy_df <- tidy_df %>%
+      filter(str_detect(`postal|area`, "^V") |
+               str_detect(`postal|area`, "^9") |
+               str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
+               str_detect(`postal|area`, "^59[0-9]{2}") & `level|of|geo` == "21" |
+               str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" |
+               str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
+               `level|of|geo` == "11" |
+               `level|of|geo` == "12") 
+    
+    
+    if (any(names(tidy_df) == "place|name|geo")) {
+      
+      tidy_df <- tidy_df %>% 
+        mutate(`place|name|geo` = iconv(`place|name|geo`, from = "latin1", to = "ASCII//TRANSLIT")) %>% 
+        filter(str_detect(`place|name|geo`, "YUKON", negate = TRUE) & ## filtering out territories and those cities
+                 str_detect(`place|name|geo`, "WHITEHORSE", negate = TRUE) &
+                 str_detect(`place|name|geo`, "NORTHWEST", negate = TRUE) &
+                 str_detect(`place|name|geo`, "YELLOWKNIFE", negate = TRUE) &
+                 str_detect(`place|name|geo`, "IQALUIT", negate = TRUE) &
+                 str_detect(`place|name|geo`, "NUNAVUT", negate = TRUE)
+        )
+    }
+    
+    if (any(names(tidy_df) == "place|name")) {
+      tidy_df <- tidy_df %>% 
+        mutate(`place|name` = iconv(`place|name`, from = "latin1", to = "ASCII//TRANSLIT")) %>% 
+        filter(str_detect(`place|name`, "YUKON", negate = TRUE) & ## filtering out territories and those cities
+                 str_detect(`place|name`, "WHITEHORSE", negate = TRUE) &
+                 str_detect(`place|name`, "NORTHWEST", negate = TRUE) &
+                 str_detect(`place|name`, "YELLOWKNIFE", negate = TRUE) &
+                 str_detect(`place|name`, "IQALUIT", negate = TRUE) &
+                 str_detect(`place|name`, "NUNAVUT", negate = TRUE)
+        )
+    }
   }
   
   # clean out the extra decimal places introduced by reading xls into R
@@ -167,7 +196,7 @@ clean_taxfiles_fam <- function(input_folder, tidy_folder, filter_BC = TRUE) {
 merge_taxfiles_fam <- function(tidy_folder, output_folder) {
   sub_folders <- get_sub_folders(tidy_folder) 
   for (sub_folder in sub_folders[-1]) {
-    merged_taxfile <- merge_subfolder(sub_folder)
+    merged_taxfile <- merge_subfolder_fam(sub_folder)
     write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_FAM.csv"),  na = "X")
   }
 }

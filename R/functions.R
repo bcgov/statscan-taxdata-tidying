@@ -56,16 +56,64 @@ get_sub_folders <- function(tidy_folder) {
 ## and merges them according to sheet number
 ## the function returns one merged csv for each file 
 
-merge_subfolder <- function(sub_folder) {
-  print(paste0("processing ", sub_folder))
-  csv_files <- list.files(sub_folder, pattern = "*.csv", full.names = TRUE) %>% 
-    lapply(function(file){
-      read.csv(file = file, header = TRUE,  check.names = FALSE)
-    }) 
-  big_object <- do.call(plyr::rbind.fill, csv_files)
-  return(big_object)
+merge_subfolder_ind <- function(sub_folder) {
+  
+  message(paste0("processing ", sub_folder))
+  
+  ## Handle '1' type files with different cols and classes
+  if(basename(sub_folder) == '1') {
+    list.files(sub_folder, pattern = "*.csv", full.names = TRUE) %>%
+      map_df(~ {
+        print(.x)
+        readr::read_csv(
+          .x,
+          col_types = cols(
+            year = col_double(),
+            cityid = col_double(),
+            `postal|area` = col_character(),
+            `postal|walk` = col_character(),
+            `level|of|geo` = col_double(),
+            `place|name|geo` = col_character(),
+            .default = col_double()),
+          na = c("", "NA", "X")
+        )
+      })
+  } else {
+    list.files(sub_folder, pattern = "*.csv", full.names = TRUE) %>%
+      map_df(~ {
+        print(.x)
+        readr::read_csv(
+          .x,
+          col_types = cols(
+            `postal|area` = col_character(),
+            `postal|walk` = col_character(),
+            `place|name` = col_character(),
+            .default = col_double()
+          ),
+          na = c("", "NA", "X")
+        )
+      })
+  }
+
 }
 
+
+merge_subfolder_fam <- function(sub_folder) {
+  list.files(sub_folder, pattern = "*.csv", full.names = TRUE) %>%
+    map_df(~ {
+      print(.x)
+      readr::read_csv(
+        .x,
+        col_types = cols(
+          `postal|area` = col_character(),
+          `postal|walk` = col_character(),
+          `place|name` = col_character(),
+          .default = col_double()
+        ),
+        na = c("", "NA", "X")
+      )
+    })
+}
 
 #-------------------------------------------------------------------------------
 

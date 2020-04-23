@@ -26,13 +26,13 @@ messy_tables <- c("7A", "7B", "7C")
 ## Tax data tidying function for individual tables:
 
 tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
-  
+
   print(paste0("processing ", sheet, " of ", path))
   file_year <- get_file_year(path)
 
   
   #process sheet 7A-7C differently for years 2002:2006
-  if (file_year %in% messy_years & sheet %in% messy_tables)   {
+  if (file_year %in% messy_years && sheet %in% messy_tables) {
     
     # process sheet 7A,B,C for some years as necessary 
     sheet %in% c("7A", "7B", "7C")
@@ -42,7 +42,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
       t() %>% 
       as_tibble(.name_repair = ~ tempcols) %>% 
       slice(1:(n()-2)) %>%
-      fill(tempcols) %>% 
+      fill(all_of(tempcols)) %>% 
       unite(sheet_col_names) %>% 
       mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
       select(sheet_col_names) %>%
@@ -96,13 +96,13 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
     #process sheet 3A, 3B, 3C, 9 and other sheets/clean column headers
     if (sheet %in% c("3A", "3B", "3C", "9")) {
       tempcols <- c("one", "two") 
-    } else tempcols <- c("one", "two", "three")
+    } else {tempcols <- c("one", "two", "three")}
     
     sheetcolnames <- path %>%
       read_excel(sheet = sheet, skip = 1, n_max = 3, col_names = FALSE, na = c("", "X")) %>%
       t() %>% 
       as_tibble(.name_repair = ~ tempcols) %>% 
-      fill(tempcols) %>% 
+      fill(all_of(tempcols)) %>% 
       unite(sheet_col_names) %>% 
       mutate(sheet_col_names = mutate_col_names(sheet_col_names)) %>%
       mutate(sheet_col_names = str_replace(sheet_col_names, "l.o.g.", "level|of|geo")) %>% 
@@ -110,28 +110,70 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
       pull()
   }
   
-  #generate data.table with fixed sheet column names
-  tidy_df <- path %>%
-    read_excel(sheet = sheet, skip = 4,
-               col_names = sheetcolnames,
-               .name_repair = "unique", na = c("", "X")) %>%
-    remove_empty_rows() %>% 
-    tibble::add_column(year = file_year, .before = 1)  
   
-  #filter out only BC Geographies
-  if(filter_BC == TRUE){
-    #filter out only BC Geographies
-    tidy_df <- tidy_df %>% filter(str_detect(`postal|area`, "^V") |
-                                    str_detect(`postal|area`, "^9") | 
-                                    str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
-                                    str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" | 
-                                    str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
-                                    `level|of|geo` == "11" |
-                                    `level|of|geo` == "12") 
+  ## handle the specific case of duplicated columns in #2. Choosing to create a 
+  ## unique conditional to ensure no inadvertent behaviour towards other sheets
+  if (sheet == "2") {
+    #generate data.table with fixed sheet column names
+    tidy_df <- path %>%
+      read_excel(sheet = sheet, skip = 4,
+                 col_names = sheetcolnames,
+                 .name_repair = make.unique, na = c("", "X")) %>%
+      remove_empty("rows") %>% 
+      select(all_of(sheetcolnames)) %>% 
+      tibble::add_column(year = file_year, .before = 1)
+    
+  } else {
+    #generate data.table with fixed sheet column names
+    tidy_df <- path %>%
+      read_excel(sheet = sheet, skip = 4,
+                 col_names = sheetcolnames,
+                 .name_repair = "unique", na = c("", "X")) %>%
+      remove_empty("rows") %>% 
+      tibble::add_column(year = file_year, .before = 1) 
   }
   
+#filter out only BC Geographies
+if (filter_BC == TRUE) {
+  # filter out only BC Geographies
+  tidy_df <- tidy_df %>%
+    filter(str_detect(`postal|area`, "^V") |
+      str_detect(`postal|area`, "^9") |
+      str_detect(`postal|area`, "^59[0-9]{3}") & `level|of|geo` == "31" |
+      str_detect(`postal|area`, "^59[0-9]{2}") & `level|of|geo` == "21" |
+      str_detect(`postal|area`, "^59[0-9]{4}") & `level|of|geo` == "21" |
+      str_detect(`postal|area`, "^515[0-9]{3}") & `level|of|geo` == "51" |
+      `level|of|geo` == "11" |
+      `level|of|geo` == "12") 
+  
+  
+  if (any(names(tidy_df) == "place|name|geo")) {
+    tidy_df <- tidy_df %>% 
+      mutate(`place|name|geo` = iconv(`place|name|geo`, from = "latin1", to = "ASCII//TRANSLIT")) %>% 
+      filter(str_detect(`place|name|geo`, "YUKON", negate = TRUE) & ## filtering out territories and those cities
+             str_detect(`place|name|geo`, "WHITEHORSE", negate = TRUE) &
+             str_detect(`place|name|geo`, "NORTHWEST", negate = TRUE) &
+             str_detect(`place|name|geo`, "YELLOWKNIFE", negate = TRUE) &
+             str_detect(`place|name|geo`, "IQALUIT", negate = TRUE) &
+             str_detect(`place|name|geo`, "NUNAVUT", negate = TRUE)
+             )
+  }
+  
+  if (any(names(tidy_df) == "place|name")) {
+    tidy_df <- tidy_df %>% 
+      mutate(`place|name` = iconv(`place|name`, from = "latin1", to = "ASCII//TRANSLIT")) %>% 
+      filter(str_detect(`place|name`, "YUKON", negate = TRUE) & ## filtering out territories and those cities
+               str_detect(`place|name`, "WHITEHORSE", negate = TRUE) &
+               str_detect(`place|name`, "NORTHWEST", negate = TRUE) &
+               str_detect(`place|name`, "YELLOWKNIFE", negate = TRUE) &
+               str_detect(`place|name`, "IQALUIT", negate = TRUE) &
+               str_detect(`place|name`, "NUNAVUT", negate = TRUE)
+      )
+  }
+}
+  
  
-  # clean out the extra decimal places introduced by reading xls into R
+  # clean out the extra decimal places added by excel
   tidy_df1 <- tidy_df %>%
     filter(`level|of|geo` == 61) %>%
     mutate(`postal|area` = formatC(as.numeric(`postal|area`), format="f", digits=2))
@@ -142,6 +184,7 @@ tidy_tax_ind <- function(sheet, path, filter_BC = TRUE) {
   tidy_df <- bind_rows(tidy_df1, tidy_df2) %>%
     arrange(desc(year))
 
+  ## this probably isn't doing anything anymore. will leave in because it doesn't hurt anyone
   if (colnames(tidy_df[,6]) == "place|name" | colnames(tidy_df[,6]) == "place|name|geo") {
   tidy_df[, 7:ncol(tidy_df)] <-  tidy_df[, 7:ncol(tidy_df)] %>% 
     mutate_if(is.character, as.numeric) 
@@ -212,8 +255,11 @@ clean_taxfiles_ind <- function(input_folder, tidy_folder, filter_BC = TRUE) {
 
 merge_taxfiles_ind <- function(tidy_folder, output_folder) {
   sub_folders <- get_sub_folders(tidy_folder) 
-  for (sub_folder in sub_folders[-1]) {
-    merged_taxfile <- merge_subfolder(sub_folder)
+  ## remove main directory AND 13 dir. That is handled by a separate process
+  sub_folders <- sub_folders[!sub_folders %in% c("data-tidy/ind", "data-tidy/ind/13")]
+  
+  for (sub_folder in sub_folders) {
+    merged_taxfile <- merge_subfolder_ind(sub_folder)
     write_csv(merged_taxfile, paste0(output_folder, "/", basename(sub_folder), "_IND.csv"), na = "X")
   }
 }

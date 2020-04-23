@@ -27,11 +27,11 @@ clean_taxfiles_fam("data-raw/fam", "data-tidy/fam")
 merge_taxfiles_fam("data-tidy/fam", "data-output")
 
 
-
 # Individual --------------------------------------------------------------
 
 source("ind-clean.R")
 
+## This exclude IND-13 which takes place inside this function
 ## Calling function for cleaning taxfiles
 clean_taxfiles_ind("data-raw/ind", "data-tidy/ind")
 
@@ -48,13 +48,18 @@ clean_taxfiles_13("data-raw/ind13", "data-tidy/ind13")
 
 ## Map over tidy sheets and bind rows to make one Table 13
 ## Write out IND Table 13 CSV
-
 ind13_path <- here("data-tidy/ind13")   
-ind13_files <- dir(ind13_path, pattern = "*.csv") 
+ind13_files <- list.files(ind13_path, pattern = "*.csv", full.names = TRUE) 
 
-table13 <- ind13_files %>%
-  map(~ read_csv(file.path(ind13_path, .))) %>% 
-  reduce(rbind)
+table13 <- map_df(
+  ind13_files,
+  ~read_csv(.x,
+    col_types = cols(
+      `postal|area` = col_character(),
+      `place|name` = col_character(),
+      .default = col_double()
+    ), na = c("", "NA", "X"))
+  ) 
 
 write_csv(table13, here("data-output/13_IND.csv"),  na = "X")
 
