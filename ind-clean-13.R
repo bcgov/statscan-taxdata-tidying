@@ -67,7 +67,6 @@ tidy_tax_i13sheet <- function(sheet, skip, col_names, path, filter_BC = TRUE) {
                `level|of|geo` == "11" |
                `level|of|geo` == "12") 
     
-    browser()
     if (any(names(tidy_df) == "place|name|geo")) {
       
       tidy_df <- tidy_df %>% 
